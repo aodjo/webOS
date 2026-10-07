@@ -13,7 +13,7 @@ import { fs, mimeFor, useFS } from './fs';
 import { basename, dirname, extname, isWithin, join } from './path';
 import { tr } from './i18n';
 
-const SEED_SCHEMA = 5; /** Schema version hashed into the seed version; increment it after changing how this file builds the seed so returning visitors get the new seed merged in. */
+const SEED_SCHEMA = 6; /** Schema version hashed into the seed version; increment it after changing how this file builds the seed so returning visitors get the new seed merged in. */
 
 /**
  * Hashes a string to a short, stable identifier.
@@ -224,12 +224,27 @@ function buildSeed(locale: Locale, apps: AppManifest[]): Draft {
    * const mail = appName('mail', { en: 'Mail', ko: '메일' });
    */
   const appName = (id: string, fallback: { en: string; ko: string }) => L(apps.find((a) => a.id === id)?.name ?? fallback);
-  const aboutMe = appName('about-me', { en: 'About Me', ko: '내 소개' });
-  const projectsApp = appName('projects', { en: 'Projects', ko: '프로젝트' });
-  const mail = appName('mail', { en: 'Mail', ko: '메일' });
+  /**
+   * Returns a Markdown link that opens an app through its `.app` file in /Applications.
+   *
+   * The link text is the app's localized name in bold; the target is the `.app` file named after
+   * the app's English name (the name it is seeded under), wrapped in angle brackets so names with
+   * spaces stay one link.
+   *
+   * @param {string} id - The app id.
+   * @param {{ en: string; ko: string }} fallback - Names used when the app is not registered.
+   * @returns {string} The Markdown link.
+   *
+   * @example
+   * appLink('mail', { en: 'Mail', ko: '메일' }); // '[**메일**](</Applications/Mail.app>)'
+   */
+  const appLink = (id: string, fallback: { en: string; ko: string }) => `[**${appName(id, fallback)}**](</Applications/${tr(apps.find((a) => a.id === id)?.name ?? fallback, 'en')}.app>)`;
+  const aboutMe = appLink('about-me', { en: 'About Me', ko: '내 소개' });
+  const projectsApp = appLink('projects', { en: 'Projects', ko: '프로젝트' });
+  const mail = appLink('mail', { en: 'Mail', ko: '메일' });
   file(
     join(PATHS.desktop, readMe),
-    `# ${locale === 'ko' ? `${osInfo.name}에 오신 것을 환영합니다 👋` : `Welcome to ${osInfo.name} 👋`}\n\n${L(owner.bio)}\n\n---\n\n${locale === 'ko' ? '**바로가기**' : '**Quick links**'}\n\n- ${locale === 'ko' ? `Dock의 **${aboutMe}** — 저에 대해` : `**${aboutMe}** in the Dock — who I am`}\n- ${locale === 'ko' ? `Dock의 **${projectsApp}** — 작업물` : `**${projectsApp}** in the Dock — my work`}\n- ${locale === 'ko' ? `**${mail}** — 연락하기` : `**${mail}** — get in touch`}\n`,
+    `# ${locale === 'ko' ? `${osInfo.name}에 오신 것을 환영합니다 👋` : `Welcome to ${osInfo.name} 👋`}\n\n${L(owner.bio)}\n\n---\n\n${locale === 'ko' ? '**바로가기**' : '**Quick links**'}\n\n- ${locale === 'ko' ? `${aboutMe} — 저에 대해` : `${aboutMe} — who I am`}\n- ${locale === 'ko' ? `${projectsApp} — 작업물` : `${projectsApp} — my work`}\n- ${locale === 'ko' ? `${mail} — 연락하기` : `${mail} — get in touch`}\n`,
     { x: 0, y: 0 },
   );
   const shot = projects[0]?.cover ?? '/projects/webos.svg';
