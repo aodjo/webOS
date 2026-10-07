@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
-import { ArrowRight, ArrowUpRight, Briefcase, Check, Copy, Globe, GraduationCap, Layers, Mail, MapPin, PenLine, Sparkles, Trophy } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Briefcase, Check, Copy, Globe, Layers, Mail, MapPin, PenLine, Sparkles, Trophy } from 'lucide-react';
 import type { AppProps, MenuItem } from '@/kernel';
 import { COMMON, fs, localizePeriod, useAppMenus, useArgsChange, useLocale, useNode, useSystem, useT, wm } from '@/kernel';
 import { Toolbar } from '@/components/ui';
@@ -33,6 +33,7 @@ const S = {
   featured: { en: 'Featured Projects', ko: '주요 프로젝트' },
   allProjects: { en: 'All Projects', ko: '모든 프로젝트' },
   now: { en: 'Now', ko: '재직 중' },
+  enrolled: { en: 'Enrolled', ko: '재학 중' },
   alsoUsed: { en: 'Also used in projects', ko: '프로젝트에서 사용한 기술' },
   card: { en: 'Card', ko: '카드' },
   sendEmail: { en: 'Send Email…', ko: '이메일 보내기…' },
@@ -599,11 +600,13 @@ function SkillsTab() {
 }
 
 /**
- * Renders the Education section.
+ * Renders the Education section as a vertical timeline.
  *
- * Shows one card per education entry with the school, degree and localized period.
+ * Shows one timeline entry per education entry, newest first, with the localized period, the
+ * school and the degree. Entries whose period is open-ended get a highlighted dot and an
+ * "Enrolled" badge.
  *
- * @returns {JSX.Element} The grid of education cards.
+ * @returns {JSX.Element} The education timeline.
  *
  * @example
  * {tab === 'education' && <EducationTab />}
@@ -612,20 +615,24 @@ function EducationTab() {
   const t = useT();
   const locale = useLocale();
   return (
-    <div className={styles.eduGrid}>
-      {education.map((e, i) => (
-        <article key={`${t(e.school)}-${e.period}`} className={`lg lg-thick ${styles.eduCard}`} style={{ '--i': i } as CSSProperties}>
-          <span className={styles.eduIcon}>
-            <GraduationCap size={20} />
-          </span>
-          <div className={styles.eduBody}>
-            <h3>{t(e.school)}</h3>
-            <p>{t(e.degree)}</p>
-            <span className={styles.eduPeriod}>{localizePeriod(e.period, locale)}</span>
-          </div>
-        </article>
-      ))}
-    </div>
+    <ol className={styles.timeline}>
+      {education.map((e, i) => {
+        const current = !!parsePeriod(e.period)?.current;
+        return (
+          <li key={`${t(e.school)}-${e.period}`} className={styles.tlItem} style={{ '--i': i } as CSSProperties}>
+            <span className={`${styles.tlDot} ${current ? styles.tlDotCurrent : ''}`} aria-hidden="true" />
+            <div className={`lg lg-thick ${styles.tlCard}`}>
+              <div className={styles.tlPeriod}>
+                {localizePeriod(e.period, locale)}
+                {current && <span className={styles.nowBadge}>{t(S.enrolled)}</span>}
+              </div>
+              <h3 className={styles.tlRole}>{t(e.school)}</h3>
+              <p className={styles.tlDesc}>{t(e.degree)}</p>
+            </div>
+          </li>
+        );
+      })}
+    </ol>
   );
 }
 
