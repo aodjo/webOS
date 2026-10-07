@@ -84,8 +84,8 @@ export function buildSeedMessages(locale: Locale, seededAt: number, me: { name: 
     flagged: false,
     extra: 'welcome',
     body: ko
-      ? `안녕하세요.\n\n**${osInfo.name}**에 방문해 주셔서 감사합니다. ${bioFirst}\n\n이곳은 일반적인 포트폴리오 사이트가 아니라 브라우저에서 동작하는 작은 운영체제입니다. 다음과 같이 둘러볼 수 있습니다.\n\n- **Dock**에서 앱을 실행하고, 창을 화면 가장자리로 끌어 붙일 수 있습니다.\n- **Finder**에서 만들거나 지운 파일은 **터미널**에도 그대로 반영됩니다. (\`ls ~/Documents\`)\n- **⌘K**로 Spotlight를 열어 무엇이든 검색할 수 있습니다.\n- 메뉴 막대와 키보드 단축키도 실제처럼 동작합니다.\n\n아래 버튼으로 바로 시작할 수 있습니다.${sign}`
-      : `Hi there!\n\nThanks for stopping by **${osInfo.name}**. ${bioFirst}\n\nThis isn’t a regular portfolio site. It’s a tiny operating system running in your browser. Here’s how to explore:\n\n- Launch apps from the **Dock**, then drag windows to the screen edges to snap them.\n- Create or delete files in **Finder** and watch them show up in the **Terminal** (\`ls ~/Documents\`).\n- Press **⌘K** to open Spotlight and search for anything.\n- The menu bar and keyboard shortcuts work like the real thing.\n\nThe buttons below are a good place to start.${sign}`,
+      ? `안녕하세요.\n\n**제 포트폴리오 사이트**에 방문해 주셔서 감사합니다. ${bioFirst}\n\n이곳은 일반적인 포트폴리오 사이트가 아니라 브라우저에서 동작하는 작은 운영체제입니다. 다음과 같이 둘러볼 수 있습니다.\n\n- **Dock**에서 앱을 실행하고, 창을 화면 가장자리로 끌어 붙일 수 있습니다.\n- **Finder**에서 만들거나 지운 파일은 **터미널**에도 그대로 반영됩니다. (\`ls ~/Documents\`)\n- **⌘K**로 Spotlight를 열어 무엇이든 검색할 수 있습니다.\n- 메뉴 막대와 키보드 단축키도 실제처럼 동작합니다.\n\n아래 버튼으로 바로 시작할 수 있습니다.${sign}`
+      : `Hi there!\n\nThanks for stopping by **my portfolio site**. ${bioFirst}\n\nThis isn’t a regular portfolio site. It’s a tiny operating system running in your browser. Here’s how to explore:\n\n- Launch apps from the **Dock**, then drag windows to the screen edges to snap them.\n- Create or delete files in **Finder** and watch them show up in the **Terminal** (\`ls ~/Documents\`).\n- Press **⌘K** to open Spotlight and search for anything.\n- The menu bar and keyboard shortcuts work like the real thing.\n\nThe buttons below are a good place to start.${sign}`,
   };
 
   const projectsMsg: MailMessage = {
