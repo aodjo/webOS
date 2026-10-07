@@ -18,7 +18,7 @@ Real window management, a persistent virtual file system, a zsh-like terminal an
 - **Apps** — Finder (icon / list / column / gallery views, Quick Look, Get Info), Terminal (pipes, redirection, globbing, history, tab completion, `neofetch`), TextEdit, Preview, Notes, Safari, Mail, Calculator, Activity Monitor, System Settings, Minesweeper.
 - **Portfolio apps** — About Me, Projects and a first-run Tips tour, all generated from one data file.
 - **System** — boot, login and lock screens, sleep / restart / shut down, menu bar with real menus and shortcuts, Control Center, Notification Center, Spotlight (apps, files, math), Launchpad, desktop widgets.
-- **Liquid Glass** — translucent glass with rim light and inner glow everywhere; on Chromium browsers an SVG filter adds real edge refraction and colour bleed (Dock, Spotlight, menus, Control Center, the lock screen clock).
+- **Liquid Glass** — translucent glass with a thin rim light, modelled on macOS 26: Control Center and widgets switch between white and dark content depending on what lies behind them, and the lock screen clock is milky glass over the wallpaper. On Chromium browsers an SVG filter adds real edge refraction (Dock, Spotlight, menus, Control Center, widgets).
 - **English / 한국어** UI switchable at runtime, light / dark / auto appearance, accessibility options (Reduce Motion, Reduce Transparency), phone-friendly layout.
 
 ## Getting started
@@ -38,7 +38,7 @@ Edit **`src/data/portfolio.ts`** — name, role, bio, contact links, skills, exp
 
 - Avatar: replace `public/avatar.svg` (an emoji on a gradient by default).
 - Project covers: `public/projects/*.svg`, referenced by each project's `cover`.
-- Wallpapers: `public/wallpapers/*.svg`, listed in `src/kernel/wallpapers.ts`.
+- Wallpapers: `public/wallpapers/`, listed in `src/kernel/wallpapers.ts`. The default "Flow" picture is drawn by `scripts/wallpapers/flow.html` and saved as JPEGs by `scripts/wallpapers/render.js` (a Playwright snippet, run with the dev server up).
 
 Visitors' changes (files, settings) are stored in their own browser; when you change the portfolio data, returning visitors get the new content merged in and keep their own files.
 
@@ -74,7 +74,7 @@ This is an independent fan-made project inspired by macOS. It is not affiliated 
 
 ## 한국어
 
-브라우저에서 동작하는 macOS 스타일 운영체제이자 개발자 포트폴리오입니다. 실제 창 관리, IndexedDB에 저장되는 가상 파일시스템, zsh 스타일 터미널, 하나의 커널을 공유하는 십여 개의 앱을 Liquid Glass 디자인으로 구현했습니다.
+브라우저에서 동작하는 macOS 스타일 운영체제이자 개발자 포트폴리오입니다. 실제 창 관리, IndexedDB에 저장되는 가상 파일시스템, zsh 스타일 터미널, 하나의 커널을 공유하는 십여 개의 앱을 macOS 26의 Liquid Glass 디자인으로 구현했습니다. 제어 센터와 위젯은 뒤에 있는 내용에 따라 흰 글씨와 어두운 글씨를 오가고, 잠금 화면 시계는 배경이 비치는 우윳빛 유리로 그립니다.
 
 ### 실행
 
@@ -91,7 +91,7 @@ npm run build      # dist/ 에 정적 사이트 생성
 
 - 아바타: `public/avatar.svg` 교체 (기본값은 그라데이션 위 이모지)
 - 프로젝트 커버: `public/projects/*.svg`
-- 배경화면: `public/wallpapers/*.svg` (목록은 `src/kernel/wallpapers.ts`)
+- 배경화면: `public/wallpapers/` (목록은 `src/kernel/wallpapers.ts`). 기본 배경 "Flow"는 `scripts/wallpapers/flow.html`이 그리고 `scripts/wallpapers/render.js`(Playwright 스니펫, 개발 서버 실행 중에 사용)가 JPEG로 저장합니다.
 
 방문자가 만든 파일과 설정은 각자의 브라우저에 저장됩니다. 포트폴리오 데이터를 바꾸면 재방문자에게 새 내용이 병합되고 방문자 파일은 유지됩니다.
 
