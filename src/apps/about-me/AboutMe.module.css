@@ -391,6 +391,10 @@ html[data-reduce-transparency='true'] .actionActive .actionCircle {
   -webkit-text-fill-color: transparent;
 }
 
+.display .emoji {
+  -webkit-text-fill-color: initial;
+}
+
 .bio {
   font-size: 13.5px;
   line-height: 1.62;

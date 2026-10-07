@@ -407,6 +407,8 @@ function MiniProjectCard({ project, index }: { project: Project; index: number }
   );
 }
 
+const EMOJI = /(\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*)/u; /** Matches one emoji (with variation selectors and ZWJ sequences), captured so `split` keeps it. */
+
 /**
  * Renders the Overview section.
  *
@@ -430,7 +432,11 @@ function Overview() {
   const shown = (featured.length ? featured : projects).slice(0, 4);
   return (
     <>
-      <h1 className={styles.display}>{t(owner.tagline)}</h1>
+      <h1 className={styles.display}>
+        {t(owner.tagline)
+          .split(EMOJI)
+          .map((part, i) => (i % 2 ? <span key={i} className={styles.emoji}>{part}</span> : part))}
+      </h1>
       <Markdown source={t(owner.bio)} className={styles.bio} />
 
       <h2 className={styles.sectionTitle}>{t(S.highlights)}</h2>

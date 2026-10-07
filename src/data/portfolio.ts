@@ -27,10 +27,7 @@ export const owner = {
   role: { en: 'Full-stack Engineer', ko: '풀스택 엔지니어' } as LString,
   location: { en: 'Seoul, South Korea', ko: '대한민국 서울' } as LString,
   /** One-line summary used as the About Me headline and shown in Tips, the Safari portfolio page and Terminal `about`. */
-  tagline: {
-    en: 'I build products end to end, from the interface to the server.',
-    ko: '화면부터 서버까지, 제품을 처음부터 끝까지 만듭니다.',
-  } as LString,
+  tagline: { en: 'Hello! 👋', ko: '안녕하세요! 👋' } as LString,
   /** Longer bio, written in Markdown; the welcome email quotes only its first paragraph. */
   bio: {
     en:
