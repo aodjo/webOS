@@ -42,8 +42,8 @@
   color: #fff;
   animation: trackIn 0.5s ease both;
   transition:
-    opacity 0.45s ease,
-    filter 0.45s ease;
+    opacity 0.3s ease,
+    filter 0.3s ease;
 }
 
 .greeting.morphing {
@@ -56,7 +56,7 @@
   max-width: 1ch;
   overflow: hidden;
   transition:
-    max-width 0.38s var(--ease-out),
+    max-width 0.26s var(--ease-out),
     opacity 0.3s ease,
     color 0.3s ease;
 }

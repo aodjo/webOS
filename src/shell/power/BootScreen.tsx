@@ -23,13 +23,13 @@ const MAX_SPEED = 1 / 0.5; /** Maximum catch-up speed in progress per second, so
 const PAUSE_AT_END_MS = 260; /** Time in ms the full bar stays visible before the screen fades. */
 const FADE_MS = 520; /** Duration in ms of the fade-out, after which `onDone` is called. */
 const GLYPHS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'; /** Characters cycled through while a greeting character is scrambled. */
-const SCRAMBLE_TICK_MS = 55; /** Time in ms between changes of a scrambled character. */
-const GREETING_READ_MS = 1100; /** Time in ms the greeting stays readable before it starts to scramble. */
-const SCRAMBLE_SPREAD_MS = 450; /** Window in ms over which the characters start scrambling, in random order. */
-const COLLAPSE_START_MS = 1500; /** Time in ms at which scrambled characters start dropping out. */
-const COLLAPSE_MS = 900; /** Time in ms over which characters drop out, from the ends towards the middle. */
+const SCRAMBLE_TICK_MS = 45; /** Time in ms between changes of a scrambled character. */
+const GREETING_READ_MS = 600; /** Time in ms the greeting stays readable before it starts to scramble. */
+const SCRAMBLE_SPREAD_MS = 280; /** Window in ms over which the characters start scrambling, in random order. */
+const COLLAPSE_START_MS = 850; /** Time in ms at which scrambled characters start dropping out. */
+const COLLAPSE_MS = 520; /** Time in ms over which characters drop out, from the ends towards the middle. */
 const KEEP_CHARS = 5; /** Number of middle characters left when the greeting reaches the logo's size. */
-const MORPH_AT_MS = 2550; /** Time in ms at which the leftover characters give way to the logo. */
+const MORPH_AT_MS = 1450; /** Time in ms at which the leftover characters give way to the logo. */
 
 /**
  * Picks a random character to show in place of a scrambled one.
