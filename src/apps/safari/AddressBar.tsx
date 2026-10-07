@@ -8,7 +8,8 @@ import { fmt, useLocale, useT } from '@/kernel';
 import type { Bookmark, HistoryEntry } from './store';
 import type { TabStatus } from './tabs';
 import { S, titleFor } from './strings';
-import { START_URL, displayHost, isSecure, kindOfURL, letterIcon, parseInput, searchQueryOf, searchURL } from './url';
+import { START_URL, displayHost, isSecure, kindOfURL, parseInput, searchQueryOf, searchURL } from './url';
+import { SiteIcon } from './SiteIcon';
 import styles from './Safari.module.css';
 
 /** Imperative handle exposed by `<AddressBar ref>`. */
@@ -285,7 +286,6 @@ export const AddressBar = forwardRef<AddressBarHandle, Props>(function AddressBa
         <div id={listId} className={`lg lg-thick lg-float ${styles.suggest}`} role="listbox" onMouseDown={(e) => e.preventDefault()}>
           {suggestions.length > 1 && <div className={styles.suggestHeader}>{t(S.topHits)}</div>}
           {suggestions.map((s, i) => {
-            const li = letterIcon(s.title, s.url);
             return (
               <div
                 key={s.key}
@@ -296,9 +296,11 @@ export const AddressBar = forwardRef<AddressBarHandle, Props>(function AddressBa
                 onMouseEnter={() => setHighlight(i)}
                 onClick={() => submit(s.url)}
               >
-                <span className={styles.suggestIcon} style={s.icon === 'site' ? { background: li.color } : undefined}>
-                  {s.icon === 'search' ? <Search size={12} /> : s.icon === 'globe' ? <Globe size={12} /> : li.letter}
-                </span>
+                {s.icon === 'site' ? (
+                  <SiteIcon url={s.url} size={20} />
+                ) : (
+                  <span className={styles.suggestIcon}>{s.icon === 'search' ? <Search size={12} /> : <Globe size={12} />}</span>
+                )}
                 <span className={styles.suggestTitle}>{s.title}</span>
                 {s.subtitle && <span className={styles.suggestSub}>{s.subtitle}</span>}
               </div>

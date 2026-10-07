@@ -364,17 +364,13 @@
   background: var(--active);
   color: var(--text);
 }
+/* Holds the loading spinner in place of the page icon. */
 .tabIcon {
   flex: none;
   display: grid;
   place-items: center;
   width: 16px;
   height: 16px;
-  border-radius: 5px;
-  background: var(--tile);
-  color: #fff;
-  font-size: 9px;
-  font-weight: 700;
 }
 .tabTitle {
   min-width: 0;
@@ -416,18 +412,6 @@
     opacity: 0;
     transform: translateX(-12px);
   }
-}
-.sideIcon {
-  display: grid;
-  place-items: center;
-  width: 18px;
-  height: 18px;
-  border-radius: 5px;
-  background: var(--tile);
-  color: #fff;
-  font-size: 9px;
-  font-weight: 700;
-  flex: none;
 }
 .sideEmpty {
   padding: 2px 8px 6px;

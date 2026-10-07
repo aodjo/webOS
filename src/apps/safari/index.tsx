@@ -3,7 +3,7 @@
  * portfolio, history) are React. Each tab has its own back/forward history; browsing history,
  * bookmarks and the Reading List are shared by all Safari windows (see ./store).
  */
-import { useCallback, useEffect, useMemo, useReducer, useRef, useState, type CSSProperties, type Dispatch, type KeyboardEvent, type MouseEvent } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState, type Dispatch, type KeyboardEvent, type MouseEvent } from 'react';
 import { ChevronLeft, ChevronRight, Glasses, PanelLeft, Plus, Share, Star, X } from 'lucide-react';
 import { IconButton, SidebarItem, SidebarSection, Toolbar } from '@/components/ui';
 import { GlassGroup } from '@/components/Glass';
@@ -34,7 +34,8 @@ import { linkMenu, openExternal, type PageAPI } from './pages/api';
 import { buildFavorites, useSafari } from './store';
 import { S, titleFor } from './strings';
 import { ZOOM_STEPS, canGoBack, canGoForward, currentURL, initTabs, tabsReducer, type Tab, type TabsAction, type TabsState } from './tabs';
-import { HISTORY_URL, START_URL, fileURL, isKnownBlocked, isMailto, isSelf, kindOfURL, letterIcon, parseInput, parseLinkFile } from './url';
+import { HISTORY_URL, START_URL, fileURL, isKnownBlocked, isMailto, isSelf, kindOfURL, parseInput, parseLinkFile } from './url';
+import { SiteIcon } from './SiteIcon';
 import styles from './Safari.module.css';
 
 const sep: MenuItem = { separator: true }; /** Separator entry reused in menus and context menus. */
@@ -192,7 +193,6 @@ function TabBar({ state, dispatch, onClose, onNewTab, locale }: { state: TabsSta
       {state.tabs.map((tab, i) => {
         const url = currentURL(tab);
         const title = titleFor(url, locale);
-        const li = letterIcon(title, url);
         const active = tab.id === state.activeId;
         const cls = [styles.tab, active && styles.tabActive, dragFrom === i && styles.tabDragging, dragOver === i && dragFrom !== i && styles.tabDropTarget].filter(Boolean).join(' ');
         return (
@@ -254,9 +254,13 @@ function TabBar({ state, dispatch, onClose, onNewTab, locale }: { state: TabsSta
             >
               <X size={10} strokeWidth={2.4} />
             </button>
-            <span className={styles.tabIcon} style={{ '--tile': li.color } as CSSProperties} aria-hidden>
-              {tab.status === 'loading' ? <span className={styles.spinner} /> : li.letter}
-            </span>
+            {tab.status === 'loading' ? (
+              <span className={styles.tabIcon} aria-hidden>
+                <span className={styles.spinner} />
+              </span>
+            ) : (
+              <SiteIcon url={url} size={16} />
+            )}
             <span className={styles.tabTitle}>{title}</span>
           </div>
         );
@@ -767,16 +771,11 @@ export default function Safari({ windowId, args }: AppProps) {
               {state.tabs.map((x) => {
                 const u = currentURL(x);
                 const ti = titleFor(u, locale);
-                const li = letterIcon(ti, u);
                 return (
                   <SidebarItem
                     key={x.id}
                     selected={x.id === state.activeId}
-                    icon={
-                      <span className={styles.sideIcon} style={{ '--tile': li.color } as CSSProperties}>
-                        {li.letter}
-                      </span>
-                    }
+                    icon={<SiteIcon url={u} size={18} />}
                     label={ti}
                     onClick={() => dispatch({ type: 'select', id: x.id })}
                   />

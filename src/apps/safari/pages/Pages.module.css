@@ -241,10 +241,8 @@
   height: 52px;
   /* 18px card radius − 10px card padding, so the corners are concentric. */
   border-radius: 8px;
-  background: linear-gradient(160deg, color-mix(in srgb, var(--tile) 70%, white), var(--tile));
-  color: #fff;
-  font-size: 22px;
-  font-weight: 600;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14);
 }
 .readingText {
   display: flex;
@@ -345,17 +343,6 @@
   color: var(--text-secondary);
   font-size: 12px;
   font-variant-numeric: tabular-nums;
-}
-.historyIcon {
-  display: grid;
-  place-items: center;
-  width: 18px;
-  height: 18px;
-  border-radius: 5px;
-  background: var(--tile);
-  color: #fff;
-  font-size: 10px;
-  font-weight: 700;
 }
 .historyTitle,
 .historyUrl {

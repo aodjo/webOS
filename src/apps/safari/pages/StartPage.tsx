@@ -4,12 +4,12 @@
  */
 import { useMemo, useState, type CSSProperties } from 'react';
 import { Glasses, ShieldHalf } from 'lucide-react';
-import { owner } from '@/data/portfolio';
 import { fmt, fs, showContextMenu, useIsDark, useLocale, useSystem, useT, wallpaperURL } from '@/kernel';
 import { buildFavorites, useSafari, type Favorite } from '../store';
 import { S } from '../strings';
 import { displayHost, kindOfURL, letterIcon } from '../url';
 import { linkMenu, type PageAPI } from './api';
+import { faviconFor, SiteIcon } from '../SiteIcon';
 import styles from './Pages.module.css';
 
 const P = {
@@ -28,28 +28,6 @@ const P = {
     ko: '읽기 목록에 추가한 페이지가 여기에 표시됩니다. 공유 버튼이나 ⇧⌘D를 사용해 보세요.',
   },
 }; /** Localized strings used only by the Start Page. */
-
-/**
- * Returns the picture for a favorite's icon tile.
- *
- * The portfolio page uses the owner's avatar; web sites use their own `/favicon.ico`, loaded from
- * the site itself; other pages have none.
- *
- * @param {string} url - The favorite's URL.
- * @returns {string | null} The image URL, or null when the tile shows a letter instead.
- *
- * @example
- * faviconFor('https://github.com/aodjo'); // 'https://github.com/favicon.ico'
- */
-function faviconFor(url: string): string | null {
-  if (kindOfURL(url) === 'internal') return owner.avatar || null;
-  if (kindOfURL(url) !== 'web') return null;
-  try {
-    return `${new URL(url).origin}/favicon.ico`;
-  } catch {
-    return null;
-  }
-}
 
 /**
  * A favorite shown as an app-like icon tile with its name underneath.
@@ -190,7 +168,6 @@ export function StartPage({ api }: { api: PageAPI }) {
             ) : (
               <div className={styles.readingGrid}>
                 {readingList.map((r) => {
-                  const li = letterIcon(r.title, r.url);
                   return (
                     <button
                       key={r.url}
@@ -202,8 +179,8 @@ export function StartPage({ api }: { api: PageAPI }) {
                       }}
                       onContextMenu={(e) => showContextMenu(e, linkMenu(api, r.url, [{ label: S.removeReading, action: () => removeFromReadingList(r.url) }]))}
                     >
-                      <span className={styles.readingThumb} style={{ '--tile': li.color } as CSSProperties}>
-                        {li.letter}
+                      <span className={styles.readingThumb}>
+                        <SiteIcon url={r.url} size={28} />
                       </span>
                       <span className={styles.readingText}>
                         <span className={styles.readingTitle}>

@@ -2,13 +2,14 @@
  * The `webos://history` page: searchable browsing history grouped by day, plus the
  * shared "Clear History" confirmation used by the Safari menu.
  */
-import { useMemo, useState, type CSSProperties } from 'react';
+import { useMemo, useState } from 'react';
 import { Clock } from 'lucide-react';
 import { Button, SearchField } from '@/components/ui';
 import { dialogs, formatDate, showContextMenu, useLocale, useT } from '@/kernel';
 import { useSafari, type HistoryEntry } from '../store';
 import { S } from '../strings';
-import { displayHost, kindOfURL, letterIcon } from '../url';
+import { displayHost, kindOfURL } from '../url';
+import { SiteIcon } from '../SiteIcon';
 import { linkMenu, type PageAPI } from './api';
 import styles from './Pages.module.css';
 
@@ -118,7 +119,6 @@ export function HistoryPage({ api }: { api: PageAPI }) {
             <section key={g.key} className={styles.historyGroup}>
               <h2 className={styles.historyDay}>{g.label}</h2>
               {g.items.map((h) => {
-                const li = letterIcon(h.title, h.url);
                 return (
                   <button
                     key={`${h.ts}-${h.url}`}
@@ -128,9 +128,7 @@ export function HistoryPage({ api }: { api: PageAPI }) {
                     onContextMenu={(e) => showContextMenu(e, linkMenu(api, h.url, [{ label: P.removeVisit, action: () => removeVisit(h.ts) }]))}
                   >
                     <span className={styles.historyTime}>{formatDate(h.ts, locale, { hour: 'numeric', minute: '2-digit' })}</span>
-                    <span className={styles.historyIcon} style={{ '--tile': li.color } as CSSProperties}>
-                      {li.letter}
-                    </span>
+                    <SiteIcon url={h.url} size={18} />
                     <span className={styles.historyTitle}>{h.title}</span>
                     <span className={styles.historyUrl}>{kindOfURL(h.url) === 'web' ? displayHost(h.url) : h.url}</span>
                   </button>
