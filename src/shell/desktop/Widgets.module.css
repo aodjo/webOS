@@ -7,27 +7,53 @@
 }
 
 /* ───────────────────────── Widget card ─────────────────────────
-   A Liquid Glass tile (`lg` in Widgets.tsx). While the desktop is in front it uses a slightly
-   denser tint than regular glass so theme-colored text stays legible on any wallpaper; while an
-   app is in front it recedes into clear glass (`lg-clear`) with monochrome content (Sonoma). */
+   A Liquid Glass tile (`lg` in Widgets.tsx) in the macOS 26 desktop style: clear glass with white
+   content. Over a bright desktop picture (the stack's data-tone="dark") the glass turns frosted
+   white and the content dark. While an app is in front the tile recedes into clear glass
+   (`lg-clear`) with monochrome content. */
+
+.stack {
+  --w-tint: rgba(255, 255, 255, 0.1);
+  --w-text: #fff;
+  --w-text-2: rgba(255, 255, 255, 0.78);
+  --w-text-3: rgba(255, 255, 255, 0.6);
+  --w-face: rgba(255, 255, 255, 0.14);
+  --w-shadow: 0 1px 2px rgba(0, 0, 0, 0.14);
+}
+html[data-theme='dark'] .stack {
+  --w-tint: rgba(0, 0, 0, 0.1);
+  --w-face: rgba(255, 255, 255, 0.1);
+}
+.stack[data-tone='dark'] {
+  --w-tint: rgba(255, 255, 255, 0.42);
+  --w-text: rgba(0, 0, 0, 0.85);
+  --w-text-2: rgba(0, 0, 0, 0.6);
+  --w-text-3: rgba(0, 0, 0, 0.45);
+  --w-face: rgba(255, 255, 255, 0.5);
+  --w-shadow: none;
+}
+html[data-reduce-transparency='true'] .stack {
+  --w-text: var(--text);
+  --w-text-2: var(--text-secondary);
+  --w-text-3: var(--text-tertiary);
+  --w-face: var(--window-bg);
+  --w-shadow: none;
+}
 
 .widget {
-  --widget-tint: rgba(255, 255, 255, 0.4);
   position: relative;
   width: 160px;
   height: 160px;
   border-radius: 22px;
-  color: var(--text);
+  color: var(--w-text);
+  text-shadow: var(--w-shadow);
   transition:
     background-color 0.35s ease,
     box-shadow 0.35s ease;
   animation: widgetIn 0.42s var(--ease-spring) both;
 }
-html[data-theme='dark'] .widget {
-  --widget-tint: rgba(34, 34, 38, 0.42);
-}
 .widget:not(.dimmed) {
-  background: var(--widget-tint);
+  background: var(--w-tint);
 }
 
 .content {
@@ -42,14 +68,12 @@ html[data-theme='dark'] .widget {
 
 /* While an app is in front, widgets recede into monochrome clear glass. */
 .widget.dimmed {
-  /* Keeps the clear glass's lighter blur, but not its near-zero tint: theme-colored text must
-     stay legible over any wallpaper, including the user's own pictures. */
-  background: var(--lg-tint);
+  background: var(--w-tint);
   box-shadow:
     inset 0.5px 0.5px 0 0 var(--lg-rim-top),
     inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
     0 0 0 0.5px var(--lg-edge),
-    0 4px 14px rgba(0, 0, 0, 0.08);
+    0 4px 14px rgba(0, 0, 0, 0.06);
 }
 .dimmed .content {
   filter: grayscale(1);
@@ -113,35 +137,26 @@ html[data-theme='dark'] .widget {
   width: 100%;
   height: 100%;
   overflow: visible;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.12));
 }
 
-/* The face sits inset in the glass tile, a little translucent, with a bright rim on top. */
+/* The face is a slightly lighter disc of the same glass. */
 .dial {
-  fill: color-mix(in srgb, var(--window-bg) 86%, transparent);
-  stroke: rgba(255, 255, 255, 0.55);
-  stroke-width: 0.5;
-}
-html[data-theme='dark'] .dial {
-  stroke: rgba(255, 255, 255, 0.14);
-}
-html[data-reduce-transparency='true'] .dial {
-  fill: var(--window-bg);
+  fill: var(--w-face);
 }
 
 .tick {
-  stroke: var(--text-tertiary);
+  stroke: var(--w-text-3);
   stroke-width: 0.6;
   stroke-linecap: round;
 }
 .tickMajor {
-  stroke: var(--text-secondary);
+  stroke: var(--w-text-2);
   stroke-width: 1.1;
   stroke-linecap: round;
 }
 
 .numeral {
-  fill: var(--text);
+  fill: var(--w-text);
   font-family: var(--font-display);
   font-size: 10.5px;
   font-weight: 500;
@@ -149,7 +164,7 @@ html[data-reduce-transparency='true'] .dial {
 }
 
 .city {
-  fill: var(--text-secondary);
+  fill: var(--w-text-2);
   font-size: 6.4px;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -157,7 +172,7 @@ html[data-reduce-transparency='true'] .dial {
 }
 
 .date {
-  fill: var(--red);
+  fill: var(--orange);
   font-size: 6.8px;
   font-weight: 600;
   text-anchor: middle;
@@ -170,14 +185,14 @@ html[data-reduce-transparency='true'] .dial {
   animation-iteration-count: infinite;
 }
 .hourHand {
-  stroke: var(--text);
+  stroke: var(--w-text);
   stroke-width: 3.2;
   stroke-linecap: round;
   animation-duration: 43200s;
   animation-delay: var(--hour-delay, 0s);
 }
 .minuteHand {
-  stroke: var(--text);
+  stroke: var(--w-text);
   stroke-width: 2.2;
   stroke-linecap: round;
   animation-duration: 3600s;
@@ -196,7 +211,7 @@ html[data-reduce-transparency='true'] .dial {
   fill: var(--orange);
 }
 .pin {
-  fill: var(--window-bg);
+  fill: var(--w-text);
 }
 
 @keyframes spin {
@@ -250,7 +265,7 @@ html[data-reduce-motion='true'] .secondHand {
   padding: 0;
   border: none;
   background: none;
-  color: var(--text);
+  color: inherit;
   text-align: left;
   cursor: default;
 }
@@ -313,7 +328,7 @@ html[data-theme='dark'] .status {
   max-width: 100%;
   font-size: 11px;
   line-height: 14px;
-  color: var(--text-secondary);
+  color: var(--w-text-2);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -327,12 +342,12 @@ html[data-theme='dark'] .status {
   gap: 3px;
   font-size: 10px;
   line-height: 13px;
-  color: var(--text-tertiary);
+  color: var(--w-text-3);
   overflow: hidden;
   white-space: nowrap;
 }
 
-/* Accent-tinted glass capsule that squishes on press. */
+/* Glass capsule that squishes on press. */
 .nowCta {
   align-self: flex-start;
   display: inline-flex;
@@ -342,12 +357,11 @@ html[data-theme='dark'] .status {
   padding: 0 11px;
   border: none;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  background: rgba(255, 255, 255, 0.18);
   box-shadow:
     inset 0.5px 0.5px 0 0 var(--lg-rim-top),
-    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
-    0 0 0 0.5px color-mix(in srgb, var(--accent) 22%, transparent);
-  color: var(--accent);
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom);
+  color: var(--w-text);
   font-size: 11px;
   font-weight: 600;
   cursor: default;
@@ -356,10 +370,10 @@ html[data-theme='dark'] .status {
     background-color 0.15s ease;
 }
 .nowCta:hover {
-  background: color-mix(in srgb, var(--accent) 24%, transparent);
+  background: rgba(255, 255, 255, 0.26);
 }
 .nowCta:active {
-  background: color-mix(in srgb, var(--accent) 32%, transparent);
+  background: rgba(255, 255, 255, 0.34);
   transform: scale(0.94);
   transition-duration: 0.1s;
 }

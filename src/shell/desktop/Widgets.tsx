@@ -11,6 +11,7 @@ import { useRefraction } from '@/components/Glass';
 import { owner } from '@/data/portfolio';
 import { clockCityLabel, hostTimeZone } from './cities';
 import { desktopUI, useDesktopUI, WIDGET_IDS, type WidgetId } from './desktopStore';
+import { useWallpaperLuminance } from '../menubar/wallpaperTone';
 import styles from './Widgets.module.css';
 
 const S = {
@@ -23,6 +24,9 @@ const S = {
   projects: { en: 'Projects', ko: '프로젝트' },
   openAboutMe: { en: 'Open About Me', ko: '내 소개 열기' },
 } satisfies Record<string, LString>; /** Localized UI strings for the widgets, their context menu and the edit gallery. */
+
+const WIDGET_REGION = { x0: 0, y0: 0.03, x1: 0.16, y1: 0.45 }; /** Viewport region (fractions) behind the widget stack, sampled to pick the content tone. */
+const DARK_CONTENT_ABOVE = 0.42; /** Wallpaper luminance above which the widgets switch to frosted glass with dark content. */
 
 const WIDGETS: Record<WidgetId, { name: LString; description: LString; icon: ComponentType<{ size?: number }> }> = {
   clock: { name: { en: 'Clock', ko: '시계' }, description: { en: 'Local time and date', ko: '현재 시간과 날짜' }, icon: Clock },
@@ -49,7 +53,8 @@ const fill = (s: LString, locale: Locale, name: string) => (typeof s === 'string
  * Desktop widget column plus the edit-mode gallery.
  *
  * Renders every visible widget (per the desktop UI store) in a vertical stack at the given
- * position. Widgets are dimmed into clear monochrome glass while an app window has focus,
+ * position. The content is white on clear glass, or dark on frosted glass when the desktop
+ * picture behind the stack is brighter than DARK_CONTENT_ABOVE. Widgets are dimmed into clear monochrome glass while an app window has focus,
  * unless edit mode is on. In edit mode the gallery is shown at the bottom of the screen, and
  * pressing Escape (outside text inputs) leaves edit mode; clicking the wallpaper, handled by
  * the desktop, does the same. Memoized so desktop re-renders do not re-render the widgets.
@@ -67,6 +72,8 @@ export const Widgets = memo(function Widgets({ left, top, bottom }: { left: numb
   const visible = useDesktopUI((s) => s.widgets);
   const editing = useDesktopUI((s) => s.editingWidgets);
   const appFocused = useWM((s) => s.focusedId !== null);
+  const lum = useWallpaperLuminance(WIDGET_REGION);
+  const tone = lum !== null && lum > DARK_CONTENT_ABOVE ? 'dark' : 'light';
 
   useEffect(() => {
     if (!editing) return;
@@ -92,7 +99,7 @@ export const Widgets = memo(function Widgets({ left, top, bottom }: { left: numb
 
   return (
     <>
-      <div className={styles.stack} style={{ left, top }}>
+      <div className={styles.stack} data-tone={tone} style={{ left, top }}>
         {WIDGET_IDS.filter((id) => visible[id]).map((id) => (
           <WidgetFrame key={id} id={id} dimmed={appFocused && !editing} editing={editing}>
             {id === 'clock' ? <ClockWidget /> : <NowWidget />}

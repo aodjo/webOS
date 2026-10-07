@@ -1,5 +1,7 @@
 /**
  * Notification Center widgets: World Clock (medium), Calendar (small) and Portfolio (small).
+ * Each tile is clear Liquid Glass whose content tone (`data-adaptive-tone`) the Notification
+ * Center sets from what lies behind it.
  */
 import { useState } from 'react';
 import type { LString } from '@/kernel/types';
@@ -38,7 +40,7 @@ const WEEKDAYS = { en: ['S', 'M', 'T', 'W', 'T', 'F', 'S'], ko: ['일', '월', '
  */
 const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(' ');
 
-const TILE = 'lg lg-thick'; /** Thick Liquid Glass classes (styles/glass.css) shared by every widget tile. */
+const TILE = 'lg'; /** Regular Liquid Glass class (styles/glass.css) shared by every widget tile. */
 
 /* ───────────────────────── World Clock ───────────────────────── */
 
@@ -99,7 +101,7 @@ function WorldClockWidget() {
   const locale = useLocale();
   const now = new Date(useNow(1000));
   return (
-    <section data-lg-optics className={cx(TILE, styles.widget, styles.medium, styles.world)} aria-label={t(S.worldClock)}>
+    <section data-lg-optics data-adaptive-tone className={cx(TILE, styles.widget, styles.medium, styles.world)} aria-label={t(S.worldClock)}>
       {CITIES.map((c) => {
         const z = zonedTime(now, c.tz);
         return (
@@ -138,7 +140,7 @@ function CalendarWidget() {
   const rows = monthGrid(y, mo);
   const title = locale === 'ko' ? `${mo + 1}월` : EN_MONTHS[mo].toUpperCase();
   return (
-    <section data-lg-optics className={cx(TILE, styles.widget, styles.small, styles.calendar)} aria-label={t(S.calendar)}>
+    <section data-lg-optics data-adaptive-tone className={cx(TILE, styles.widget, styles.small, styles.calendar)} aria-label={t(S.calendar)}>
       <div className={styles.month}>{title}</div>
       <div className={styles.calGrid} role="grid">
         <div className={styles.calRow} role="row">
@@ -194,7 +196,7 @@ function PortfolioWidget({ onLaunch }: { onLaunch: (appId: string) => void }) {
   const [brokenSrc, setBrokenSrc] = useState<string | null>(null);
   const broken = brokenSrc === src;
   return (
-    <section data-lg-optics className={cx(TILE, styles.widget, styles.small, styles.portfolio)} aria-label={t(S.portfolio)}>
+    <section data-lg-optics data-adaptive-tone className={cx(TILE, styles.widget, styles.small, styles.portfolio)} aria-label={t(S.portfolio)}>
       {broken ? (
         <span className={cx(styles.avatar, styles.initials)}>{name.slice(0, 1).toUpperCase()}</span>
       ) : (

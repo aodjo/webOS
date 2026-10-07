@@ -19,6 +19,7 @@ import { OSLogo } from '@/icons';
 import { Z } from '../layers';
 import { relativeTime } from './format';
 import { useCloseOnSessionEnd, useDismiss, useNow, usePresence } from './hooks';
+import { useAdaptiveTone } from './adaptiveTone';
 import { Widgets } from './Widgets';
 import styles from './Notifications.module.css';
 
@@ -545,7 +546,8 @@ function CenterContent({ open }: { open: boolean }) {
  * play its exit animation, during which it is inert. It closes on a pointer-down outside of it
  * (except on its menu bar toggle, `[data-nc-toggle]`), on Escape, and when the session stops
  * being interactive. A pointer-down on the panel's own empty space or on a `data-nc-backdrop`
- * element also closes it, so the gaps between cards behave like the desktop behind them.
+ * element also closes it, so the gaps between cards behave like the desktop behind them. The
+ * widgets pick their content tone from what lies behind them (useAdaptiveTone).
  *
  * @returns {JSX.Element | null} The panel, or null when it is fully closed.
  *
@@ -559,6 +561,7 @@ export function NotificationCenter() {
   const ref = useRef<HTMLElement>(null);
   useDismiss(open, ref, closeCenter, '[data-nc-toggle]');
   useCloseOnSessionEnd(open, closeCenter);
+  useAdaptiveTone(ref, '[data-adaptive-tone]', mounted);
   if (!mounted) return null;
   return (
     <aside
