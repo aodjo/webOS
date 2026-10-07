@@ -21,16 +21,16 @@ interface Entry {
   color?: string;
 }
 
+const TOP: Entry[] = [{ path: RECENTS, label: S.recents, icon: Clock }]; /** Rows above the titled sections (macOS 26): Recents. */
+
 const FAVORITES: Entry[] = [
-  { path: RECENTS, label: S.recents, icon: Clock },
   { path: PATHS.applications, label: S.applications, icon: AppWindowMac },
   { path: PATHS.desktop, label: S.desktop, icon: Monitor },
   { path: PATHS.documents, label: S.documents, icon: FileText },
   { path: PATHS.downloads, label: S.downloads, icon: CircleArrowDown },
   { path: PATHS.pictures, label: S.pictures, icon: Image },
   { path: PATHS.music, label: S.music, icon: Music },
-  { path: HOME, label: USER, icon: House },
-]; /** Rows of the Favorites section: Recents, the standard folders and the home folder. */
+]; /** Rows of the Favorites section: the standard folders. */
 
 interface Props {
   location: string;
@@ -43,7 +43,8 @@ interface Props {
 }
 
 /**
- * Finder sidebar with the Favorites, Locations (startup disk and Trash) and Tags sections.
+ * Finder sidebar laid out like macOS 26: Recents on top without a heading, then the Favorites
+ * (standard folders), Locations (home folder, startup disk and Trash) and Tags sections.
  *
  * Each section title toggles its collapsed state in the Finder prefs. Rows navigate on click,
  * accept dropped items (with spring-loading) and have their own context menu; the Trash row
@@ -71,11 +72,13 @@ export function Sidebar({ location, width, windowId, onNavigate, onDropped, draw
   const collapsed = useFinderPrefs((p) => p.collapsed);
   const [liveWidth, setLiveWidth] = useState<number | null>(null);
   const locations: Entry[] = [
+    { path: HOME, label: USER, icon: House },
     { path: '/', label: `${osInfo.name} HD`, icon: HardDrive },
     { path: PATHS.trash, label: S.trash, icon: trashFull ? TrashFullGlyph : TrashEmptyGlyph },
   ];
   const tags: Entry[] = TAG_COLORS.map((c) => ({ path: TAG_PREFIX + c.id, label: c.name, color: c.color }));
-  const sections: { id: string; title: LString; entries: Entry[] }[] = [
+  const sections: { id: string; title?: LString; entries: Entry[] }[] = [
+    { id: 'top', entries: TOP },
     { id: 'favorites', title: S.favorites, entries: FAVORITES },
     { id: 'locations', title: S.locations, entries: locations },
     { id: 'tags', title: S.tags, entries: tags },
@@ -90,11 +93,13 @@ export function Sidebar({ location, width, windowId, onNavigate, onDropped, draw
         <div className={s.scroll}>
           {sections.map((sec) => (
             <section key={sec.id} className={s.section}>
-              <button type="button" className={s.sectionTitle} aria-expanded={!collapsed[sec.id]} onClick={() => prefs.toggleSection(sec.id)}>
-                <span>{t(sec.title)}</span>
-                <ChevronRight size={12} strokeWidth={2.4} className={`${s.sectionChevron} ${collapsed[sec.id] ? '' : s.sectionOpen}`} aria-hidden="true" />
-              </button>
-              {!collapsed[sec.id] && (
+              {sec.title && (
+                <button type="button" className={s.sectionTitle} aria-expanded={!collapsed[sec.id]} onClick={() => prefs.toggleSection(sec.id)}>
+                  <span>{t(sec.title)}</span>
+                  <ChevronRight size={12} strokeWidth={2.4} className={`${s.sectionChevron} ${collapsed[sec.id] ? '' : s.sectionOpen}`} aria-hidden="true" />
+                </button>
+              )}
+              {!(sec.title && collapsed[sec.id]) && (
                 <div className={s.items}>
                   {sec.entries.map((e) => (
                     <SidebarRow key={e.path} entry={e} selected={location === e.path} windowId={windowId} onNavigate={onNavigate} onDropped={onDropped} />
