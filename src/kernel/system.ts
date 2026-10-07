@@ -161,7 +161,7 @@ export const useSystem = create<SystemState>()(
     }),
     {
       name: 'webos.system',
-      version: 3,
+      version: 4,
       /**
        * Selects the part of the state that is persisted.
        *
@@ -180,8 +180,9 @@ export const useSystem = create<SystemState>()(
        *
        * Settings stored with a version below 2 get Dock magnification turned off, and the placeholder
        * display names ("Aodjo" / "아오드조") are replaced with the default full name. Below version 3
-       * the former default wallpaper ("hallasan") is replaced with the current default. The persisted
-       * object is modified in place.
+       * the former default wallpaper ("hallasan") is replaced with the current default, and below
+       * version 4 the former default avatar ("/avatar.svg") is replaced with the owner's picture. The
+       * persisted object is modified in place.
        *
        * @param {unknown} persisted - The stored state.
        * @param {number} version - The storage version the state was written with.
@@ -197,6 +198,7 @@ export const useSystem = create<SystemState>()(
           if (p.settings.fullName === 'Aodjo' || p.settings.fullName === '아오드조') p.settings.fullName = DEFAULT_SETTINGS.fullName;
         }
         if (version < 3 && p.settings?.wallpaper === 'hallasan') p.settings.wallpaper = DEFAULT_WALLPAPER;
+        if (version < 4 && p.settings?.avatar === '/avatar.svg') p.settings.avatar = DEFAULT_SETTINGS.avatar;
         return p as unknown as SystemState;
       },
       /**

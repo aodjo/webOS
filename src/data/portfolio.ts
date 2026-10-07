@@ -49,7 +49,7 @@ export const owner = {
     blog: '',
     website: '',
   },
-  avatar: '/avatar.svg',
+  avatar: '/avatar.jpg',
   resume: '/resume.pdf',
 }; /** The portfolio owner's profile: identity, bio, contact details, links, avatar and résumé paths. */
 

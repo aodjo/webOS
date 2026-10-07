@@ -36,7 +36,7 @@ Requires Node.js 22.12 or later.
 
 Edit **`src/data/portfolio.ts`** — name, role, bio, contact links, skills, experience, education and projects. Everything else (About Me, Projects, Mail, Terminal commands, Spotlight, the résumé and project files in Finder) is generated from it. Every text field accepts a plain string or `{ en, ko }`.
 
-- Avatar: replace `public/avatar.svg` (an emoji on a gradient by default).
+- Avatar: replace `public/avatar.jpg` and point `owner.avatar` at it.
 - Project covers: `public/projects/*.svg`, referenced by each project's `cover`.
 - Wallpapers: `public/wallpapers/`, listed in `src/kernel/wallpapers.ts`. The default "Flow" picture is drawn by `scripts/wallpapers/flow.html` and saved as JPEGs by `scripts/wallpapers/render.js` (a Playwright snippet, run with the dev server up).
 
@@ -89,7 +89,7 @@ npm run build      # dist/ 에 정적 사이트 생성
 
 **`src/data/portfolio.ts` 한 파일만 수정하면 됩니다.** 이름·직함·소개·연락처·기술·경력·학력·프로젝트가 About Me, Projects, 메일, 터미널 명령어, Spotlight, Finder 안의 이력서와 프로젝트 파일에 자동으로 반영됩니다. 모든 문구는 문자열 또는 `{ en, ko }`로 쓸 수 있습니다.
 
-- 아바타: `public/avatar.svg` 교체 (기본값은 그라데이션 위 이모지)
+- 아바타: `public/avatar.jpg`를 교체하고 `owner.avatar`가 그 파일을 가리키게 합니다
 - 프로젝트 커버: `public/projects/*.svg`
 - 배경화면: `public/wallpapers/` (목록은 `src/kernel/wallpapers.ts`). 기본 배경 "Flow"는 `scripts/wallpapers/flow.html`이 그리고 `scripts/wallpapers/render.js`(Playwright 스니펫, 개발 서버 실행 중에 사용)가 JPEG로 저장합니다.
 
