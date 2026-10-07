@@ -10,7 +10,7 @@ import { awards, education, experience, osInfo, owner, projects, skills } from '
 import { HOME, PATHS, USER } from './constants';
 import { WALLPAPERS } from './wallpapers';
 import { fs, mimeFor, useFS } from './fs';
-import { basename, dirname, isWithin, join } from './path';
+import { basename, dirname, extname, isWithin, join } from './path';
 import { localizePeriod, tr } from './i18n';
 
 const SEED_SCHEMA = 5; /** Schema version hashed into the seed version; increment it after changing how this file builds the seed so returning visitors get the new seed merged in. */
@@ -155,8 +155,8 @@ function buildSeed(locale: Locale, apps: AppManifest[]): Draft {
   for (const p of ['/Applications', '/System', '/System/Library', '/Library', '/Users', '/bin', '/etc', '/tmp', '/usr', '/usr/bin', '/var', '/var/log']) dir(p, { locked: true });
   dir('/System/Library/Desktop Pictures', { locked: true });
   for (const w of WALLPAPERS) {
-    asset(`/System/Library/Desktop Pictures/${tr(w.name, 'en')}.svg`, w.light, 64_000, { locked: true });
-    if (w.dark) asset(`/System/Library/Desktop Pictures/${tr(w.name, 'en')} (Dark).svg`, w.dark, 64_000, { locked: true });
+    asset(`/System/Library/Desktop Pictures/${tr(w.name, 'en')}.${extname(w.light)}`, w.light, 64_000, { locked: true });
+    if (w.dark) asset(`/System/Library/Desktop Pictures/${tr(w.name, 'en')} (Dark).${extname(w.dark)}`, w.dark, 64_000, { locked: true });
   }
   file(
     '/System/Library/SystemVersion.plist',
