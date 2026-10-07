@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 import { ArrowRight, ArrowUpRight, Briefcase, Check, Copy, FileText, Globe, GraduationCap, Layers, Mail, MapPin, PenLine, Sparkles, Trophy } from 'lucide-react';
 import type { AppProps, MenuItem } from '@/kernel';
 import { COMMON, PATHS, buildResume, dialogs, extname, fs, join, localizePeriod, showFSError, stem, useAppMenus, useArgsChange, useLocale, useNode, useSystem, useT, wm } from '@/kernel';
 import { Toolbar } from '@/components/ui';
 import { Markdown } from '@/components/Markdown';
+import { useDraggableThumb } from '@/components/segmentThumb';
 import { awards, education, experience, owner, projects, skills, type Project } from '@/data/portfolio';
 import { ProjectCover } from '../projects/Cover';
 import { GitHubMark, LinkedInMark } from './brand';
@@ -335,10 +336,9 @@ function ActionButton({ icon, label, title, onClick, active }: { icon: ReactNode
  * Renders the segmented tab control that switches the main pane's section.
  *
  * Follows the ARIA tabs pattern: only the selected tab is in the tab order, and ArrowLeft,
- * ArrowRight, Home and End move both the selection and the focus. A highlight element slides
- * under the selected segment; its offset and width are measured in a layout effect and
- * measured again when the selection or the locale (label widths) changes, or when a
- * ResizeObserver reports that the control was resized.
+ * ArrowRight, Home and End move both the selection and the focus. A glass thumb slides under the
+ * selected segment and can be grabbed and dragged to another tab (useDraggableThumb); it is
+ * re-measured when the locale changes the label widths.
  *
  * @param {Object} props - Component props.
  * @param {Tab} props.value - Currently selected tab.
@@ -353,31 +353,8 @@ function TabBar({ value, onChange, idPrefix }: { value: Tab; onChange: (t: Tab) 
   const t = useT();
   const listRef = useRef<HTMLDivElement>(null);
   const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const [indicator, setIndicator] = useState<{ x: number; w: number } | null>(null);
   const idx = TABS.indexOf(value);
-
-  useLayoutEffect(() => {
-    /**
-     * Stores the selected segment's offset and width for the sliding highlight.
-     *
-     * Keeps the previous state object when the measurement is unchanged, so repeated
-     * measurements do not cause extra renders.
-     *
-     * @returns {void}
-     *
-     * @example
-     * new ResizeObserver(measure).observe(listRef.current);
-     */
-    const measure = () => {
-      const el = btnRefs.current[idx];
-      if (el) setIndicator((prev) => (prev && prev.x === el.offsetLeft && prev.w === el.offsetWidth ? prev : { x: el.offsetLeft, w: el.offsetWidth }));
-    };
-    measure();
-    if (typeof ResizeObserver === 'undefined' || !listRef.current) return;
-    const ro = new ResizeObserver(measure);
-    ro.observe(listRef.current);
-    return () => ro.disconnect();
-  }, [idx, t]);
+  const { thumb, handlers } = useDraggableThumb(listRef, idx, (i) => onChange(TABS[i]), t);
 
   /**
    * Moves the tab selection with the keyboard.
@@ -405,8 +382,8 @@ function TabBar({ value, onChange, idPrefix }: { value: Tab; onChange: (t: Tab) 
   };
 
   return (
-    <div ref={listRef} role="tablist" aria-label={t(S.sections)} className={`lg lg-capsule ${styles.tabs}`} onKeyDown={onKeyDown}>
-      {indicator && <span className={styles.tabIndicator} style={{ width: indicator.w, transform: `translateX(${indicator.x}px)` }} aria-hidden="true" />}
+    <div ref={listRef} role="tablist" aria-label={t(S.sections)} className={`lg lg-capsule ${styles.tabs}`} onKeyDown={onKeyDown} {...handlers}>
+      {thumb && <span className={`${styles.tabIndicator} ${thumb.dragging ? styles.tabIndicatorDragging : ''}`} style={{ width: thumb.w, transform: `translateX(${thumb.x}px)` }} aria-hidden="true" />}
       {TABS.map((id, i) => (
         <button
           key={id}

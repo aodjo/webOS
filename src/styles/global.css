@@ -485,14 +485,19 @@ textarea.ui-input {
 }
 
 .ui-segmented {
+  position: relative;
   display: inline-flex;
   padding: 2px;
+  /* Horizontal drags move the thumb instead of scrolling. */
+  touch-action: pan-y;
   border-radius: 999px;
   background: var(--hover);
   box-shadow: inset 0 0 0 0.5px var(--control-border);
   gap: 2px;
 }
 .ui-segmented button {
+  position: relative;
+  z-index: 1;
   height: 24px;
   padding: 0 12px;
   border: none;
@@ -511,13 +516,42 @@ textarea.ui-input {
 .ui-segmented button:active {
   transform: scale(0.95);
 }
-.ui-segmented button[aria-pressed='true'] {
+.ui-segmented button[aria-pressed='true']:active {
+  transform: none;
+}
+
+/* The glass thumb under the selected segment; it slides between segments and can be dragged. */
+.ui-segmented-thumb {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 0;
+  border-radius: 999px;
   background: var(--lg-control-hover);
   box-shadow:
     inset 0.5px 0.5px 0 0 var(--lg-rim-top),
     inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
     0 0 0 0.5px var(--lg-edge),
     var(--lg-shadow-control);
+  pointer-events: none;
+  transition:
+    transform 0.42s var(--lg-spring),
+    width 0.42s var(--lg-spring),
+    scale 0.3s var(--lg-spring),
+    background-color 0.2s ease;
+}
+/* Held: the thumb lifts into a clearer, larger lens and follows the pointer without lag. */
+.ui-segmented-thumb.dragging {
+  scale: 1.12 1.22;
+  background: color-mix(in srgb, var(--lg-control-hover) 55%, transparent);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    0 4px 14px rgba(0, 0, 0, 0.18);
+  transition:
+    scale 0.3s var(--lg-spring),
+    background-color 0.2s ease;
 }
 
 /* Slider: thicker track, capsule glass thumb that grows while dragged. */
@@ -657,9 +691,18 @@ html[data-reduce-transparency='true'] .ui-sidebar {
 .ui-toolbar .ui-segmented button {
   height: 26px;
 }
-.ui-toolbar .ui-segmented button[aria-pressed='true'] {
+.ui-toolbar .ui-segmented-thumb {
+  top: 3px;
+  bottom: 3px;
   background: var(--active);
   box-shadow: none;
+}
+.ui-toolbar .ui-segmented-thumb.dragging {
+  background: color-mix(in srgb, var(--active) 70%, transparent);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 4px 14px rgba(0, 0, 0, 0.18);
 }
 .ui-toolbar-title {
   font-size: 15px;

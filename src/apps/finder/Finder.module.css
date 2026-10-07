@@ -104,9 +104,12 @@
 }
 
 .viewSeg :global(.ui-segmented button[aria-pressed='true']) {
-  background: var(--active);
-  box-shadow: none;
   color: var(--text);
+}
+
+.viewSeg :global(.ui-segmented-thumb) {
+  top: 0;
+  bottom: 0;
 }
 
 .menuBtn {

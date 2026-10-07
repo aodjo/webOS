@@ -262,6 +262,8 @@ html[data-reduce-transparency='true'] .actionActive .actionCircle {
 .tabs {
   display: inline-flex;
   padding: 3px;
+  /* Horizontal drags move the thumb instead of scrolling. */
+  touch-action: pan-y;
 }
 
 .tabIndicator {
@@ -277,9 +279,20 @@ html[data-reduce-transparency='true'] .actionActive .actionCircle {
     0 0 0 0.5px var(--lg-edge),
     0 1px 2px rgba(0, 0, 0, 0.12),
     0 3px 10px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
   transition:
     transform 0.42s var(--lg-spring),
-    width 0.42s var(--lg-spring);
+    width 0.42s var(--lg-spring),
+    scale 0.3s var(--lg-spring),
+    background-color 0.2s ease;
+}
+/* Held: the thumb lifts into a clearer, larger lens and follows the pointer without lag. */
+.tabIndicatorDragging {
+  scale: 1.12 1.22;
+  background: color-mix(in srgb, var(--control-bg) 50%, transparent);
+  transition:
+    scale 0.3s var(--lg-spring),
+    background-color 0.2s ease;
 }
 
 .tab {

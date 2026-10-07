@@ -2,8 +2,9 @@
  * Shared macOS-style controls. Styling lives in styles/global.css (.ui-*) so apps can also use
  * the class names directly.
  */
-import { forwardRef, type ButtonHTMLAttributes, type CSSProperties, type InputHTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, useRef, type ButtonHTMLAttributes, type CSSProperties, type InputHTMLAttributes, type ReactNode } from 'react';
 import { Search } from 'lucide-react';
+import { useDraggableThumb } from './segmentThumb';
 
 /** Props of {@link Button}: native button attributes plus a visual variant and a size. */
 type BtnProps = ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'default' | 'primary' | 'danger' | 'plain'; size?: 'regular' | 'large' };
@@ -126,8 +127,9 @@ export function Switch({ checked, onChange, label, disabled }: { checked: boolea
  * Segmented control: a row of mutually exclusive buttons.
  *
  * Renders one button per option inside a `role="group"` container; the option whose value
- * equals `value` gets `aria-pressed`, which the CSS uses to highlight it. Clicking a segment
- * calls `onChange` with that option's value. `T` is the string union of option values.
+ * equals `value` gets `aria-pressed`. A glass thumb slides under the selected segment and can be
+ * grabbed and dragged to another segment (see useDraggableThumb). Clicking a segment calls
+ * `onChange` with that option's value. `T` is the string union of option values.
  *
  * @param {Object} props - Component props.
  * @param {T} props.value - Currently selected value.
@@ -139,8 +141,16 @@ export function Switch({ checked, onChange, label, disabled }: { checked: boolea
  * <Segmented value={view} options={[{ value: 'grid', label: 'Grid' }, { value: 'list', label: 'List' }]} onChange={setView} />
  */
 export function Segmented<T extends string>({ value, options, onChange }: { value: T; options: { value: T; label: ReactNode; title?: string }[]; onChange: (v: T) => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { thumb, handlers } = useDraggableThumb(
+    ref,
+    options.findIndex((o) => o.value === value),
+    (i) => onChange(options[i].value),
+    options.length,
+  );
   return (
-    <div className="ui-segmented" role="group">
+    <div ref={ref} className="ui-segmented" role="group" {...handlers}>
+      {thumb && <span className={`ui-segmented-thumb${thumb.dragging ? ' dragging' : ''}`} style={{ width: thumb.w, transform: `translateX(${thumb.x}px)` }} aria-hidden="true" />}
       {options.map((o) => (
         <button key={o.value} type="button" title={o.title} aria-pressed={o.value === value} onClick={() => onChange(o.value)}>
           {o.label}

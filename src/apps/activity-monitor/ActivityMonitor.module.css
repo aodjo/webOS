@@ -61,9 +61,7 @@
   padding: 0 13px;
 }
 .toolbar :global(.ui-segmented button[aria-pressed='true']) {
-  background: var(--active);
   font-weight: 600;
-  box-shadow: none;
 }
 /* Narrow windows: drop the title block so the tabs and search keep fitting. */
 @container (max-width: 760px) {
