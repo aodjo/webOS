@@ -56,8 +56,6 @@
 
 /* Glass tiles (.lg) over the blurred wallpaper use a softer shadow than .lg's default,
    so the grid reads as flat panes rather than a stack of popovers. */
-:global(.lg).tile,
-:global(.lg).tileSmall,
 :global(.lg).readingCard,
 :global(.lg).privacy,
 :global(.lg).readingEmpty {
@@ -69,8 +67,6 @@
     var(--lg-shadow-control);
 }
 /* The glass box-shadow overrides the global focus ring, so the ring is added back here for keyboard focus. */
-:global(.lg).tile:focus-visible,
-:global(.lg).tileSmall:focus-visible,
 :global(.lg).readingCard:focus-visible {
   box-shadow:
     inset 0.5px 0.5px 0 0 var(--lg-rim-top),
@@ -78,91 +74,137 @@
     var(--focus-ring);
 }
 
-.tileGrid {
+/* Favorites: app-like icon tiles with the name underneath. */
+.favGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  gap: 14px 10px;
 }
-.tile {
+.fav {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 3px;
+  gap: 7px;
   min-width: 0;
-  min-height: 64px;
-  padding: 12px 10px;
+  padding: 0;
   border: none;
-  border-radius: 18px;
+  background: none;
   color: var(--text);
   cursor: default;
 }
-.tileLabel {
-  max-width: 100%;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.25;
-  text-align: center;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  word-break: break-word;
-}
-
-.smallGrid {
+.favIcon {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 15px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
+  transition: transform 0.3s var(--lg-spring);
 }
-.tileSmall {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1px;
-  min-width: 0;
-  padding: 9px 14px;
-  border: none;
-  border-radius: 16px;
-  color: var(--text);
-  text-align: left;
-  cursor: default;
+.favIcon img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
 }
-.tileSmall .tileLabel {
-  text-align: left;
-  font-size: 12px;
-  -webkit-line-clamp: 1;
+.favPhoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
-.tileHost {
+/* No icon: a flat tile with the site's first letter (Safari's fallback). */
+.favLetter {
+  background: var(--tile);
+  color: #fff;
+  font-size: 34px;
+  font-weight: 400;
+}
+.fav:hover .favIcon {
+  transform: scale(1.04);
+}
+.fav:active .favIcon {
+  transform: scale(0.96);
+}
+.fav:focus-visible {
+  outline: none;
+}
+.fav:focus-visible .favIcon {
+  box-shadow: var(--focus-ring);
+}
+.favLabel {
   max-width: 100%;
-  font-size: 11px;
-  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+/* Privacy Report: shield and summary on the left, the last 30 days' figures on the right. */
 .privacy {
   display: grid;
-  grid-template-columns: auto auto 1fr;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 20px;
-  border-radius: 18px;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 20px;
+  padding: 18px;
+  border-radius: 20px;
 }
-.privacy p {
+.privacyIntro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  padding: 6px;
+}
+.privacyIntro p {
   margin: 0;
-  font-size: 13px;
-  color: var(--text-secondary);
+  font-size: 13.5px;
 }
 .privacyIcon {
+  color: var(--green);
+}
+.privacyStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  align-content: start;
+}
+.privacyPeriod {
+  grid-column: 1 / -1;
+  font-size: 12px;
   color: var(--text-secondary);
 }
-.privacyCount {
+.privacyStat {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--window-bg) 72%, transparent);
+}
+.privacyStat span {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.privacyStat b {
   font-family: var(--font-display);
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+}
+.privacyWide {
+  grid-column: 1 / -1;
+}
+.privacyWide b {
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+@media (max-width: 560px) {
+  .privacy {
+    grid-template-columns: 1fr;
+  }
 }
 
 .readingEmpty {

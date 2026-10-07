@@ -246,35 +246,6 @@ export function buildFavorites(locale: Locale, bookmarks: Bookmark[]): Favorite[
 }
 
 /**
- * Lists the most visited pages for the Start Page's Frequently Visited section.
- *
- * Counts visits per URL, skipping URLs in `exclude` (the favorites) and internal `webos://`
- * pages. Pages are ordered by visit count, ties broken by the most recent visit, and each is
- * represented by its newest history entry.
- *
- * @param {HistoryEntry[]} history - Visits, newest first.
- * @param {Set<string>} exclude - URLs to leave out.
- * @param {number} [limit=8] - Maximum number of pages returned.
- * @returns {HistoryEntry[]} One entry per page, most visited first.
- *
- * @example
- * frequentlyVisited(history, new Set(favorites.map((f) => f.url)));
- */
-export function frequentlyVisited(history: HistoryEntry[], exclude: Set<string>, limit = 8): HistoryEntry[] {
-  const counts = new Map<string, { entry: HistoryEntry; n: number }>();
-  for (const h of history) {
-    if (exclude.has(h.url) || kindOfURL(h.url) === 'internal') continue;
-    const c = counts.get(h.url);
-    if (c) c.n++;
-    else counts.set(h.url, { entry: h, n: 1 });
-  }
-  return [...counts.values()]
-    .sort((a, b) => b.n - a.n || b.entry.ts - a.entry.ts)
-    .slice(0, limit)
-    .map((c) => c.entry);
-}
-
-/**
  * Returns the owner's name in the given locale.
  *
  * Used to build internal page titles such as the portfolio page's tab title.
