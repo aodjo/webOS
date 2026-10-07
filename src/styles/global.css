@@ -534,8 +534,10 @@ textarea.ui-input {
     0 0 0 0.5px var(--lg-edge),
     var(--lg-shadow-control);
   pointer-events: none;
+  /* Positioned with `translate`, not `transform`: `scale` (the lift while dragging) applies before
+     `transform` and would stretch the offset too. */
   transition:
-    transform 0.42s var(--lg-spring),
+    translate 0.42s var(--lg-spring),
     width 0.42s var(--lg-spring),
     scale 0.3s var(--lg-spring),
     background-color 0.2s ease;

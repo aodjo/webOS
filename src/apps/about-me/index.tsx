@@ -383,7 +383,7 @@ function TabBar({ value, onChange, idPrefix }: { value: Tab; onChange: (t: Tab) 
 
   return (
     <div ref={listRef} role="tablist" aria-label={t(S.sections)} className={`lg lg-capsule ${styles.tabs}`} onKeyDown={onKeyDown} {...handlers}>
-      {thumb && <span className={`${styles.tabIndicator} ${thumb.dragging ? styles.tabIndicatorDragging : ''}`} style={{ width: thumb.w, transform: `translateX(${thumb.x}px)` }} aria-hidden="true" />}
+      {thumb && <span className={`${styles.tabIndicator} ${thumb.dragging ? styles.tabIndicatorDragging : ''}`} style={{ width: thumb.w, translate: `${thumb.x}px 0` }} aria-hidden="true" />}
       {TABS.map((id, i) => (
         <button
           key={id}

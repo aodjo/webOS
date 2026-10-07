@@ -150,7 +150,7 @@ export function Segmented<T extends string>({ value, options, onChange }: { valu
   );
   return (
     <div ref={ref} className="ui-segmented" role="group" {...handlers}>
-      {thumb && <span className={`ui-segmented-thumb${thumb.dragging ? ' dragging' : ''}`} style={{ width: thumb.w, transform: `translateX(${thumb.x}px)` }} aria-hidden="true" />}
+      {thumb && <span className={`ui-segmented-thumb${thumb.dragging ? ' dragging' : ''}`} style={{ width: thumb.w, translate: `${thumb.x}px 0` }} aria-hidden="true" />}
       {options.map((o) => (
         <button key={o.value} type="button" title={o.title} aria-pressed={o.value === value} onClick={() => onChange(o.value)}>
           {o.label}
