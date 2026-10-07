@@ -56,7 +56,6 @@ const S = {
   application: { en: 'Application', ko: '응용 프로그램' },
   project: { en: 'Project', ko: '프로젝트' },
   skill: { en: 'Skill', ko: '기술' },
-  level: { en: 'Level', ko: '숙련도' },
   role: { en: 'Role', ko: '역할' },
   year: { en: 'Year', ko: '연도' },
   settingsHint: { en: 'Opens this pane in System Settings', ko: '시스템 설정에서 이 패널 열기' },
@@ -621,7 +620,7 @@ function Meta({ rows }: { rows: [string, string][] }) {
  *
  * Apps show their icon, description, a "Running" badge while the app has a process, and
  * kind/category/version metadata; files delegate to `FilePreview`; projects show the cover,
- * tagline, tags, role and year; skills show a five-dot level meter; settings panes and web
+ * tagline, tags, role and year; skills show their category; settings panes and web
  * searches show what activating them will do; calculations and conversions show the
  * expression, the result and a copy hint that turns into "Copied to Clipboard" after copying.
  *
@@ -687,11 +686,6 @@ function Preview({ r, copied }: { r: SpotlightResult; copied: boolean }) {
           <AboutMeIcon size={72} />
           <div className={s.pvTitle}>{r.skill}</div>
           <div className={s.pvSub}>{t(r.category)}</div>
-          <div className={s.level} aria-label={`${t(S.level)} ${r.level}/5`}>
-            {[1, 2, 3, 4, 5].map((n) => (
-              <i key={n} className={n <= r.level ? s.on : ''} />
-            ))}
-          </div>
         </div>
       );
     case 'setting':

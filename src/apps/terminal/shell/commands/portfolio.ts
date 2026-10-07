@@ -271,35 +271,29 @@ const skillsCmd: CommandDef = {
   summary: { en: 'what I work with', ko: '다루는 기술' },
   usage: 'skills',
   /**
-   * Prints the skill groups with level bars.
+   * Prints the skill groups.
    *
-   * For each skill category, prints a heading and one row per skill: the
-   * name padded to the widest skill name, a 20-cell bar (4 filled cells per
-   * level out of 5) in the accent color, and the numeric level.
+   * For each skill category, prints a heading followed by its skills joined
+   * with dimmed separators on one indented line.
    *
    * @param {CommandContext} ctx - The running command's context.
    * @returns {number} Exit status 0.
    *
    * @example
-   * skillsCmd.run(ctx); // "    TypeScript  ████████████████░░░░ 4/5"
+   * skillsCmd.run(ctx); // "    TypeScript · JavaScript · HTML / CSS"
    */
   run(ctx) {
     const s = styler(ctx);
-    const nameW = Math.max(...skills.flatMap((g) => g.items.map((i) => displayWidth(i.name)))) + 2;
     const out = [''];
     for (const g of skills) {
       out.push(`  ${s.head(t(g.category))}`);
-      for (const item of g.items) {
-        const filled = '█'.repeat(item.level * 4);
-        const empty = '░'.repeat((5 - item.level) * 4);
-        out.push(`    ${padEnd(item.name, nameW)}${s.accent(filled)}${s.dim(empty)} ${s.dim(`${item.level}/5`)}`);
-      }
+      out.push(`    ${g.items.map((i) => i.name).join(s.dim(' · '))}`);
       out.push('');
     }
     ctx.print(out.join('\n'));
     return 0;
   },
-}; /** `skills`: prints every skill category with a level bar per skill. */
+}; /** `skills`: prints every skill category with its skills. */
 
 const experienceCmd: CommandDef = {
   name: 'experience',

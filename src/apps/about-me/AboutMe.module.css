@@ -728,22 +728,6 @@ html[data-reduce-transparency='true'] .actionActive .actionCircle {
 
 /* ───────────────────────── Skills ───────────────────────── */
 
-.legend {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
-  font-size: 11px;
-  color: var(--text-tertiary);
-}
-
-.legendScale {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .skillGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -785,27 +769,11 @@ html[data-reduce-transparency='true'] .actionActive .actionCircle {
 
 .skillList {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 7px;
   margin: 0;
-  padding: 0;
+  padding: 2px 0 6px;
   list-style: none;
-}
-
-/* Rows highlight as capsules inside the card (concentric with its corners). */
-.skillRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 34px;
-  margin: 0 -6px;
-  padding: 0 8px 0 6px;
-  border-radius: 999px;
-  outline: none;
-  transition: background 0.15s;
-}
-.skillRow:hover,
-.skillRow:focus-visible {
-  background: var(--hover);
 }
 
 /* Glass control capsule (tokens only: many of them, no backdrop blur needed on a glass card). */
@@ -827,62 +795,6 @@ html[data-reduce-transparency='true'] .actionActive .actionCircle {
     inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
     0 0 0 0.5px var(--lg-edge),
     var(--lg-shadow-control);
-}
-
-.levelLabel {
-  margin-left: auto;
-  font-size: 11px;
-  white-space: nowrap;
-  color: var(--text-secondary);
-  opacity: 0;
-  transform: translateX(4px);
-  transition:
-    opacity 0.18s,
-    transform 0.18s var(--ease-out);
-}
-.skillRow:hover .levelLabel,
-.skillRow:focus-visible .levelLabel {
-  opacity: 1;
-  transform: none;
-}
-
-/* Capsule level bar: a recessed glass track that fills segment by segment. */
-.meter {
-  display: inline-flex;
-  flex: none;
-  width: 66px;
-  height: 8px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: var(--active);
-  box-shadow:
-    inset 0 1px 1.5px rgba(0, 0, 0, 0.12),
-    inset 0 0 0 0.5px var(--separator),
-    0 0.5px 0 var(--lg-rim-bottom);
-}
-
-.seg {
-  flex: 1;
-  height: 100%;
-}
-
-.segOn {
-  /* The gradient is 5x the segment width and shifted by --k, so each filled segment shows its
-     own slice and the filled run reads as one continuous gradient. */
-  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 62%, white), var(--accent));
-  background-size: 500% 100%;
-  background-position: calc((var(--k) - 1) * 25%) 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  transform-origin: left center;
-  animation: segIn 0.42s var(--ease-out) backwards;
-  animation-delay: calc(var(--k) * 55ms + 160ms);
-}
-
-@keyframes segIn {
-  from {
-    transform: scaleX(0);
-    opacity: 0;
-  }
 }
 
 .chipCloud {

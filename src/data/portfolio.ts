@@ -52,48 +52,27 @@ export const owner = {
   avatar: '/avatar.jpg',
 }; /** The portfolio owner's profile: identity, bio, contact details, links and avatar. */
 
-/** One skill and its proficiency. */
+/** One skill. */
 export interface Skill {
   name: string;
-  /** Proficiency on a 1–5 scale. */
-  level: number;
 }
 
 export const skills: { category: LString; items: Skill[] }[] = [
   {
     category: { en: 'Languages', ko: '언어' },
-    items: [
-      { name: 'TypeScript', level: 5 },
-      { name: 'JavaScript', level: 5 },
-      { name: 'HTML / CSS', level: 5 },
-      { name: 'Python', level: 3 },
-    ],
+    items: [{ name: 'TypeScript' }, { name: 'JavaScript' }, { name: 'HTML / CSS' }, { name: 'Python' }],
   },
   {
     category: { en: 'Frontend', ko: '프론트엔드' },
-    items: [
-      { name: 'React', level: 5 },
-      { name: 'Next.js', level: 4 },
-      { name: 'Zustand', level: 4 },
-      { name: 'Vite', level: 4 },
-      { name: 'Tailwind CSS', level: 4 },
-    ],
+    items: [{ name: 'React' }, { name: 'Next.js' }, { name: 'Zustand' }, { name: 'Vite' }, { name: 'Tailwind CSS' }],
   },
   {
     category: { en: 'Backend & Infra', ko: '백엔드 & 인프라' },
-    items: [
-      { name: 'Node.js', level: 4 },
-      { name: 'Cloudflare Workers', level: 3 },
-      { name: 'PostgreSQL', level: 3 },
-    ],
+    items: [{ name: 'Node.js' }, { name: 'Cloudflare Workers' }, { name: 'PostgreSQL' }],
   },
   {
     category: { en: 'Tools', ko: '도구' },
-    items: [
-      { name: 'Git', level: 5 },
-      { name: 'Figma', level: 4 },
-      { name: 'Vitest / Playwright', level: 4 },
-    ],
+    items: [{ name: 'Git' }, { name: 'Figma' }, { name: 'Vitest / Playwright' }],
   },
 ]; /** Skills grouped by category, shown in About Me, the Safari portfolio page and Terminal `skills`, and searchable from Spotlight. */
 

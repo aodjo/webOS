@@ -90,7 +90,7 @@ describe('About Me app', () => {
      */
     const selected = () => host.querySelector('[role="tab"][aria-selected="true"]')?.id ?? '';
     expect(selected()).toMatch(/skills$/);
-    expect(host.querySelectorAll('[role="meter"]').length).toBeGreaterThan(0);
+    expect(host.textContent).toContain('TypeScript');
     const list = host.querySelector('[role="tablist"]')!;
     await act(async () => list.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true })));
     expect(selected()).toMatch(/education$/);

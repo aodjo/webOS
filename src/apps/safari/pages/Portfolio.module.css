@@ -572,29 +572,12 @@
   list-style: none;
 }
 .skillCard li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
   padding: 5px 0;
   font-size: 14px;
   font-weight: 500;
 }
 .skillCard li + li {
   border-top: 0.5px solid var(--separator);
-}
-.meter {
-  display: inline-flex;
-  gap: 3px;
-}
-.meter i {
-  width: 14px;
-  height: 5px;
-  border-radius: 3px;
-  background: var(--active);
-}
-.meter i.on {
-  background: var(--accent);
 }
 
 /* ───────── Experience ───────── */

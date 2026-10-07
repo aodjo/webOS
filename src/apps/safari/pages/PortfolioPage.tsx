@@ -325,14 +325,7 @@ export function PortfolioPage({ api }: { api: PageAPI }) {
               <h3>{t(cat.category)}</h3>
               <ul>
                 {cat.items.map((s) => (
-                  <li key={s.name}>
-                    <span>{s.name}</span>
-                    <span className={styles.meter} role="img" aria-label={`${s.level} / 5`}>
-                      {[1, 2, 3, 4, 5].map((n) => (
-                        <i key={n} className={n <= s.level ? styles.on : undefined} />
-                      ))}
-                    </span>
-                  </li>
+                  <li key={s.name}>{s.name}</li>
                 ))}
               </ul>
             </div>

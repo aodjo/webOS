@@ -29,7 +29,7 @@ export type SpotlightResult =
   | (Base & { kind: 'app'; appId: string })
   | (Base & { kind: 'file'; path: string })
   | (Base & { kind: 'project'; projectId: string })
-  | (Base & { kind: 'skill'; skill: string; category: LString; level: number })
+  | (Base & { kind: 'skill'; skill: string; category: LString })
   | (Base & { kind: 'setting'; pane: string })
   | (Base & { kind: 'calc'; expr: string; plain: string })
   | (Base & { kind: 'convert'; from: string; plain: string })
@@ -288,7 +288,7 @@ export function buildResults(rawQuery: string, locale: Locale): SpotlightResult[
   for (const cat of skills) {
     for (const s of cat.items) {
       const score = Math.max(matchScore(s.name, q), Math.min(40, matchScore(tr(cat.category, locale), q)));
-      if (score >= 40) out.push({ kind: 'skill', id: `skill:${s.name}`, group: 'portfolio', score: score - 5, title: s.name, subtitle: tr(cat.category, locale), skill: s.name, category: cat.category, level: s.level });
+      if (score >= 40) out.push({ kind: 'skill', id: `skill:${s.name}`, group: 'portfolio', score: score - 5, title: s.name, subtitle: tr(cat.category, locale), skill: s.name, category: cat.category });
     }
   }
 

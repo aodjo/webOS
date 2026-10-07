@@ -33,15 +33,7 @@ const S = {
   featured: { en: 'Featured Projects', ko: '주요 프로젝트' },
   allProjects: { en: 'All Projects', ko: '모든 프로젝트' },
   now: { en: 'Now', ko: '재직 중' },
-  levels: [
-    { en: 'Beginner', ko: '입문' },
-    { en: 'Elementary', ko: '초급' },
-    { en: 'Intermediate', ko: '중급' },
-    { en: 'Advanced', ko: '고급' },
-    { en: 'Expert', ko: '전문가' },
-  ],
   alsoUsed: { en: 'Also used in projects', ko: '프로젝트에서 사용한 기술' },
-  proficiency: { en: 'Proficiency', ko: '숙련도' },
   card: { en: 'Card', ko: '카드' },
   sendEmail: { en: 'Send Email…', ko: '이메일 보내기…' },
   copyAddress: { en: 'Copy Email Address', ko: '이메일 주소 복사' },
@@ -558,8 +550,7 @@ function ExperienceTab() {
 /**
  * Renders the Skills section.
  *
- * Shows a proficiency legend, then one card per skill category in which every skill has a
- * level label and a five-segment meter (the level is rounded and clamped to 1–5). Project tags
+ * Shows one card per skill category listing its skills as chips. Project tags
  * that are not listed as skills (compared case-insensitively) follow as chips; clicking one
  * opens the Projects app filtered by that tag.
  *
@@ -574,18 +565,6 @@ function SkillsTab() {
   const extra = [...new Set(projects.flatMap((p) => p.tags))].filter((tag) => !known.has(tag.toLowerCase()));
   return (
     <>
-      <div className={styles.legend} aria-hidden="true">
-        <span>{t(S.proficiency)}</span>
-        <span className={styles.legendScale}>
-          {t(S.levels[0])}
-          <span className={styles.meter}>
-            {[1, 2, 3, 4, 5].map((k) => (
-              <span key={k} className={`${styles.seg} ${styles.segOn}`} style={{ '--k': k, opacity: 0.25 + k * 0.15 } as CSSProperties} />
-            ))}
-          </span>
-          {t(S.levels[4])}
-        </span>
-      </div>
       <div className={styles.skillGrid}>
         {skills.map((group, gi) => (
           <section key={t(group.category)} className={`lg lg-thick ${styles.skillCard}`} style={{ '--i': gi } as CSSProperties}>
@@ -594,21 +573,11 @@ function SkillsTab() {
               <span className={styles.count}>{group.items.length}</span>
             </header>
             <ul className={styles.skillList}>
-              {group.items.map((s) => {
-                const level = Math.max(1, Math.min(5, Math.round(s.level)));
-                const label = t(S.levels[level - 1]);
-                return (
-                  <li key={s.name} className={styles.skillRow} tabIndex={0} title={`${s.name} — ${label}`}>
-                    <span className={styles.chip}>{s.name}</span>
-                    <span className={styles.levelLabel}>{label}</span>
-                    <span className={styles.meter} role="meter" aria-label={s.name} aria-valuemin={1} aria-valuemax={5} aria-valuenow={level} aria-valuetext={label}>
-                      {[1, 2, 3, 4, 5].map((k) => (
-                        <span key={k} className={`${styles.seg} ${k <= level ? styles.segOn : ''}`} style={{ '--k': k } as CSSProperties} />
-                      ))}
-                    </span>
-                  </li>
-                );
-              })}
+              {group.items.map((s) => (
+                <li key={s.name} className={styles.chip}>
+                  {s.name}
+                </li>
+              ))}
             </ul>
           </section>
         ))}

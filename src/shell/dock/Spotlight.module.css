@@ -363,21 +363,6 @@
   margin-top: 4px;
 }
 
-.level {
-  display: flex;
-  gap: 5px;
-  margin-top: 6px;
-}
-.level i {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--active);
-}
-.level i.on {
-  background: var(--accent);
-}
-
 .pvCalc {
   justify-content: center;
   min-height: 100%;
