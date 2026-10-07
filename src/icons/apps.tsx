@@ -44,17 +44,18 @@ export const FinderIcon: IconFC = ({ size }) => {
   );
 };
 
-const LAUNCHPAD_COLORS = ['#ff5a52', '#ff9f0a', '#ffd60a', '#34c759', '#2ac9c9', '#0a84ff', '#5e5ce6', '#bf5af2', '#ff375f']; /** Launchpad tile colors in row-major order (also used as the tiles' React keys). */
+const LAUNCHPAD_COLORS = ['#30d158', '#0a84ff', '#5ac8fa', '#ff9f0a', '#bf5af2', '#ff375f']; /** Launchpad tile colors in row-major order (also used as the tiles' React keys). */
 const LAUNCHPAD_TILES = LAUNCHPAD_COLORS.map((color, i) => ({
   color,
-  d: squirclePath(24 + (i % 3) * 19, 24 + Math.floor(i / 3) * 19, 14, 14, 3.8),
-})); /** Launchpad's 3×3 tile grid: a 14-unit squircle path and color per tile, on a 19-unit pitch starting at (24, 24). */
+  d: squirclePath(24 + (i % 3) * 19, 45 + Math.floor(i / 3) * 19, 14, 14, 3.8),
+})); /** Launchpad's 3×2 tile grid under the search capsule: a 14-unit squircle path and color per tile, on a 19-unit pitch starting at (24, 45). */
 
 /**
  * Launchpad app icon.
  *
- * A 3×3 grid of colored squircle tiles on a silver background, each with a drop shadow and a
- * gloss gradient. The tiles get a glass edge only when rendered at 40px or larger.
+ * A white squircle with a gray search capsule across the top (with a magnifier glyph) and a 3×2
+ * grid of colored squircle tiles below it, each with a soft drop shadow and a gloss gradient.
+ * The tiles get a glass edge only when rendered at 40px or larger.
  *
  * @param {Object} props - Icon props.
  * @param {number} props.size - Rendered width and height in pixels.
@@ -71,14 +72,17 @@ export const LaunchpadIcon: IconFC = ({ size }) => {
       fill={ids.url('bg')}
       defs={
         <>
-          <VGrad id={ids('bg')} from="#e4e6ea" to="#9a9ea7" />
+          <VGrad id={ids('bg')} from="#ffffff" to="#e4e6eb" />
           <VGrad id={ids('gloss')} from="rgba(255,255,255,0.3)" to="rgba(255,255,255,0)" />
         </>
       }
     >
+      <rect x="22" y="24" width="56" height="11" rx="5.5" fill="#000" fillOpacity="0.08" />
+      <circle cx="29" cy="29.2" r="2.3" fill="none" stroke="#9a9ca3" strokeWidth="1.1" />
+      <path d="M30.7 30.9L32.2 32.4" stroke="#9a9ca3" strokeWidth="1.1" strokeLinecap="round" />
       {LAUNCHPAD_TILES.map((t) => (
         <g key={t.color}>
-          <path d={t.d} fill="#000" fillOpacity="0.16" transform="translate(0 0.9)" />
+          <path d={t.d} fill="#000" fillOpacity="0.08" transform="translate(0 0.8)" />
           <path d={t.d} fill={t.color} />
           <path d={t.d} fill={ids.url('gloss')} />
         </g>
@@ -190,7 +194,8 @@ export const MailIcon: IconFC = ({ size }) => {
 /**
  * Notes app icon.
  *
- * A notepad page: a yellow band across the top, a dotted perforation line and ruled lines below.
+ * A notepad page: a yellow band across the top, a dotted perforation line and three inset ruled
+ * lines below.
  *
  * @param {Object} props - Icon props.
  * @param {number} props.size - Rendered width and height in pixels.
@@ -214,8 +219,8 @@ export const NotesIcon: IconFC = ({ size }) => {
     >
       <rect x="0" y="0" width="100" height="31" fill={ids.url('band')} />
       <rect x="0" y="31" width="100" height="1.2" fill="#000" fillOpacity="0.08" />
-      <path d="M14 36.5H86" stroke="#bdbdc2" strokeWidth="1.3" strokeDasharray="0.1 3.2" strokeLinecap="round" />
-      <path d="M0 47.5H100M0 58.5H100M0 69.5H100M0 80.5H100" stroke="#d6d6da" strokeWidth="1" />
+      <path d="M20 38H80" stroke="#c4c4c9" strokeWidth="1.3" strokeDasharray="0.1 3.2" strokeLinecap="round" />
+      <path d="M20 51H80M20 63H80M20 75H80" stroke="#d2d2d7" strokeWidth="1.3" strokeLinecap="round" />
     </AppIconFrame>
   );
 };
@@ -305,8 +310,8 @@ export const ProjectsIcon: IconFC = ({ size }) => {
 /**
  * Terminal app icon.
  *
- * A dark terminal window with a gray title bar, a `>` prompt and a green cursor. Uses a stronger
- * rim (0.3) so the dark silhouette still reads against a dark Dock or Launchpad.
+ * A near-black squircle with a white `>_` prompt in its upper-left corner. Uses a stronger rim
+ * (0.3) so the dark silhouette still reads against a dark Dock or Launchpad.
  *
  * @param {Object} props - Icon props.
  * @param {number} props.size - Rendered width and height in pixels.
@@ -318,32 +323,21 @@ export const ProjectsIcon: IconFC = ({ size }) => {
 export const TerminalIcon: IconFC = ({ size }) => {
   const ids = useIconIds();
   return (
-    <AppIconFrame
-      size={size}
-      fill={ids.url('bg')}
-      rim={0.3}
-      defs={
-        <>
-          <VGrad id={ids('bg')} from="#36363a" to="#141416" />
-          <VGrad id={ids('bar')} from="#5c5c61" to="#45454a" />
-        </>
-      }
-    >
-      <rect x="0" y="0" width="100" height="23.5" fill={ids.url('bar')} />
-      <rect x="0" y="23.5" width="100" height="0.8" fill="#000" fillOpacity="0.55" />
-      <path d="M25.5 39.5L37 48.5L25.5 57.5" fill="none" stroke="#ececee" strokeWidth="4.6" strokeLinecap="round" strokeLinejoin="round" />
-      <rect x="41.5" y="54" width="15.5" height="4.6" rx="1.2" fill="#3ce06a" />
+    <AppIconFrame size={size} fill={ids.url('bg')} rim={0.3} defs={<VGrad id={ids('bg')} from="#303034" to="#0f0f11" />}>
+      <path d="M26 28L37 36.5L26 45" fill="none" stroke="#fff" strokeWidth="4.4" strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="40.5" y="42.6" width="13" height="4" rx="1.2" fill="#fff" />
     </AppIconFrame>
   );
 };
 
-const TEXT_LINES = [27, 33.5, 40, 46.5, 53, 59.5, 66].map((y, i) => ({ y, w: [20, 34, 31, 34, 26, 33, 18][i] })); /** Y position and length of each text line on the TextEdit page, top to bottom. */
+const TEXT_LINES = [30, 37, 44, 51, 58, 65].map((y, i) => ({ y, w: [22, 36, 32, 36, 28, 18][i] })); /** Y position and length of each text line on the TextEdit page, top to bottom. */
 
 /**
  * TextEdit app icon.
  *
- * A tilted sheet of paper with text lines (the first one heavier, like a heading) and a fountain
- * pen laid across it. The pen is drawn in the frame's overlay so it can extend past the squircle.
+ * An upright white page with text lines (the first one heavier, like a heading) on a pale
+ * blue-gray squircle, and a slim dark pen leaning across its lower right corner. The pen is
+ * drawn in the frame's overlay so its cap can overhang the squircle.
  *
  * @param {Object} props - Icon props.
  * @param {number} props.size - Rendered width and height in pixels.
@@ -360,30 +354,25 @@ export const TextEditIcon: IconFC = ({ size }) => {
       fill={ids.url('bg')}
       defs={
         <>
-          <VGrad id={ids('bg')} from="#eaf0f7" to="#bcc6d4" />
-          <VGrad id={ids('barrel')} from="#4a4a4f" to="#141416" x1={0} y1={0} x2={1} y2={0} />
-          <VGrad id={ids('nib')} from="#f8de86" to="#c08f24" x1={0} y1={0} x2={1} y2={0} />
+          <VGrad id={ids('bg')} from="#f4f6f9" to="#cdd4de" />
+          <VGrad id={ids('pen')} from="#4b4e55" to="#1f2024" x1={0} y1={0} x2={1} y2={0} />
         </>
       }
       overlay={
-        <g transform="translate(55 57) rotate(38)">
-          <rect x="-6.5" y="-44" width="13" height="30" rx="4" fill="#000" fillOpacity="0.2" transform="translate(1.6 0.6)" />
-          <path d="M-5.8 -13L5.8 -13L6.4 -4C6.4 2 2.7 7 0 12.5C-2.7 7 -6.4 2 -6.4 -4Z" fill={ids.url('nib')} stroke="#8a6414" strokeWidth="0.5" />
-          <path d="M0 12.2V-2.4" stroke="#6b4b0c" strokeWidth="0.9" strokeLinecap="round" />
-          <circle cx="0" cy="-4" r="1.6" fill="#6b4b0c" />
-          <rect x="-6.6" y="-17" width="13.2" height="4.6" rx="1" fill={ids.url('nib')} />
-          <rect x="-6.5" y="-44" width="13" height="27.5" rx="4" fill={ids.url('barrel')} />
-          <rect x="-3.6" y="-41.5" width="2" height="22" rx="1" fill="#fff" fillOpacity="0.25" />
+        <g transform="translate(64 58) rotate(40)">
+          <rect x="-3.6" y="-30" width="7.2" height="40" rx="3.6" fill="#000" fillOpacity="0.16" transform="translate(1.2 0.8)" />
+          <rect x="-3.6" y="-30" width="7.2" height="34" rx="3.6" fill={ids.url('pen')} />
+          <path d="M-3.6 2H3.6L0 11Z" fill="#e7c37a" />
+          <path d="M-1 8.6H1L0 11Z" fill="#2a2b30" />
+          <rect x="-1.8" y="-27" width="1.4" height="24" rx="0.7" fill="#fff" fillOpacity="0.28" />
         </g>
       }
     >
-      <g transform="rotate(-7 47 48)">
-        <rect x="23" y="17" width="48" height="63" rx="2.5" fill="#1b2a40" fillOpacity="0.18" transform="translate(0.6 1.6)" />
-        <rect x="23" y="17" width="48" height="63" rx="2.5" fill="#fff" />
-        {TEXT_LINES.map((l, i) => (
-          <path key={l.y} d={`M29.5 ${l.y}H${29.5 + l.w}`} stroke={i === 0 ? '#8c96a6' : '#c3c9d3'} strokeWidth={i === 0 ? 2.6 : 1.8} strokeLinecap="round" />
-        ))}
-      </g>
+      <rect x="25" y="18" width="50" height="64" rx="4" fill="#1b2a40" fillOpacity="0.12" transform="translate(0 1.2)" />
+      <rect x="25" y="18" width="50" height="64" rx="4" fill="#fff" />
+      {TEXT_LINES.map((l, i) => (
+        <path key={l.y} d={`M32 ${l.y}H${32 + l.w}`} stroke={i === 0 ? '#8c96a6' : '#c9cfd8'} strokeWidth={i === 0 ? 2.6 : 1.8} strokeLinecap="round" />
+      ))}
     </AppIconFrame>
   );
 };
@@ -391,8 +380,8 @@ export const TextEditIcon: IconFC = ({ size }) => {
 /**
  * Preview app icon.
  *
- * Two overlapping, tilted photos (a sunset and a green landscape) on a blue gradient, with a
- * magnifying glass drawn in the frame's overlay so it can overhang the squircle.
+ * A single landscape photo, slightly tilted, on a blue gradient, with a light glass magnifier
+ * drawn in the frame's overlay so it can overhang the squircle.
  *
  * @param {Object} props - Icon props.
  * @param {number} props.size - Rendered width and height in pixels.
@@ -410,34 +399,26 @@ export const PreviewIcon: IconFC = ({ size }) => {
       defs={
         <>
           <VGrad id={ids('bg')} from="#8fd8ff" to="#2b7fe0" />
-          <VGrad id={ids('sunset')} from="#ffd36e" to="#ff6f61" />
           <VGrad id={ids('sky')} from="#5dbcff" to="#d3eeff" />
-          <VGrad id={ids('rim')} from="#4a4a4f" to="#18181a" />
         </>
       }
       overlay={
         <g>
-          <circle cx="58.5" cy="60.5" r="12.5" fill="#e8f6ff" fillOpacity="0.35" />
-          <path d="M67.8 69.8L76.5 78.5" stroke="#000" strokeOpacity="0.2" strokeWidth="7" strokeLinecap="round" transform="translate(0.6 1)" />
-          <path d="M67.8 69.8L76.5 78.5" stroke={ids.url('rim')} strokeWidth="6.4" strokeLinecap="round" />
-          <circle cx="58.5" cy="60.5" r="12.5" fill="none" stroke={ids.url('rim')} strokeWidth="4" />
-          <path d="M51 56A8.6 8.6 0 0 1 58.5 51.4" fill="none" stroke="#fff" strokeOpacity="0.85" strokeWidth="1.6" strokeLinecap="round" />
+          <path d="M67.6 69.6L77 79" stroke="#000" strokeOpacity="0.16" strokeWidth="6.4" strokeLinecap="round" transform="translate(0.5 0.9)" />
+          <path d="M67.6 69.6L77 79" stroke="#eef2f7" strokeWidth="5.6" strokeLinecap="round" />
+          <circle cx="58.5" cy="60.5" r="12.5" fill="#fff" fillOpacity="0.28" stroke="#fff" strokeWidth="3.4" />
+          <GlassEdge size={size} opacity={0.7}>
+            <circle cx="58.5" cy="60.5" r="14.2" />
+          </GlassEdge>
         </g>
       }
     >
-      <g transform="rotate(-12 43 40)">
-        <rect x="20" y="22" width="46" height="36" rx="2" fill="#0a3d7a" fillOpacity="0.2" transform="translate(0.5 1.4)" />
-        <rect x="20" y="22" width="46" height="36" rx="2" fill="#fff" />
-        <rect x="23" y="25" width="40" height="30" rx="0.8" fill={ids.url('sunset')} />
-        <path d="M23 55L35 41L44 50L51 44L63 55Z" fill="#7a3d6b" fillOpacity="0.7" />
-      </g>
-      <g transform="rotate(6 53 51)">
-        <rect x="27" y="32" width="52" height="40" rx="2" fill="#0a3d7a" fillOpacity="0.22" transform="translate(0.5 1.6)" />
-        <rect x="27" y="32" width="52" height="40" rx="2" fill="#fff" />
-        <rect x="30" y="35" width="46" height="34" rx="0.8" fill={ids.url('sky')} />
-        <circle cx="66" cy="43" r="3.6" fill="#ffd54a" />
-        <path d="M30 69L42 52L49 60L58 48L76 69Z" fill="#34a866" />
-        <path d="M58 48L63.5 55.5L60 54.2L57 57L54.4 53.4Z" fill="#fff" fillOpacity="0.85" />
+      <g transform="rotate(-6 46 46)">
+        <rect x="20" y="24" width="52" height="42" rx="3" fill="#0a3d7a" fillOpacity="0.18" transform="translate(0 1.4)" />
+        <rect x="20" y="24" width="52" height="42" rx="3" fill="#fff" />
+        <rect x="23.5" y="27.5" width="45" height="35" rx="1.4" fill={ids.url('sky')} />
+        <circle cx="58" cy="36" r="3.8" fill="#ffd54a" />
+        <path d="M23.5 62.5L36 46L44 55L52 45L68.5 62.5Z" fill="#34a866" />
       </g>
     </AppIconFrame>
   );
@@ -509,15 +490,16 @@ export const CalculatorIcon: IconFC = ({ size }) => {
   );
 };
 
-const SETTINGS_OUTER = gearPath(50, 50, 30.8, 34.6, 36, 0.36, 0.56); /** Outline of the outer 36-tooth gear of the System Settings icon. */
-const SETTINGS_INNER = gearPath(50, 50, 19.5, 24.2, 12, 0.42, 0.62, 15); /** Outline of the inner 12-tooth gear, its teeth offset by 15°. */
-const SETTINGS_SPOKES = [0, 60, 120, 180, 240, 300]; /** Rotation angles, in degrees, of the six spokes between the inner gear and the hub. */
+const SETTINGS_GEAR = gearPath(50, 50, 28.6, 32.6, 24, 0.4, 0.6); /** Outline of the 24-tooth gear of the System Settings icon. */
+const SETTINGS_BLADE = 'M47.8 43.4C47.2 37.6 45.6 33.4 42.4 29.9L46.6 29.3C49.4 32.8 51.2 37.4 52.3 43.2Z'; /** One curved spoke between the hub and the inner ring, drawn pointing up; rotated three times. */
+const SETTINGS_BLADES = [0, 120, 240]; /** Rotation angles, in degrees, of the three spokes. */
 
 /**
  * System Settings app icon.
  *
- * A steel gear inside a gear: the outer gear (with a glass edge from 32px up), a dark well, the
- * inner gear, six spokes and a central hub, each layer with its own drop shadow.
+ * A light gear on a soft gray squircle: a toothed outer ring, a darker inner disc, a thin light
+ * ring and three curved spokes meeting a round hub. Kept flat and simple, with a glass edge on
+ * the gear from 32px up.
  *
  * @param {Object} props - Icon props.
  * @param {number} props.size - Rendered width and height in pixels.
@@ -534,27 +516,24 @@ export const SettingsIcon: IconFC = ({ size }) => {
       fill={ids.url('bg')}
       defs={
         <>
-          <VGrad id={ids('bg')} from="#94959b" to="#46474c" />
-          <VGrad id={ids('steel')} from="#fbfbfc" to="#a9aab0" />
-          <VGrad id={ids('steel2')} from="#ececf0" to="#94959b" />
-          <VGrad id={ids('well')} from="#2f3035" to="#5b5c62" />
+          <VGrad id={ids('bg')} from="#b9b9be" to="#76767b" />
+          <VGrad id={ids('gear')} from="#ffffff" to="#d9d9de" />
+          <VGrad id={ids('disc')} from="#6b6b71" to="#8d8d93" />
         </>
       }
     >
-      <path d={SETTINGS_OUTER} fill="#000" fillOpacity="0.25" transform="translate(0 1.2)" />
-      <path d={SETTINGS_OUTER} fill={ids.url('steel')} />
-      <GlassEdge size={size} min={32}>
-        <path d={SETTINGS_OUTER} />
+      <path d={SETTINGS_GEAR} fill="#000" fillOpacity="0.16" transform="translate(0 1)" />
+      <path d={SETTINGS_GEAR} fill={ids.url('gear')} />
+      <GlassEdge size={size} min={32} opacity={0.6}>
+        <path d={SETTINGS_GEAR} />
       </GlassEdge>
-      <circle cx="50" cy="50" r="27.6" fill={ids.url('well')} />
-      <path d={SETTINGS_INNER} fill="#000" fillOpacity="0.3" transform="translate(0 1)" />
-      <path d={SETTINGS_INNER} fill={ids.url('steel2')} />
-      <circle cx="50" cy="50" r="15.2" fill="#55565c" />
-      {SETTINGS_SPOKES.map((deg) => (
-        <rect key={deg} x="48.2" y="34" width="3.6" height="16" rx="1" fill="#c9cacf" transform={`rotate(${deg} 50 50)`} />
+      <circle cx="50" cy="50" r="24.6" fill={ids.url('disc')} />
+      <circle cx="50" cy="50" r="20.4" fill="none" stroke="#f1f1f4" strokeWidth="2.6" />
+      {SETTINGS_BLADES.map((deg) => (
+        <path key={deg} d={SETTINGS_BLADE} fill="#f1f1f4" transform={`rotate(${deg} 50 50)`} />
       ))}
-      <circle cx="50" cy="50" r="8.4" fill={ids.url('steel')} />
-      <circle cx="50" cy="50" r="3.3" fill="#3a3b40" />
+      <circle cx="50" cy="50" r="7.4" fill="#f6f6f8" />
+      <circle cx="50" cy="50" r="2.6" fill="#7a7a80" />
     </AppIconFrame>
   );
 };
@@ -574,15 +553,12 @@ export const SettingsIcon: IconFC = ({ size }) => {
  */
 const graph = (ys: number[]) => ys.map((y, i) => `${i === 0 ? 'M' : 'L'}${Math.round((18 + (64 * i) / (ys.length - 1)) * 100) / 100} ${y}`).join('');
 const AM_GREEN = graph([67, 61, 64, 53, 57, 42, 48, 36, 45, 39, 50, 31]); /** Green graph line of the Activity Monitor icon, also closed into the filled area beneath it. */
-const AM_RED = graph([73, 71, 74, 65, 69, 63, 67, 59, 64, 61, 56, 58]); /** Red graph line of the Activity Monitor icon, drawn behind the green one. */
-const AM_GRID =
-  [26, 34, 42, 50, 58, 66, 74].map((x) => `M${x} 21V79`).join('') + [31, 41, 51, 61, 71].map((y) => `M18 ${y}H82`).join(''); /** Activity Monitor screen grid: vertical lines every 8 units and horizontal lines every 10 units. */
 
 /**
  * Activity Monitor app icon.
  *
- * A dark screen showing a green grid, a red graph line and a green graph line with a filled area,
- * all clipped to the screen's rounded rectangle. Uses the stronger rim (0.3) for the dark body.
+ * A dark screen showing a single green graph line with a soft filled area beneath it, clipped to
+ * the screen's rounded rectangle. Uses the stronger rim (0.3) for the dark body.
  *
  * @param {Object} props - Icon props.
  * @param {number} props.size - Rendered width and height in pixels.
@@ -601,7 +577,7 @@ export const ActivityMonitorIcon: IconFC = ({ size }) => {
       defs={
         <>
           <VGrad id={ids('bg')} from="#5d5d62" to="#28282b" />
-          <VGrad id={ids('area')} from="rgba(50,215,75,0.45)" to="rgba(50,215,75,0)" />
+          <VGrad id={ids('area')} from="rgba(50,215,75,0.4)" to="rgba(50,215,75,0)" />
           <clipPath id={ids('screen')}>
             <rect x="18" y="21" width="64" height="58" rx="5" />
           </clipPath>
@@ -610,10 +586,8 @@ export const ActivityMonitorIcon: IconFC = ({ size }) => {
     >
       <rect x="18" y="21" width="64" height="58" rx="5" fill="#070907" />
       <g clipPath={ids.url('screen')}>
-        <path d={AM_GRID} stroke="#2a5a33" strokeOpacity="0.55" strokeWidth="0.6" />
         <path d={`${AM_GREEN}L82 79H18Z`} fill={ids.url('area')} />
-        <path d={AM_RED} fill="none" stroke="#ff453a" strokeWidth="1.9" strokeLinejoin="round" strokeLinecap="round" />
-        <path d={AM_GREEN} fill="none" stroke="#3be25a" strokeWidth="2.4" strokeLinejoin="round" strokeLinecap="round" />
+        <path d={AM_GREEN} fill="none" stroke="#3be25a" strokeWidth="2.8" strokeLinejoin="round" strokeLinecap="round" />
       </g>
       <rect x="18" y="21" width="64" height="58" rx="5" fill="none" stroke="#000" strokeOpacity="0.6" strokeWidth="0.8" />
       <GlassEdge size={size} opacity={0.45}>

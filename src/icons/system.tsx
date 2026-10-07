@@ -1,5 +1,5 @@
 /**
- * System icons that are not squircle app icons: the wire-mesh glass Trash (empty / full), the
+ * System icons that are not squircle app icons: the frosted-glass Trash (empty / full), the
  * startup disk and the OS logo mark.
  */
 import { GLASS_MIN, IconSvg, VGrad, hairline, useIconIds, type IconFC } from './shared';
@@ -66,40 +66,6 @@ function binPoint(t: number, c: number): string {
 }
 
 /**
- * Builds the SVG path of the wire mesh covering the front of the bin.
- *
- * Vertical wires are spaced evenly in angle around the front half, so they bunch up towards the
- * sides as the cone turns away; each runs straight from the rim to the base. Horizontal wires are
- * the front halves of the ellipses interpolated between the rim and the base.
- *
- * @param {number} cols - Number of vertical wires.
- * @param {number} rows - Number of horizontal bands (`rows - 1` wires are drawn between rim and base).
- * @returns {string} SVG path data for all wires.
- *
- * @example
- * const d = binMesh(11, 8);
- * <path d={d} fill="none" stroke="#fff" />;
- */
-function binMesh(cols: number, rows: number): string {
-  let d = '';
-  for (let i = 0; i < cols; i++) {
-    const c = Math.cos((Math.PI * (i + 0.5)) / cols);
-    const s = Math.sin((Math.PI * (i + 0.5)) / cols);
-    d += `M${r2(50 - TOP.rx * c)} ${r2(TOP.cy + TOP.ry * s)}L${r2(50 - BASE.rx * c)} ${r2(BASE.cy + BASE.ry * s)}`;
-  }
-  for (let j = 1; j < rows; j++) {
-    const t = j / rows;
-    const cy = r2(lerp(TOP.cy, BASE.cy, t));
-    const rx = r2(lerp(TOP.rx, BASE.rx, t));
-    const ry = r2(lerp(TOP.ry, BASE.ry, t));
-    d += `M${r2(50 - rx)} ${cy}A${rx} ${ry} 0 0 0 ${r2(50 + rx)} ${cy}`;
-  }
-  return d;
-}
-
-const BIN_MESH = { large: binMesh(17, 13), medium: binMesh(11, 8), small: binMesh(7, 5) }; /** Wire mesh per size class: smaller sizes get fewer, thicker wires so it doesn't blur. */
-
-/**
  * Builds a vertical glass reflection band running down the front of the bin.
  *
  * The band is a quadrilateral between two horizontal positions on the rim and the same two
@@ -133,33 +99,24 @@ const rimArc = (c0: number, c1: number) => `M${binPoint(0, c0)}A${TOP.rx} ${TOP.
 const RIM_GLINT = rimArc(-0.97, -0.58); /** Specular glint on the top of the front rim (top-left). */
 const RIM_BOUNCE = rimArc(0.6, 0.94); /** Specular glint on the underside of the front rim (bottom-right). */
 
-const PAPERS = [
-  {
-    outline: 'M25.5 21L27 13.5L32 9L38.5 8L44.5 11.5L47 17.5L45 24L38 27L30 26Z',
-    creases: 'M32 9L35 16L30 26M35 16L44.5 11.5M35 16L41 21L47 17.5',
-  },
-  {
-    outline: 'M63 22L64.5 15L70 11.5L76 13L79.5 18.5L77.5 24.5L70.5 27L65 26Z',
-    creases: 'M70 11.5L70.5 19L65 26M70.5 19L79.5 18.5',
-  },
-  {
-    outline: 'M44 18L46.5 10L52.5 5.5L60 5L66.5 8.5L69 15L67 21.5L60 25L51 23.5Z',
-    creases: 'M52.5 5.5L56.5 13.5L51 23.5M56.5 13.5L66.5 8.5M56.5 13.5L62 18.5L69 15',
-  },
-]; /** Crumpled paper balls poking out of a full bin: outline and crease lines of each. */
+const ITEMS = [
+  { d: 'M27 26L29 11.5L45 10L47.5 25Z', fill: '#4aa3ff' },
+  { d: 'M41 24L44.5 6.5L58.5 8.5L57 25.5Z', fill: '#ffffff' },
+  { d: 'M55 25.5C55 18 59.5 12.5 66 12.5C72 12.5 76 17.5 75.5 25.5Z', fill: '#ff6b5a' },
+  { d: 'M63 26L67.5 15.5L77 19.5L74.5 26Z', fill: '#ffd34d' },
+]; /** Colorful items poking out of a full bin (a folder, a page, a crumpled ball and a sticky note): outline and color of each. */
 
 /**
- * Renders the glass wire-mesh Trash bin, empty or full.
+ * Renders the frosted-glass Trash bin, empty or full.
  *
- * Layers, back to front: floor shadow, dark inside, back rim, paper balls (when full), tinted
- * glass body, wire mesh (a dark and a light stroke), shading, reflections, side edges, base ring
- * and front rim. The mesh density follows the rendered size (see `BIN_MESH`); wire widths are
- * fixed at 48 px and up, and about one screen pixel (via `hairline`) below that. Rim glints are
- * only drawn at `GLASS_MIN` px and larger.
+ * Layers, back to front: floor shadow, dark inside, back rim, colorful items (when full), the
+ * frosted glass body with its side shading and a soft vertical reflection, the base ring and the
+ * front rim. The body is milky but translucent, so the items behind it show through faintly. Rim
+ * glints are only drawn at `GLASS_MIN` px and larger.
  *
  * @param {Object} props - Component props.
  * @param {number} props.size - Rendered size in px.
- * @param {boolean} props.full - Whether to draw paper balls in the bin.
+ * @param {boolean} props.full - Whether to draw items in the bin.
  * @returns {JSX.Element} The icon SVG.
  *
  * @example
@@ -168,75 +125,59 @@ const PAPERS = [
 function TrashBin({ size, full }: { size: number; full: boolean }) {
   const ids = useIconIds();
   const fine = size >= GLASS_MIN;
-  const mesh = size >= 48 ? BIN_MESH.large : fine ? BIN_MESH.medium : BIN_MESH.small;
-  const wire = size >= 48 ? { dark: 1.7, light: 0.95 } : { dark: hairline(size, 0.95, 1.7), light: hairline(size, 0.55, 0.95) };
   return (
     <IconSvg size={size}>
       <defs>
         <radialGradient id={ids('floor')} cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stopColor="#000" stopOpacity="0.3" />
+          <stop offset="0" stopColor="#000" stopOpacity="0.26" />
           <stop offset="1" stopColor="#000" stopOpacity="0" />
         </radialGradient>
-        <VGrad id={ids('inside')} from="rgba(52,56,62,0.62)" to="rgba(120,126,134,0.42)" />
+        <VGrad id={ids('inside')} from="rgba(70,74,82,0.55)" to="rgba(140,146,154,0.35)" />
         <linearGradient id={ids('body')} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#5b6068" stopOpacity="0.5" />
-          <stop offset="0.4" stopColor="#9aa0a8" stopOpacity="0.3" />
-          <stop offset="1" stopColor="#50555d" stopOpacity="0.52" />
+          <stop offset="0" stopColor="#d9dce1" stopOpacity="0.88" />
+          <stop offset="0.38" stopColor="#ffffff" stopOpacity="0.8" />
+          <stop offset="1" stopColor="#c9cdd3" stopOpacity="0.9" />
         </linearGradient>
-        <linearGradient id={ids('shade')} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#000" stopOpacity="0.16" />
-          <stop offset="0.38" stopColor="#fff" stopOpacity="0.12" />
-          <stop offset="0.62" stopColor="#fff" stopOpacity="0" />
-          <stop offset="1" stopColor="#000" stopOpacity="0.2" />
+        <linearGradient id={ids('fade')} x1="0" y1={TOP.cy} x2="0" y2={BASE.cy} gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#fff" stopOpacity="0" />
+          <stop offset="1" stopColor="#8d939b" stopOpacity="0.22" />
         </linearGradient>
         <linearGradient id={ids('rim')} x1="16" y1="0" x2="84" y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#c4c8ce" />
+          <stop offset="0" stopColor="#e1e4e8" />
           <stop offset="0.4" stopColor="#ffffff" />
-          <stop offset="1" stopColor="#b9bec5" />
+          <stop offset="1" stopColor="#d4d8dd" />
         </linearGradient>
-        <VGrad id={ids('paper')} from="#ffffff" to="#dfe1e6" x1={0} y1={0} x2={1} y2={1} />
         <linearGradient id={ids('streak')} x1="0" y1={TOP.cy} x2="0" y2={BASE.cy} gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#fff" stopOpacity="0.5" />
-          <stop offset="0.35" stopColor="#fff" stopOpacity="0.26" />
-          <stop offset="1" stopColor="#fff" stopOpacity="0.06" />
+          <stop offset="0" stopColor="#fff" stopOpacity="0.7" />
+          <stop offset="1" stopColor="#fff" stopOpacity="0.1" />
         </linearGradient>
       </defs>
 
       <ellipse cx="50" cy="89.5" rx="31" ry="5" fill={ids.url('floor')} />
       <ellipse cx="50" cy={TOP.cy} rx={TOP.rx - 1.4} ry={TOP.ry - 1} fill={ids.url('inside')} />
-      <path d={RIM_BACK} fill="none" stroke="#000" strokeOpacity="0.28" strokeWidth="4.2" />
-      <path d={RIM_BACK} fill="none" stroke={ids.url('rim')} strokeWidth="3" />
+      <path d={RIM_BACK} fill="none" stroke="#000" strokeOpacity="0.14" strokeWidth="4.6" />
+      <path d={RIM_BACK} fill="none" stroke={ids.url('rim')} strokeWidth="3.6" />
 
-      {full &&
-        PAPERS.map((p) => (
-          <g key={p.outline}>
-            <path d={p.outline} fill={ids.url('paper')} stroke="#9ea3aa" strokeWidth="0.6" strokeLinejoin="round" />
-            <path d={p.creases} fill="none" stroke="#bfc3c9" strokeWidth="0.6" strokeLinejoin="round" strokeLinecap="round" />
-          </g>
-        ))}
+      {full && ITEMS.map((it) => <path key={it.d} d={it.d} fill={it.fill} stroke="#000" strokeOpacity="0.12" strokeWidth="0.6" strokeLinejoin="round" />)}
 
       <path d={BIN_BODY} fill={ids.url('body')} />
-      <path d={mesh} fill="none" stroke="#000" strokeOpacity="0.2" strokeWidth={wire.dark} />
-      <path d={mesh} fill="none" stroke="#f3f5f7" strokeOpacity="0.92" strokeWidth={wire.light} />
-      <path d={BIN_BODY} fill={ids.url('shade')} />
+      <path d={BIN_BODY} fill={ids.url('fade')} />
       <path d={BIN_STREAK} fill={ids.url('streak')} />
-      <path d={BIN_BOUNCE} fill={ids.url('streak')} fillOpacity="0.4" />
+      <path d={BIN_BOUNCE} fill={ids.url('streak')} fillOpacity="0.35" />
       <path
         d={`M${50 - TOP.rx} ${TOP.cy}L${50 - BASE.rx} ${BASE.cy}M${50 + TOP.rx} ${TOP.cy}L${50 + BASE.rx} ${BASE.cy}`}
         stroke="#000"
-        strokeOpacity="0.25"
-        strokeWidth="0.8"
+        strokeOpacity="0.12"
+        strokeWidth="0.7"
       />
-      <path d={BASE_FRONT} fill="none" stroke="#000" strokeOpacity="0.25" strokeWidth="3.6" />
-      <path d={BASE_FRONT} fill="none" stroke="#d5d8dd" strokeWidth="2.5" />
-      <path d={RIM_FRONT} fill="none" stroke="#000" strokeOpacity="0.3" strokeWidth="4.2" />
-      <path d={RIM_FRONT} fill="none" stroke={ids.url('rim')} strokeWidth="3" />
+      <path d={BASE_FRONT} fill="none" stroke="#000" strokeOpacity="0.12" strokeWidth="3.2" />
+      <path d={BASE_FRONT} fill="none" stroke="#eceef1" strokeWidth="2.4" />
+      <path d={RIM_FRONT} fill="none" stroke="#000" strokeOpacity="0.16" strokeWidth="4.6" />
+      <path d={RIM_FRONT} fill="none" stroke={ids.url('rim')} strokeWidth="3.6" />
       {fine && (
         <g fill="none" stroke="#fff" strokeLinecap="round">
-          <path d={`M${50 - TOP.rx + 4} ${TOP.cy + 3.6}A${TOP.rx} ${TOP.ry} 0 0 0 ${50 + 6} ${TOP.cy + TOP.ry}`} strokeOpacity="0.8" strokeWidth="0.7" />
-          {/* Offset onto the upper / lower half of the 3-unit rim tube. */}
-          <path d={RIM_GLINT} strokeOpacity="0.95" strokeWidth="1.1" transform="translate(0 -0.75)" />
-          <path d={RIM_BOUNCE} strokeOpacity="0.5" strokeWidth="1.1" transform="translate(0 0.75)" />
+          <path d={RIM_GLINT} strokeOpacity="0.95" strokeWidth="1.1" transform="translate(0 -0.9)" />
+          <path d={RIM_BOUNCE} strokeOpacity="0.5" strokeWidth="1.1" transform="translate(0 0.9)" />
         </g>
       )}
     </IconSvg>

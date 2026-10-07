@@ -304,7 +304,7 @@ describe('Thumbnail', () => {
   });
 
   it('switches the Trash icon live when items are trashed', () => {
-    const paper = '#9ea3aa'; // stroke color of the crumpled paper drawn only in the full bin
+    const paper = '#ff6b5a'; // fill of the crumpled ball drawn only in the full bin
     act(() => root.render(<I.FileIcon node={dir(PATHS.trash)} size={64} />));
     expect(host.innerHTML).not.toContain(paper);
     act(() => seedFS(1));
