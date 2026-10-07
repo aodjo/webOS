@@ -11,15 +11,16 @@ export interface Wallpaper {
 }
 
 export const WALLPAPERS: Wallpaper[] = [
+  { id: 'flow', name: { en: 'Flow', ko: '물결' }, light: '/wallpapers/flow-light.jpg', dark: '/wallpapers/flow-dark.jpg' },
   { id: 'hallasan', name: { en: 'Hallasan', ko: '한라산' }, light: '/wallpapers/hallasan-light.svg', dark: '/wallpapers/hallasan-dark.svg' },
   { id: 'jeju', name: { en: 'Jeju Sea', ko: '제주 바다' }, light: '/wallpapers/jeju-light.svg', dark: '/wallpapers/jeju-dark.svg' },
   { id: 'aurora', name: { en: 'Aurora', ko: '오로라' }, light: '/wallpapers/aurora-light.svg', dark: '/wallpapers/aurora-dark.svg' },
   { id: 'seoul', name: { en: 'Seoul Night', ko: '서울의 밤' }, light: '/wallpapers/seoul-light.svg', dark: '/wallpapers/seoul-dark.svg' },
   { id: 'bloom', name: { en: 'Bloom', ko: '블룸' }, light: '/wallpapers/bloom-light.svg', dark: '/wallpapers/bloom-dark.svg' },
   { id: 'graphite', name: { en: 'Graphite', ko: '그래파이트' }, light: '/wallpapers/graphite-light.svg', dark: '/wallpapers/graphite-dark.svg' },
-]; /** Built-in wallpapers (SVGs in /public/wallpapers), each with a light and a dark variant. */
+]; /** Built-in wallpapers (images in /public/wallpapers), each with a light and a dark variant. */
 
-export const DEFAULT_WALLPAPER = 'hallasan'; /** Id of the default wallpaper, also the fallback for unknown ids and unresolvable image paths. */
+export const DEFAULT_WALLPAPER = 'flow'; /** Id of the default wallpaper, also the fallback for unknown ids and unresolvable image paths. */
 
 /**
  * Resolves the `settings.wallpaper` value to an image URL.

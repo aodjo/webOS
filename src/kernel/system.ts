@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Locale, PowerState, Settings } from './types';
 import { owner } from '@/data/portfolio';
+import { DEFAULT_WALLPAPER } from './wallpapers';
 
 /**
  * Detects the default locale from the browser language.
@@ -34,7 +35,7 @@ export const DEFAULT_DOCK: string[] = [
 export const DEFAULT_SETTINGS: Settings = {
   theme: 'auto',
   accent: '#0a84ff',
-  wallpaper: 'hallasan',
+  wallpaper: DEFAULT_WALLPAPER,
   dockSize: 52,
   dockMagnification: false,
   dockMagnifiedSize: 80,
@@ -160,7 +161,7 @@ export const useSystem = create<SystemState>()(
     }),
     {
       name: 'webos.system',
-      version: 2,
+      version: 3,
       /**
        * Selects the part of the state that is persisted.
        *
@@ -178,7 +179,8 @@ export const useSystem = create<SystemState>()(
        * Upgrades persisted state from an older storage version.
        *
        * Settings stored with a version below 2 get Dock magnification turned off, and the placeholder
-       * display names ("Aodjo" / "아오드조") are replaced with the default full name. The persisted
+       * display names ("Aodjo" / "아오드조") are replaced with the default full name. Below version 3
+       * the former default wallpaper ("hallasan") is replaced with the current default. The persisted
        * object is modified in place.
        *
        * @param {unknown} persisted - The stored state.
@@ -194,6 +196,7 @@ export const useSystem = create<SystemState>()(
           p.settings.dockMagnification = false;
           if (p.settings.fullName === 'Aodjo' || p.settings.fullName === '아오드조') p.settings.fullName = DEFAULT_SETTINGS.fullName;
         }
+        if (version < 3 && p.settings?.wallpaper === 'hallasan') p.settings.wallpaper = DEFAULT_WALLPAPER;
         return p as unknown as SystemState;
       },
       /**

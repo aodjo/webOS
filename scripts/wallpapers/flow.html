@@ -1,0 +1,305 @@
+<!doctype html>
+<!--
+  Generator for the "Flow" wallpaper (public/wallpapers/flow-light.jpg / flow-dark.jpg).
+  Open with ?mode=light or ?mode=dark; the picture fills a 1440×900 canvas drawn at the device
+  pixel ratio. scripts/wallpapers/render.js screenshots it at 2× into the JPEG files.
+-->
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  html, body { margin: 0; background: #000; overflow: hidden; }
+  canvas { display: block; width: 1440px; height: 900px; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+  const W = 1440; /** Logical canvas width in CSS px. */
+  const H = 900; /** Logical canvas height in CSS px. */
+  const DPR = window.devicePixelRatio || 1; /** Backing-store scale. */
+  const MODE = new URLSearchParams(location.search).get('mode') === 'dark' ? 'dark' : 'light'; /** Which variant to draw. */
+
+  const PALETTES = {
+    light: {
+      skyTop: '#3474cc', skyMid: '#98b6dc', skyWarm: '#efd2ae', skyHaze: '#e9e3d6',
+      deep: '#0a28a6', mid: '#1a58e0', bright: '#3a9ef2', cyan: '#62d2f2', shadow: '#03125f',
+      silk: ['#ffffff', '#d8f3ff', '#a9e6ff', '#fff2c4', '#c7f5e4'], edge: '#ffffff', edgeGlow: '#9fe2ff',
+      mound: '#7f9cc4', moundLight: '#c9d8ea', grain: 0.035,
+    },
+    dark: {
+      skyTop: '#050a24', skyMid: '#14214f', skyWarm: '#5a3f78', skyHaze: '#2a2f62',
+      deep: '#04114f', mid: '#0b2a8f', bright: '#1d5fd0', cyan: '#3a9be0', shadow: '#020830',
+      silk: ['#bfe6ff', '#7fc8ff', '#5aa8f0', '#c9b6ff', '#8fe0d0'], edge: '#d9f1ff', edgeGlow: '#4fb0ff',
+      mound: '#1a2a5a', moundLight: '#34508a', grain: 0.03,
+    },
+  }; /** Colours of the two variants. */
+  const P = PALETTES[MODE]; /** Colours of the variant being drawn. */
+
+  let seed = 7; /** State of the deterministic random generator. */
+  /**
+   * Returns a deterministic pseudo-random number in [0, 1) (mulberry32).
+   *
+   * @returns {number} The next random value.
+   *
+   * @example
+   * const r = rand();
+   */
+  function rand() {
+    seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+
+  /**
+   * Point on the wave crest for a parameter t in [0, 1], in CSS px.
+   *
+   * The crest rises from the lower left to the upper right with a gentle S bend.
+   *
+   * @param {number} t - Position along the crest.
+   * @returns {{x: number, y: number}} The point.
+   *
+   * @example
+   * const p = crest(0.5);
+   */
+  function crest(t) {
+    const x = -0.06 + 1.16 * t;
+    const y = 0.9 - 1.02 * t + 0.13 * Math.sin(t * Math.PI) - 0.04 * Math.sin(t * Math.PI * 2.6);
+    return { x: x * W, y: y * H };
+  }
+
+  /**
+   * Unit normal of the crest at t, pointing into the wave body (down/right).
+   *
+   * @param {number} t - Position along the crest.
+   * @returns {{x: number, y: number}} The normal.
+   *
+   * @example
+   * const n = normal(0.5);
+   */
+  function normal(t) {
+    const a = crest(Math.max(0, t - 0.002));
+    const b = crest(Math.min(1, t + 0.002));
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const len = Math.hypot(dx, dy) || 1;
+    return { x: -dy / len, y: dx / len };
+  }
+
+  /**
+   * Traces the wave body (everything below/right of the crest) as the current path.
+   *
+   * @param {CanvasRenderingContext2D} ctx - Target context.
+   * @param {number} [offset=0] - Distance in px the crest is pushed into the body.
+   * @returns {void}
+   *
+   * @example
+   * bodyPath(ctx); ctx.fill();
+   */
+  function bodyPath(ctx, offset = 0) {
+    ctx.beginPath();
+    for (let i = 0; i <= 200; i++) {
+      const t = i / 200, p = crest(t), n = normal(t);
+      const x = p.x + n.x * offset, y = p.y + n.y * offset;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.lineTo(W + 200, -200);
+    ctx.lineTo(W + 200, H + 200);
+    ctx.lineTo(-200, H + 200);
+    ctx.closePath();
+  }
+
+  /**
+   * Strokes a curve that follows the crest at a given depth with a slow wobble.
+   *
+   * @param {CanvasRenderingContext2D} ctx - Target context.
+   * @param {number} depth - Distance into the body in px.
+   * @param {number} wobble - Amplitude of the sideways wobble in px.
+   * @param {number} phase - Phase of the wobble.
+   * @param {number} t0 - Start of the stroke along the crest.
+   * @param {number} t1 - End of the stroke along the crest.
+   * @returns {void}
+   *
+   * @example
+   * ribbon(ctx, 40, 6, 1.2, 0.1, 0.9);
+   */
+  function ribbon(ctx, depth, wobble, phase, t0, t1) {
+    ctx.beginPath();
+    for (let i = 0; i <= 160; i++) {
+      const t = t0 + (t1 - t0) * (i / 160), p = crest(t), n = normal(t);
+      const d = depth + wobble * Math.sin(t * 9 + phase) + wobble * 0.5 * Math.sin(t * 23 + phase * 1.7);
+      const x = p.x + n.x * d, y = p.y + n.y * d;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+
+  /**
+   * Fills an elliptical radial glow.
+   *
+   * @param {CanvasRenderingContext2D} ctx - Target context.
+   * @param {number} x - Centre x as a fraction of the width.
+   * @param {number} y - Centre y as a fraction of the height.
+   * @param {number} rx - Horizontal radius as a fraction of the width.
+   * @param {number} ry - Vertical radius as a fraction of the height.
+   * @param {string} color - Centre colour.
+   * @param {number} alpha - Centre opacity.
+   * @param {number} [rot=0] - Rotation in radians.
+   * @returns {void}
+   *
+   * @example
+   * blob(ctx, 0.5, 0.5, 0.3, 0.2, '#fff', 0.4);
+   */
+  function blob(ctx, x, y, rx, ry, color, alpha, rot = 0) {
+    ctx.save();
+    ctx.translate(x * W, y * H);
+    ctx.rotate(rot);
+    ctx.scale(rx * W, ry * H);
+    const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+    g.addColorStop(0, color);
+    g.addColorStop(1, color + '00');
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(0, 0, 1, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  /**
+   * Draws the whole wallpaper.
+   *
+   * Layers: sky gradient with a warm haze, the wave body with soft volumes, silk ribbons that
+   * follow the crest, the luminous crest line, blurred foreground swells and film grain against
+   * banding.
+   *
+   * @returns {void}
+   *
+   * @example
+   * draw();
+   */
+  function draw() {
+    const canvas = document.getElementById('c');
+    canvas.width = W * DPR;
+    canvas.height = H * DPR;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(DPR, DPR);
+
+    const sky = ctx.createLinearGradient(0, 0, W * 0.35, H);
+    sky.addColorStop(0, P.skyTop);
+    sky.addColorStop(0.45, P.skyMid);
+    sky.addColorStop(0.8, P.skyHaze);
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, W, H);
+    blob(ctx, 0.2, 0.62, 0.42, 0.42, P.skyWarm, 0.95);
+    blob(ctx, 0.05, 0.3, 0.3, 0.3, P.skyMid, 0.5);
+
+    ctx.save();
+    bodyPath(ctx);
+    ctx.clip();
+    const body = ctx.createLinearGradient(W * 0.3, H * 0.2, W * 0.85, H);
+    body.addColorStop(0, P.bright);
+    body.addColorStop(0.35, P.mid);
+    body.addColorStop(0.75, P.deep);
+    body.addColorStop(1, P.shadow);
+    ctx.fillStyle = body;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.filter = 'blur(40px)';
+    blob(ctx, 0.88, 0.3, 0.22, 0.2, P.cyan, 0.7, -0.5);
+    blob(ctx, 0.62, 0.62, 0.3, 0.16, P.bright, 0.65, -0.6);
+    blob(ctx, 0.78, 0.9, 0.35, 0.18, P.shadow, 0.8, -0.3);
+    blob(ctx, 0.45, 0.95, 0.25, 0.12, P.deep, 0.7);
+    blob(ctx, 0.97, 0.62, 0.14, 0.3, P.cyan, 0.4);
+    ctx.filter = 'none';
+
+    ctx.lineCap = 'round';
+    for (let i = 0; i < 9; i++) {
+      const light = i % 2 === 0;
+      ctx.globalCompositeOperation = light ? 'screen' : 'multiply';
+      ctx.strokeStyle = light ? P.cyan : P.shadow;
+      ctx.globalAlpha = light ? 0.16 + rand() * 0.14 : 0.22 + rand() * 0.16;
+      ctx.lineWidth = 50 + rand() * 90;
+      ctx.filter = `blur(${24 + rand() * 18}px)`;
+      ribbon(ctx, 60 + i * 62 + rand() * 30, 26 + rand() * 20, rand() * 6.28, 0.1, 1);
+    }
+    ctx.globalCompositeOperation = 'screen';
+    for (let i = 0; i < 70; i++) {
+      const depth = Math.pow(rand(), 2) * 220 + 3;
+      const near = 1 - depth / 220;
+      ctx.strokeStyle = P.silk[Math.floor(rand() * P.silk.length)];
+      ctx.globalAlpha = (0.02 + rand() * 0.05) * (0.5 + near);
+      ctx.lineWidth = 1 + rand() * (depth < 40 ? 5 : 18);
+      ctx.filter = `blur(${(2 + rand() * 3 + (1 - near) * 8).toFixed(1)}px)`;
+      const t0 = 0.3 + rand() * 0.25;
+      ribbon(ctx, depth, 6 + rand() * 16, rand() * 6.28, t0, 1);
+    }
+    ctx.filter = 'blur(26px)';
+    ctx.globalAlpha = 0.5;
+    ctx.strokeStyle = P.edgeGlow;
+    ctx.lineWidth = 46;
+    ribbon(ctx, 22, 0, 0, 0, 1);
+    ctx.filter = 'none';
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.restore();
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    const fade = ctx.createLinearGradient(crest(0.25).x, 0, crest(0.5).x, 0);
+    fade.addColorStop(0, P.edgeGlow + '00');
+    fade.addColorStop(1, P.edgeGlow);
+    ctx.filter = 'blur(10px)';
+    ctx.globalAlpha = 0.45;
+    ctx.strokeStyle = fade;
+    ctx.lineWidth = 10;
+    ribbon(ctx, 2, 0, 0, 0.2, 1);
+    const fadeEdge = ctx.createLinearGradient(crest(0.25).x, 0, crest(0.5).x, 0);
+    fadeEdge.addColorStop(0, P.edge + '00');
+    fadeEdge.addColorStop(1, P.edge);
+    ctx.filter = 'blur(0.6px)';
+    ctx.globalAlpha = 0.95;
+    ctx.strokeStyle = fadeEdge;
+    ctx.lineWidth = 1.6;
+    ribbon(ctx, 0.5, 0, 0, 0.2, 1);
+    ctx.restore();
+
+    ctx.save();
+    ctx.filter = 'blur(34px)';
+    ctx.fillStyle = P.mound;
+    ctx.globalAlpha = 0.85;
+    ctx.beginPath();
+    ctx.moveTo(-100, H + 50);
+    ctx.bezierCurveTo(W * 0.02, H * 0.8, W * 0.2, H * 0.74, W * 0.34, H * 0.9);
+    ctx.bezierCurveTo(W * 0.38, H * 0.95, W * 0.4, H + 40, W * 0.38, H + 80);
+    ctx.closePath();
+    ctx.fill();
+    ctx.globalAlpha = 0.5;
+    ctx.filter = 'blur(40px)';
+    blob(ctx, 0.14, 0.86, 0.12, 0.05, P.moundLight, 0.8, -0.15);
+    ctx.globalAlpha = 0.9;
+    ctx.filter = 'blur(46px)';
+    ctx.fillStyle = P.mound;
+    ctx.beginPath();
+    ctx.moveTo(W * 0.66, H + 60);
+    ctx.bezierCurveTo(W * 0.76, H * 0.82, W * 0.92, H * 0.6, W + 120, H * 0.5);
+    ctx.lineTo(W + 120, H + 60);
+    ctx.closePath();
+    ctx.fill();
+    blob(ctx, 0.9, 0.72, 0.1, 0.12, P.moundLight, 0.7, -0.7);
+    ctx.restore();
+
+    const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const d = img.data;
+    const amp = P.grain * 255;
+    for (let i = 0; i < d.length; i += 4) {
+      const n = (rand() - 0.5) * amp;
+      d[i] += n; d[i + 1] += n; d[i + 2] += n;
+    }
+    ctx.putImageData(img, 0, 0);
+    document.body.dataset.ready = 'true';
+  }
+
+  draw();
+</script>
+</body>
+</html>
