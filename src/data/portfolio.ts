@@ -40,8 +40,8 @@ export const owner = {
       '저는 초등학교 5학년 때 프로그래밍을 처음 접하고 계속하여 프로그램과 웹사이트를 제작하고 있어요. ' +
       '지금은 **목포대학교 정보보호영재원**을 수료하고, **선린인터넷고등학교 소프트웨어과**에 재학하면서 열심히 공부하고 있어요.'
   } as LString,
-  /** Contact address used as the sender in Mail and in the résumé and contact links. TODO: replace with your real contact info. */
-  email: 'hello@example.com',
+  /** Contact address used as the sender in Mail and in the résumé and contact links. */
+  email: 'me@junx.dev',
   /** Profile URLs; leave a field empty to hide that link. */
   links: {
     github: 'https://github.com/aodjo',
