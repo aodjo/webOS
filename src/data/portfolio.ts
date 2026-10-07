@@ -50,7 +50,9 @@ export const owner = {
     website: '',
   },
   avatar: '/avatar.jpg',
-}; /** The portfolio owner's profile: identity, bio, contact details, links and avatar. */
+  /** Greeting decoded character by character on the boot screen before the logo appears; leave empty to skip it. */
+  bootGreeting: "Welcome to Junsung Lee's portfolio!",
+}; /** The portfolio owner's profile: identity, bio, contact details, links, avatar and boot greeting. */
 
 /** One skill. */
 export interface Skill {

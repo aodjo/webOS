@@ -21,6 +21,31 @@
   opacity: 0;
 }
 
+.greeting {
+  margin: 0;
+  padding: 0 24px;
+  max-width: 100%;
+  text-align: center;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: clamp(15px, 2.4vw, 24px);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: pre-wrap;
+  color: rgba(255, 255, 255, 0.45);
+  transition-property: opacity;
+  transition-timing-function: ease;
+  animation: trackIn 0.4s ease both;
+}
+
+.greeting.fading {
+  opacity: 0;
+}
+
+.glyph[data-settled] {
+  color: #fff;
+  transition: color 0.25s ease;
+}
+
 .logo {
   display: flex;
   animation: logoIn 0.7s var(--ease-out) both;
