@@ -1898,13 +1898,15 @@ export function Dock() {
 
 /* ───────────────────────── Minimized window tile ───────────────────────── */
 
+const WINDOW_RADIUS = 16; /** Corner radius of a standard window in px (`--radius-window`), scaled down with the thumbnail. */
+
 /**
  * Minimized-window tile shown in the Dock.
  *
  * Fits the window's aspect ratio into 84% of the slot size and shows the snapshot captured when
  * the window was minimized, mounted into the tile and scaled to fit, or a schematic window with
- * traffic lights and text lines when there is none (decided once on mount). Corners scale with
- * the tile (about 10px at the default Dock size, at least 4px), and the owning app's icon is
+ * traffic lights and text lines when there is none (decided once on mount). The thumbnail keeps
+ * the window's own shape, its corner radius scaled down with it, and the owning app's icon is
  * overlaid as a badge at 40% of the slot size, overlapping the thumbnail's bottom-right corner.
  *
  * @param {Object} props - Component props.
@@ -1934,8 +1936,7 @@ function MiniWindow({ win, max }: { win: WindowState; max: number }) {
   return (
     <span className={s.mini}>
       <span className={s.miniFrame} style={{ width: w, height: h }}>
-        {/* 10px corners at the default Dock size, scaled with the tile. */}
-        <span className={s.miniWin} style={{ width: w, height: h, borderRadius: Math.max(4, Math.round(max * 0.19)) }}>
+        <span className={s.miniWin} style={{ width: w, height: h, borderRadius: WINDOW_RADIUS * (w / Math.max(1, win.width)) }}>
           {snap ? (
             <span ref={hostRef} className={s.snapHost} />
           ) : (

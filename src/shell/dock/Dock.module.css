@@ -463,19 +463,6 @@
   background: var(--window-bg);
   box-shadow: 0 0 0 0.5px var(--lg-edge), 0 2px 8px rgba(0, 0, 0, 0.26);
 }
-/* Rim light over the thumbnail (drawn above the snapshot, which would cover an inset shadow). */
-.miniWin::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  border-radius: inherit;
-  pointer-events: none;
-  box-shadow:
-    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
-    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
-    inset 0 0 0 0.5px var(--lg-rim-side);
-}
 .miniBar {
   flex: none;
   display: flex;
