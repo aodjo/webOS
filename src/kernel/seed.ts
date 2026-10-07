@@ -236,9 +236,10 @@ function buildSeed(locale: Locale, apps: AppManifest[]): Draft {
     { x: 0, y: 0 },
   );
   file(join(PATHS.desktop, locale === 'ko' ? '이력서.md' : 'Resume.md'), resume, { x: 0, y: 1 });
-  asset(join(PATHS.desktop, 'Screenshot.svg'), projects[0]?.cover ?? '/projects/webos.svg', 52_000, { x: 0, y: 2 });
+  const shot = projects[0]?.cover ?? '/projects/webos.svg';
+  asset(join(PATHS.desktop, `Screenshot.${extname(shot)}`), shot, 52_000, { x: 0, y: 2 });
 
-  for (const p of projects) asset(join(PATHS.pictures, `${p.id}.svg`), p.cover, 52_000);
+  for (const p of projects) asset(join(PATHS.pictures, `${p.id}.${extname(p.cover)}`), p.cover, 52_000);
   asset(join(PATHS.pictures, `avatar.${extname(owner.avatar)}`), owner.avatar, 40_000);
   if (owner.links.github) file(join(PATHS.downloads, 'GitHub.webloc'), owner.links.github);
   file(join(PATHS.downloads, 'todo.txt'), locale === 'ko' ? '- 포트폴리오 업데이트\n- 운동하기\n' : '- update portfolio\n- go for a run\n');

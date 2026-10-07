@@ -182,7 +182,7 @@ export const education: { school: LString; degree: LString; period: string }[] =
 
 /** One portfolio project, shown in the Projects app, Finder, Spotlight and Mail. */
 export interface Project {
-  /** Unique slug that identifies the project (e.g. when Mail or Spotlight opens it in the Projects app) and names its cover copy ~/Pictures/<id>.svg. */
+  /** Unique slug that identifies the project (e.g. when Mail or Spotlight opens it in the Projects app) and names its cover copy ~/Pictures/<id>.<ext>. */
   id: string;
   name: string;
   year: number;
@@ -224,6 +224,33 @@ export const projects: Project[] = [
       { en: 'Window manager with edge tiling, z-ordering and minimize animations', ko: '엣지 타일링, z-순서, 최소화 애니메이션을 갖춘 윈도우 매니저' },
       { en: 'Virtual file system shared by Finder, Terminal and every app', ko: 'Finder, 터미널, 모든 앱이 공유하는 가상 파일 시스템' },
       { en: 'Bilingual UI (English / 한국어) switchable at runtime', ko: '런타임에 전환 가능한 이중 언어 UI (English / 한국어)' },
+    ],
+    featured: true,
+  },
+  {
+    id: 'hankari',
+    name: 'Hankari',
+    year: 2026,
+    tagline: { en: 'Find KakaoTalk bots and request an invite, all in one place.', ko: '카카오톡 봇을 찾고 초대 신청까지 한 번에.' },
+    description: {
+      en:
+        'Hankari (한카리) is a directory of Korean KakaoTalk bots. Visitors search bots by name, command or open chat room, browse them by category, ' +
+        'and send an invite request for their own chat room. Monthly rankings, featured bots and an open chat room directory help people discover new bots, ' +
+        'and bot developers get an API and documentation under Hankari Devs.',
+      ko:
+        '한카리는 한국 카카오톡 봇 디렉터리입니다. 봇 이름, 명령어, 오픈채팅방으로 검색하고 카테고리별로 둘러본 뒤 내 채팅방으로 초대 신청을 보낼 수 있습니다. ' +
+        '이번 달 랭킹, 추천 봇, 오픈채팅방 목록으로 새 봇을 발견할 수 있고, 봇 개발자를 위한 API와 문서(한카리 Devs)도 제공합니다.',
+    },
+    role: { en: 'Planning and full-stack development', ko: '기획 및 풀스택 개발' },
+    tags: ['KakaoTalk', 'Web', 'API'],
+    cover: '/projects/hankari.jpg',
+    color: '#ffcc00',
+    links: { demo: 'https://hankari.dev/' },
+    highlights: [
+      { en: 'Bot search by name, command or open chat room', ko: '봇 이름·명령어·오픈채팅방 검색' },
+      { en: 'Categories: room management, utilities, attendance and levels, chat statistics, games', ko: '방 관리, 유틸리티, 출석·레벨, 채팅 통계, 게임 등 카테고리' },
+      { en: 'Invite requests, monthly heart rankings and an open chat room directory', ko: '초대 신청, 이번 달 하트 랭킹, 오픈채팅방 목록' },
+      { en: 'Developer API and documentation (Hankari Devs)', ko: '개발자용 API와 문서 (한카리 Devs)' },
     ],
     featured: true,
   },
