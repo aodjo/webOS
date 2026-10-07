@@ -61,7 +61,6 @@ export function buildSeedMessages(locale: Locale, seededAt: number, me: { name: 
   const name = L(owner.name);
   const from = { name, email: owner.email };
   const to = [{ name: me.name, email: '' }];
-  const sign = `\n\n${ko ? '감사합니다,' : 'Cheers,'}\n**${name}**  \n${L(owner.role)} · ${L(owner.location)}`;
   const featured = projects.filter((p) => p.featured);
   const showcase = featured.length ? featured : projects.slice(0, 3);
   const links = [
@@ -84,8 +83,8 @@ export function buildSeedMessages(locale: Locale, seededAt: number, me: { name: 
     flagged: false,
     extra: 'welcome',
     body: ko
-      ? `안녕하세요.\n\n**제 포트폴리오 사이트**에 방문해 주셔서 감사합니다. ${bioFirst}\n\n이곳은 일반적인 포트폴리오 사이트가 아니라 브라우저에서 동작하는 작은 운영체제입니다. 다음과 같이 둘러볼 수 있습니다.\n\n- **Dock**에서 앱을 실행하고, 창을 화면 가장자리로 끌어 붙일 수 있습니다.\n- **Finder**에서 만들거나 지운 파일은 **터미널**에도 그대로 반영됩니다. (\`ls ~/Documents\`)\n- **⌘K**로 Spotlight를 열어 무엇이든 검색할 수 있습니다.\n- 메뉴 막대와 키보드 단축키도 실제처럼 동작합니다.\n\n아래 버튼으로 바로 시작할 수 있습니다.${sign}`
-      : `Hi there!\n\nThanks for stopping by **my portfolio site**. ${bioFirst}\n\nThis isn’t a regular portfolio site. It’s a tiny operating system running in your browser. Here’s how to explore:\n\n- Launch apps from the **Dock**, then drag windows to the screen edges to snap them.\n- Create or delete files in **Finder** and watch them show up in the **Terminal** (\`ls ~/Documents\`).\n- Press **⌘K** to open Spotlight and search for anything.\n- The menu bar and keyboard shortcuts work like the real thing.\n\nThe buttons below are a good place to start.${sign}`,
+      ? `안녕하세요.\n\n**제 포트폴리오 사이트**에 방문해 주셔서 감사합니다. ${bioFirst}\n\n이곳은 일반적인 포트폴리오 사이트가 아니라 브라우저에서 동작하는 작은 운영체제입니다. 다음과 같이 둘러볼 수 있습니다.\n\n- **Dock**에서 앱을 실행하고, 창을 화면 가장자리로 끌어 붙일 수 있습니다.\n- **Finder**에서 만들거나 지운 파일은 **터미널**에도 그대로 반영됩니다. (\`ls ~/Documents\`)\n- **⌘K**로 Spotlight를 열어 무엇이든 검색할 수 있습니다.\n- 메뉴 막대와 키보드 단축키도 실제처럼 동작합니다.\n\n아래 버튼으로 바로 시작할 수 있습니다.`
+      : `Hi there!\n\nThanks for stopping by **my portfolio site**. ${bioFirst}\n\nThis isn’t a regular portfolio site. It’s a tiny operating system running in your browser. Here’s how to explore:\n\n- Launch apps from the **Dock**, then drag windows to the screen edges to snap them.\n- Create or delete files in **Finder** and watch them show up in the **Terminal** (\`ls ~/Documents\`).\n- Press **⌘K** to open Spotlight and search for anything.\n- The menu bar and keyboard shortcuts work like the real thing.\n\nThe buttons below are a good place to start.`,
   };
 
   const projectsMsg: MailMessage = {
@@ -100,8 +99,8 @@ export function buildSeedMessages(locale: Locale, seededAt: number, me: { name: 
     flagged: false,
     extra: 'projects',
     body: ko
-      ? `대표 작업을 소개합니다.\n\n${showcase.map((p) => `- **${p.name}** (${p.year}): ${L(p.tagline)}`).join('\n')}\n\n카드를 누르면 **프로젝트** 앱에서 자세한 내용을 볼 수 있습니다. 소개 문서는 Finder의 \`~/Documents/Projects\`에도 있습니다.${sign}`
-      : `Here’s the work I’m proudest of:\n\n${showcase.map((p) => `- **${p.name}** (${p.year}): ${L(p.tagline)}`).join('\n')}\n\nClick a card to see the details in the **Projects** app. The write-ups also live in Finder under \`~/Documents/Projects\`.${sign}`,
+      ? `대표 작업을 소개합니다.\n\n${showcase.map((p) => `- **${p.name}** (${p.year}): ${L(p.tagline)}`).join('\n')}\n\n카드를 누르면 **프로젝트** 앱에서 자세한 내용을 볼 수 있습니다. 소개 문서는 Finder의 \`~/Documents/Projects\`에도 있습니다.`
+      : `Here’s the work I’m proudest of:\n\n${showcase.map((p) => `- **${p.name}** (${p.year}): ${L(p.tagline)}`).join('\n')}\n\nClick a card to see the details in the **Projects** app. The write-ups also live in Finder under \`~/Documents/Projects\`.`,
   };
 
   const contact: MailMessage = {
@@ -116,8 +115,8 @@ export function buildSeedMessages(locale: Locale, seededAt: number, me: { name: 
     flagged: true,
     extra: 'contact',
     body: ko
-      ? `채용 제안, 협업, 개발 이야기 모두 환영합니다. 편하게 연락 주세요.\n\n- 이메일: [${owner.email}](mailto:${owner.email})\n${links.join('\n')}\n\n이 메시지에 **답장**하면 메일 창이 열리고, 보내기를 누르면 사용하시는 메일 앱으로 넘어갑니다.${sign}`
-      : `Whether it’s a role, a collaboration, or just a chat about building software, my inbox is open.\n\n- Email: [${owner.email}](mailto:${owner.email})\n${links.join('\n')}\n\n**Reply** to this message to start writing; when you hit Send, it’s handed off to your own mail app.${sign}`,
+      ? `채용 제안, 협업, 개발 이야기 모두 환영합니다. 편하게 연락 주세요.\n\n- 이메일: [${owner.email}](mailto:${owner.email})\n${links.join('\n')}\n\n이 메시지에 **답장**하면 메일 창이 열리고, 보내기를 누르면 사용하시는 메일 앱으로 넘어갑니다.`
+      : `Whether it’s a role, a collaboration, or just a chat about building software, my inbox is open.\n\n- Email: [${owner.email}](mailto:${owner.email})\n${links.join('\n')}\n\n**Reply** to this message to start writing; when you hit Send, it’s handed off to your own mail app.`,
   };
 
   const system: MailMessage = {
