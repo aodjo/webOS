@@ -24,6 +24,12 @@ export interface TerminalAPI {
   readLine(prompt: string, opts?: { secret?: boolean; signal?: AbortSignal }): Promise<string | null>;
   /** Wait for a single key press. Resolves null when aborted. */
   readKey(signal?: AbortSignal): Promise<string | null>;
+  /**
+   * Wait for raw terminal input: the bytes a key press sends (control characters, escape
+   * sequences) or pasted text, for programs that talk to a remote system. ^C is delivered
+   * instead of interrupting. Resolves null when aborted. Terminals without raw input omit it.
+   */
+  readRaw?(signal?: AbortSignal): Promise<string | null>;
   /** Show a full-screen frame (alternate screen buffer); null returns to the normal screen. */
   altScreen(frame: string[] | null): void;
   /**

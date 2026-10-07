@@ -5,6 +5,7 @@
  */
 import { HOME, HOSTNAME, USER, basename, fs, isMacHost, normalize, useSystem } from '@/kernel';
 import { ScreenBuffer } from './buffer';
+import { encodeKey } from './vt';
 import { c } from './shell/ansi';
 import { commonPrefix, complete } from './shell/completion';
 import { expandHistory } from './shell/history';
@@ -250,6 +251,7 @@ export class TerminalSession implements TerminalAPI {
   private abort: AbortController | null = null;
   private lineWaiter: ((line: string | null) => void) | null = null;
   private readonly keyWaiters = new Set<(key: string | null) => void>();
+  private readonly rawWaiters = new Set<(data: string | null) => void>();
   private queue: Queued[] = [];
   private tabStreak = 0;
   private runGen = 0;
@@ -602,6 +604,66 @@ export class TerminalSession implements TerminalAPI {
   }
 
   /**
+   * Wait for raw terminal input (used by `linux`, which forwards it to a virtual machine).
+   *
+   * While a command runs with a raw waiter registered and no line being read, handleKey()
+   * encodes each key press as terminal bytes with encodeKey() (so ^C is sent, not acted on) and
+   * paste() delivers pasted text with line breaks as carriage returns.
+   *
+   * @param {AbortSignal} [signal] - Cancels the wait.
+   * @returns {Promise<string | null>} The input bytes, or null when aborted.
+   *
+   * @example
+   * const data = await term.readRaw(signal);
+   * if (data !== null) vm.serial0_send(data);
+   */
+  readRaw(signal?: AbortSignal): Promise<string | null> {
+    if (signal?.aborted) return Promise.resolve(null);
+    return new Promise((resolve) => {
+      /**
+       * Resolve the pending wait with null when the signal aborts.
+       *
+       * @returns {void}
+       *
+       * @example
+       * signal?.addEventListener('abort', onAbort, { once: true });
+       */
+      const onAbort = () => done(null);
+      /**
+       * Complete the pending wait and unregister this waiter.
+       *
+       * @param {string | null} data - The input, or null when cancelled.
+       * @returns {void}
+       *
+       * @example
+       * done('\r');
+       */
+      const done = (data: string | null) => {
+        signal?.removeEventListener('abort', onAbort);
+        this.rawWaiters.delete(done);
+        resolve(data);
+      };
+      this.rawWaiters.add(done);
+      signal?.addEventListener('abort', onAbort, { once: true });
+    });
+  }
+
+  /**
+   * Hand input to the raw waiters, if a running command is reading raw input.
+   *
+   * @param {string} data - Bytes to deliver.
+   * @returns {boolean} True when a raw reader took the input.
+   *
+   * @example
+   * if (this.deliverRaw('\x03')) return true;
+   */
+  private deliverRaw(data: string): boolean {
+    if (this.mode !== 'running' || this.lineWaiter || !this.rawWaiters.size) return false;
+    for (const k of [...this.rawWaiters]) k(data);
+    return true;
+  }
+
+  /**
    * Show a full-screen frame on the alternate screen, or leave it.
    *
    * Frame updates are batched to the next animation frame; leaving the alternate screen
@@ -799,6 +861,7 @@ export class TerminalSession implements TerminalAPI {
     this.shell.killJobs();
     this.lineWaiter?.(null);
     for (const k of [...this.keyWaiters]) k(null);
+    for (const k of [...this.rawWaiters]) k(null);
     if (this.frame !== null) cancelFrame(this.frame);
     this.listeners.clear();
     this.unregister();
@@ -1030,6 +1093,7 @@ export class TerminalSession implements TerminalAPI {
     this.lineWaiter = null;
     this.secret = false;
     for (const k of [...this.keyWaiters]) k(null);
+    for (const k of [...this.rawWaiters]) k(null);
     if (this.disposed || this.mode === 'exited') return;
     if (this.shell.exited) {
       this.end();
@@ -1067,6 +1131,7 @@ export class TerminalSession implements TerminalAPI {
       this.abort?.abort();
       this.lineWaiter?.(null);
       for (const k of [...this.keyWaiters]) k(null);
+      for (const k of [...this.rawWaiters]) k(null);
       setTimeout(() => {
         if (!this.disposed && this.mode === 'running' && this.runGen === gen) {
           this.runGen++;
@@ -1182,6 +1247,7 @@ export class TerminalSession implements TerminalAPI {
    * session.paste('cd ~/Documents\nls\n');
    */
   paste(raw: string): void {
+    if (this.deliverRaw(raw.replace(/\r?\n/g, '\r'))) return;
     const text = raw.replace(/\r\n?/g, '\n');
     if (!text.includes('\n')) {
       this.insert(text);
@@ -1423,6 +1489,11 @@ export class TerminalSession implements TerminalAPI {
     if (mod && e.altKey && !e.shiftKey && (lower === 'k' || (isMacHost && !e.ctrlKey && e.code === 'KeyK'))) {
       this.clearScrollback();
       return true;
+    }
+
+    if (this.mode === 'running' && !this.lineWaiter && this.rawWaiters.size) {
+      const data = encodeKey(e);
+      return data !== null && this.deliverRaw(data);
     }
 
     if (this.mode === 'running' && !this.lineWaiter && this.keyWaiters.size) {

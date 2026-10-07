@@ -91,6 +91,7 @@ export function logoArt(height = 17): string[] {
 
 const neofetch: CommandDef = {
   name: 'neofetch',
+  aliases: ['fastfetch'],
   path: '/usr/local/bin',
   group: 'fun',
   summary: { en: 'show system information with the OS logo', ko: 'OS 로고와 함께 시스템 정보 표시' },

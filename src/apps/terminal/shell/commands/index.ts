@@ -4,12 +4,13 @@ import { APP_COMMANDS } from './apps';
 import { BUILTIN_COMMANDS } from './builtins';
 import { FILE_COMMANDS } from './files';
 import { FUN_COMMANDS } from './fun';
+import { LINUX_COMMANDS } from './linux';
 import { NET_COMMANDS } from './net';
 import { PORTFOLIO_COMMANDS } from './portfolio';
 import { SYSTEM_COMMANDS } from './system';
 import { TEXT_COMMANDS } from './text';
 
-export const COMMAND_LIST: CommandDef[] = [...PORTFOLIO_COMMANDS, ...FILE_COMMANDS, ...TEXT_COMMANDS, ...APP_COMMANDS, ...SYSTEM_COMMANDS, ...NET_COMMANDS, ...BUILTIN_COMMANDS, ...FUN_COMMANDS]; /** Every command definition, in registry order: portfolio, files, text, apps, system, network, builtins, fun. */
+export const COMMAND_LIST: CommandDef[] = [...PORTFOLIO_COMMANDS, ...FILE_COMMANDS, ...TEXT_COMMANDS, ...APP_COMMANDS, ...LINUX_COMMANDS, ...SYSTEM_COMMANDS, ...NET_COMMANDS, ...BUILTIN_COMMANDS, ...FUN_COMMANDS]; /** Every command definition, in registry order: portfolio, files, text, apps, linux, system, network, builtins, fun. */
 
 const byName = new Map<string, CommandDef>(); /** Index from every command name and alias to its definition, filled from COMMAND_LIST at module load (later entries win on a name clash). */
 for (const def of COMMAND_LIST) {

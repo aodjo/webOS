@@ -249,7 +249,7 @@ function color256(n: number): number | string {
  * @example
  * applySGR({}, [1, 38, 5, 196]); // { bold: true, fg: "rgb(255,0,0)" }
  */
-function applySGR(style: Style, params: number[]): Style {
+export function applySGR(style: Style, params: number[]): Style {
   const s: Style = { ...style };
   if (!params.length) params = [0];
   for (let i = 0; i < params.length; i++) {
