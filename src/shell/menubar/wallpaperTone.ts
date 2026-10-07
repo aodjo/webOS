@@ -17,6 +17,8 @@ export type BarForeground = 'light' | 'dark';
 
 const SAMPLE_W = 64; /** Width in px of the canvas the sampled wallpaper strip is scaled into. */
 const SAMPLE_H = 4; /** Height in px of the canvas the sampled wallpaper strip is scaled into. */
+const MAP_W = 48; /** Columns of the luminance map that covers the whole viewport. */
+const MAP_H = 30; /** Rows of the luminance map that covers the whole viewport. */
 
 export const DARK_GLYPHS_ABOVE = 0.22; /** Luminance above which dark glyphs win; set above the ≈ 0.18 equal-contrast point because light glyphs get a dark halo. */
 
@@ -255,12 +257,61 @@ export function useWallpaperForeground(dim = 1): BarForeground | null {
 }
 
 /**
- * Measures the luminance of the desktop picture under a viewport region.
+ * Loads the desktop picture into an off-screen image and tracks the rounded viewport size.
  *
  * Resolves the wallpaper URL the same way the desktop does (a built-in id with its light/dark
- * variant, or a file in the virtual FS, re-resolved when that file changes), loads it into an
- * off-screen image, and samples it whenever the image, the rounded viewport size or the
- * region changes. Callers use it to keep text drawn straight on the wallpaper legible (menu
+ * variant, or a file in the virtual FS, re-resolved when that file changes) and loads it. The
+ * returned image is null until the current URL has loaded; `failed` is set when it could not be
+ * loaded, so callers can keep their previous answer while a new picture is still loading.
+ *
+ * @returns {{ img: HTMLImageElement | null; failed: boolean; w: number; h: number }} The loaded
+ *   picture, whether loading failed, and the rounded viewport width and height in CSS px.
+ *
+ * @example
+ * const { img, w, h } = useWallpaperImage();
+ */
+function useWallpaperImage(): { img: HTMLImageElement | null; failed: boolean; w: number; h: number } {
+  const wallpaper = useSystem((s) => s.settings.wallpaper);
+  const dark = useIsDark();
+  const node = useNode(wallpaper.startsWith('/') ? wallpaper : null);
+  const url = wallpaperURL(wallpaper, dark, () => {
+    if (node?.type !== 'file') return null;
+    try {
+      return fs.getURL(node.path);
+    } catch {
+      return null;
+    }
+  });
+  const { w, h } = useViewport();
+  const [img, setImg] = useState<{ url: string; el: HTMLImageElement | null } | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const el = new Image();
+    el.decoding = 'async';
+    el.onload = () => {
+      if (!cancelled) setImg({ url, el });
+    };
+    el.onerror = () => {
+      if (!cancelled) setImg({ url, el: null });
+    };
+    el.src = url;
+    return () => {
+      cancelled = true;
+      el.onload = null;
+      el.onerror = null;
+    };
+  }, [url]);
+
+  const current = img && img.url === url ? img : null;
+  return { img: current?.el ?? null, failed: !!current && !current.el, w, h };
+}
+
+/**
+ * Measures the luminance of the desktop picture under a viewport region.
+ *
+ * Samples the picture from useWallpaperImage whenever the image, the rounded viewport size or
+ * the region changes, keeping the previous value while a new picture loads. Callers use it to keep text drawn straight on the wallpaper legible (menu
  * bar, desktop icon labels, lock screen). The region is compared by its coordinates, so an
  * inline object literal does not cause resampling on every render.
  *
@@ -277,43 +328,115 @@ export function useWallpaperLuminance(region?: Region): number | null {
   const ry0 = region?.y0;
   const rx1 = region?.x1;
   const ry1 = region?.y1;
-  const wallpaper = useSystem((s) => s.settings.wallpaper);
-  const dark = useIsDark();
-  const node = useNode(wallpaper.startsWith('/') ? wallpaper : null);
-  const url = wallpaperURL(wallpaper, dark, () => {
-    if (node?.type !== 'file') return null;
-    try {
-      return fs.getURL(node.path);
-    } catch {
-      return null;
-    }
-  });
-  const { w, h } = useViewport();
-  const [img, setImg] = useState<{ url: string; el: HTMLImageElement } | null>(null);
+  const { img, failed, w, h } = useWallpaperImage();
   const [lum, setLum] = useState<number | null>(null);
 
   useEffect(() => {
-    let cancelled = false;
-    const el = new Image();
-    el.decoding = 'async';
-    el.onload = () => {
-      if (!cancelled) setImg({ url, el });
-    };
-    el.onerror = () => {
-      if (!cancelled) setLum(null);
-    };
-    el.src = url;
-    return () => {
-      cancelled = true;
-      el.onload = null;
-      el.onerror = null;
-    };
-  }, [url]);
-
-  useEffect(() => {
     const r = rx0 === undefined ? undefined : { x0: rx0, y0: ry0!, x1: rx1!, y1: ry1! };
-    if (img && img.url === url) setLum(sample(img.el, w, h, r));
-  }, [img, url, w, h, rx0, ry0, rx1, ry1]);
+    if (img) setLum(sample(img, w, h, r));
+    else if (failed) setLum(null);
+  }, [img, failed, w, h, rx0, ry0, rx1, ry1]);
 
   return lum;
+}
+
+/** Relative luminance of the desktop picture on a coarse grid covering the viewport. */
+export interface LuminanceMap {
+  cols: number;
+  rows: number;
+  /** Row-major luminance values (0–1), `cols` × `rows`. */
+  values: Float32Array;
+}
+
+/**
+ * Samples the whole visible desktop picture into a coarse luminance grid.
+ *
+ * Draws the part of the image the desktop shows (`cover`, centered) into a MAP_W×MAP_H canvas
+ * and stores each cell's relative luminance. Errors from a tainted canvas or missing 2D canvas
+ * support are caught.
+ *
+ * @param {HTMLImageElement} img - The loaded wallpaper image.
+ * @param {number} vw - Viewport width in CSS px.
+ * @param {number} vh - Viewport height in CSS px.
+ * @returns {LuminanceMap | null} The grid, or null when the pixels can't be read.
+ *
+ * @example
+ * const map = sampleMap(img, window.innerWidth, window.innerHeight);
+ */
+function sampleMap(img: HTMLImageElement, vw: number, vh: number): LuminanceMap | null {
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = MAP_W;
+    canvas.height = MAP_H;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    if (!ctx) return null;
+    if (img.naturalWidth && img.naturalHeight) {
+      const r = coverRect(img.naturalWidth, img.naturalHeight, vw, vh, { x0: 0, y0: 0, x1: 1, y1: 1 });
+      ctx.drawImage(img, r.sx, r.sy, r.sw, r.sh, 0, 0, MAP_W, MAP_H);
+    } else {
+      ctx.drawImage(img, 0, 0, MAP_W, MAP_H);
+    }
+    const data = ctx.getImageData(0, 0, MAP_W, MAP_H).data;
+    const values = new Float32Array(MAP_W * MAP_H);
+    for (let i = 0; i < values.length; i++) values[i] = 0.2126 * toLinear(data[i * 4]) + 0.7152 * toLinear(data[i * 4 + 1]) + 0.0722 * toLinear(data[i * 4 + 2]);
+    return { cols: MAP_W, rows: MAP_H, values };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Averages a luminance map over a viewport region.
+ *
+ * Covers every grid cell the region touches; a region outside the viewport is clamped to its
+ * nearest edge cells.
+ *
+ * @param {LuminanceMap} map - The grid from useWallpaperLuminanceMap.
+ * @param {Region} r - The viewport region, in fractions of the viewport size.
+ * @returns {number} Mean luminance (0–1) of the covered cells.
+ *
+ * @example
+ * regionLuminance(map, { x0: 0.8, y0: 0.05, x1: 0.9, y1: 0.12 }); // 0.31
+ */
+export function regionLuminance(map: LuminanceMap, r: Region): number {
+  const clampCol = (v: number) => Math.min(map.cols - 1, Math.max(0, v));
+  const clampRow = (v: number) => Math.min(map.rows - 1, Math.max(0, v));
+  const c0 = clampCol(Math.floor(r.x0 * map.cols));
+  const c1 = clampCol(Math.ceil(r.x1 * map.cols) - 1);
+  const r0 = clampRow(Math.floor(r.y0 * map.rows));
+  const r1 = clampRow(Math.ceil(r.y1 * map.rows) - 1);
+  let sum = 0;
+  let n = 0;
+  for (let y = r0; y <= Math.max(r0, r1); y++) {
+    for (let x = c0; x <= Math.max(c0, c1); x++) {
+      sum += map.values[y * map.cols + x];
+      n++;
+    }
+  }
+  return n ? sum / n : 0;
+}
+
+/**
+ * Provides a coarse luminance grid of the desktop picture as it is shown on screen.
+ *
+ * Lets a component pick a legible tone for several elements at once (one sample for all of
+ * them, see regionLuminance). Resampled when the picture or the rounded viewport size changes.
+ *
+ * @returns {LuminanceMap | null} The grid, or null while unknown or when the picture can't be
+ *   sampled.
+ *
+ * @example
+ * const map = useWallpaperLuminanceMap();
+ * const lum = map ? regionLuminance(map, region) : null;
+ */
+export function useWallpaperLuminanceMap(): LuminanceMap | null {
+  const { img, failed, w, h } = useWallpaperImage();
+  const [map, setMap] = useState<LuminanceMap | null>(null);
+
+  useEffect(() => {
+    if (img) setMap(sampleMap(img, w, h));
+    else if (failed) setMap(null);
+  }, [img, failed, w, h]);
+
+  return map;
 }
