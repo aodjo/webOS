@@ -1905,7 +1905,7 @@ export function Dock() {
  * the window was minimized, mounted into the tile and scaled to fit, or a schematic window with
  * traffic lights and text lines when there is none (decided once on mount). Corners scale with
  * the tile (about 10px at the default Dock size, at least 4px), and the owning app's icon is
- * overlaid as a badge at 40% of the slot size.
+ * overlaid as a badge at 40% of the slot size, overlapping the thumbnail's bottom-right corner.
  *
  * @param {Object} props - Component props.
  * @param {WindowState} props.win - The minimized window.
@@ -1933,30 +1933,32 @@ function MiniWindow({ win, max }: { win: WindowState; max: number }) {
 
   return (
     <span className={s.mini}>
-      {/* 10px corners at the default Dock size, scaled with the tile. */}
-      <span className={s.miniWin} style={{ width: w, height: h, borderRadius: Math.max(4, Math.round(max * 0.19)) }}>
-        {snap ? (
-          <span ref={hostRef} className={s.snapHost} />
-        ) : (
-          <>
-            <span className={s.miniBar} style={{ height: Math.max(4, h * 0.12) }}>
-              <i />
-              <i />
-              <i />
-            </span>
-            <span className={s.miniBody}>
-              <i style={{ width: '70%' }} />
-              <i style={{ width: '88%' }} />
-              <i style={{ width: '54%' }} />
-            </span>
-          </>
+      <span className={s.miniFrame} style={{ width: w, height: h }}>
+        {/* 10px corners at the default Dock size, scaled with the tile. */}
+        <span className={s.miniWin} style={{ width: w, height: h, borderRadius: Math.max(4, Math.round(max * 0.19)) }}>
+          {snap ? (
+            <span ref={hostRef} className={s.snapHost} />
+          ) : (
+            <>
+              <span className={s.miniBar} style={{ height: Math.max(4, h * 0.12) }}>
+                <i />
+                <i />
+                <i />
+              </span>
+              <span className={s.miniBody}>
+                <i style={{ width: '70%' }} />
+                <i style={{ width: '88%' }} />
+                <i style={{ width: '54%' }} />
+              </span>
+            </>
+          )}
+        </span>
+        {AppIcon && (
+          <span className={s.miniBadge} style={{ width: max * 0.4, height: max * 0.4, right: -max * 0.06, bottom: -max * 0.08 }}>
+            <AppIcon size={Math.round(max * 0.4)} />
+          </span>
         )}
       </span>
-      {AppIcon && (
-        <span className={s.miniBadge} style={{ width: max * 0.4, height: max * 0.4 }}>
-          <AppIcon size={Math.round(max * 0.4)} />
-        </span>
-      )}
     </span>
   );
 }

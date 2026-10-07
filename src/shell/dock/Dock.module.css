@@ -449,6 +449,11 @@
   align-items: center;
   justify-content: center;
 }
+/* The thumbnail and its app badge, sized like the thumbnail so the badge sits on its corner. */
+.miniFrame {
+  position: relative;
+  display: flex;
+}
 .miniWin {
   position: relative;
   display: flex;
@@ -518,8 +523,7 @@
 }
 .miniBadge {
   position: absolute;
-  right: 0;
-  bottom: 0;
+  z-index: 2;
   display: flex;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
 }
