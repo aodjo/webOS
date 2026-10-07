@@ -28,7 +28,7 @@ const S = {
   locked: { en: 'Lock Screen', ko: '잠금 화면' },
   password: { en: 'Password', ko: '암호' },
   enterPassword: { en: 'Enter Password', ko: '암호 입력' },
-  touchId: { en: 'Touch ID or Enter Password', ko: 'Touch ID 또는 암호 입력' },
+  pressEnter: { en: 'Press Enter to start webOS', ko: 'Enter로 webOS 시작하기' },
   logIn: { en: 'Log In', ko: '로그인' },
   unlock: { en: 'Unlock', ko: '잠금 해제' },
   showHint: { en: 'Show Password Hint', ko: '암호 힌트 보기' },
@@ -208,7 +208,7 @@ export function LoginScreen({ mode, onUnlock }: { mode: 'login' | 'locked'; onUn
   const scrim = lum === null ? 0 : Math.min(0.32, Math.max(0, (lum - 0.22) * 0.55));
   const showArrow = !needsPassword || value.length > 0;
   const fieldShown = revealed || value.length > 0 || attempts > 0;
-  const caption = showHint ? fmt(t(S.hint), { hint }) : t(S.touchId);
+  const caption = showHint ? fmt(t(S.hint), { hint }) : t(S.pressEnter);
 
   return (
     <div
