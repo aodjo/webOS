@@ -38,8 +38,8 @@ interface FinderPrefs {
 const DEFAULTS: FinderPrefs = {
   views: {},
   sorts: {},
-  showPathBar: true,
-  showStatusBar: true,
+  showPathBar: false,
+  showStatusBar: false,
   showSidebar: true,
   sidebarWidth: 180,
   collapsed: {},
@@ -77,8 +77,29 @@ function bounded<T>(map: Record<string, T>, key: string, value: T): Record<strin
 export const useFinderPrefs = create<FinderPrefs>()(
   persist(() => DEFAULTS, {
     name: 'webos.finder',
-    version: 1,
+    version: 2,
     storage: createJSONStorage(() => localStorage),
+    /**
+     * Upgrades preferences saved by an older version.
+     *
+     * Below version 2 the path bar and status bar are turned off, matching macOS, where both are
+     * hidden until View ▸ Show Path Bar / Show Status Bar.
+     *
+     * @param {unknown} persisted - Preferences read from localStorage.
+     * @param {number} version - The version they were saved with.
+     * @returns {FinderPrefs} The upgraded preferences.
+     *
+     * @example
+     * migrate({ showPathBar: true }, 1); // { showPathBar: false, … }
+     */
+    migrate: (persisted, version) => {
+      const p = { ...(persisted as Partial<FinderPrefs>) };
+      if (version < 2) {
+        p.showPathBar = false;
+        p.showStatusBar = false;
+      }
+      return p as FinderPrefs;
+    },
     /**
      * Combines saved preferences with the current state on rehydration.
      *
