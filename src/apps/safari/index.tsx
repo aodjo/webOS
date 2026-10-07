@@ -716,8 +716,9 @@ export default function Safari({ windowId, args }: AppProps) {
 
   return (
     <div className={styles.safari}>
-      <Toolbar className={styles.toolbar}>
-        <GlassGroup>
+      <Toolbar className={styles.toolbar} inset={false}>
+        <div className={styles.leading} data-drag-region>
+          <GlassGroup>
           <IconButton label={t(sidebar ? S.hideSidebar : S.showSidebar)} active={sidebar} onClick={toggleSidebar}>
             <PanelLeft size={16} />
           </IconButton>
@@ -730,6 +731,7 @@ export default function Safari({ windowId, args }: AppProps) {
             <ChevronRight size={20} />
           </IconButton>
         </GlassGroup>
+        </div>
         <div className={styles.fieldSlot} data-drag-region>
           <AddressBar
             ref={address}
@@ -744,14 +746,16 @@ export default function Safari({ windowId, args }: AppProps) {
             onStop={stop}
           />
         </div>
-        <GlassGroup>
-          <IconButton ref={shareBtn} label={t(S.share)} onClick={openShare}>
-            <Share size={15} />
-          </IconButton>
-          <IconButton label={t(S.newTab)} onClick={() => newTab()}>
-            <Plus size={18} />
-          </IconButton>
-        </GlassGroup>
+        <div className={styles.trailing} data-drag-region>
+          <GlassGroup>
+            <IconButton ref={shareBtn} label={t(S.share)} onClick={openShare}>
+              <Share size={15} />
+            </IconButton>
+            <IconButton label={t(S.newTab)} onClick={() => newTab()}>
+              <Plus size={18} />
+            </IconButton>
+          </GlassGroup>
+        </div>
       </Toolbar>
 
       {state.tabs.length > 1 && <TabBar state={state} dispatch={dispatch} onClose={closeTab} onNewTab={() => newTab()} locale={locale} />}

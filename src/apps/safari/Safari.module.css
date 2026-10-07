@@ -11,17 +11,33 @@
 
 /* ───────── Toolbar ─────────
    Compact layout: a transparent toolbar, buttons grouped in floating glass capsules and
-   the smart search field as a centered glass capsule. */
+   the smart search field as a glass capsule centred on the window. The leading and trailing
+   columns share the leftover width equally (the leading one also holds the room for the
+   traffic lights), so the field stays centred as long as both button groups fit. */
 
 .toolbar {
   /* Above the page so the Top Hits popover isn't covered by tab content or the sidebar. */
   position: relative;
   z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(max-content, 1fr) minmax(0, 620px) minmax(max-content, 1fr);
   gap: 8px;
   padding-right: 12px;
 }
+.leading,
+.trailing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.leading {
+  padding-left: 72px;
+}
+.trailing {
+  justify-content: flex-end;
+}
 .fieldSlot {
-  flex: 1;
   min-width: 0;
   display: flex;
   justify-content: center;
@@ -142,6 +158,10 @@
   .toolbar {
     gap: 6px;
     padding-right: 8px;
+  }
+  .leading,
+  .trailing {
+    gap: 6px;
   }
   .fieldSlot {
     padding: 0;

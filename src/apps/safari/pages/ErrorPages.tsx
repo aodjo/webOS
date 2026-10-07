@@ -4,14 +4,14 @@
  * for the OS's own URL. Blocked GitHub URLs also get a live preview built from the
  * public GitHub REST API, which allows cross-origin requests.
  */
-import { useEffect, useState, type CSSProperties } from 'react';
+import { useEffect, useState } from 'react';
 import { Compass, ExternalLink, FileX, GitFork, MapPin, RotateCw, Star, Users } from 'lucide-react';
 import { osInfo } from '@/data/portfolio';
 import { Button } from '@/components/ui';
 import { fmt, formatDate, useLocale, useT } from '@/kernel';
 import { GitHubMark } from '../brands';
 import { S } from '../strings';
-import { START_URL, displayHost, githubTarget, letterIcon } from '../url';
+import { START_URL, displayHost, githubTarget } from '../url';
 import { openExternal, type PageAPI } from './api';
 import styles from './Pages.module.css';
 
@@ -49,12 +49,12 @@ const P = {
 /**
  * Centered icon, title, body and optional action row shared by every error page.
  *
- * Renders the icon above an `<h1>` title and a paragraph body. The actions container
+ * Renders the icon (when given) above an `<h1>` title and a paragraph body. The actions container
  * is only emitted when `children` is provided, so pages without buttons get no empty
  * row below the text.
  *
  * @param {Object} props - Component props.
- * @param {React.ReactNode} props.icon - Artwork shown above the title.
+ * @param {React.ReactNode} [props.icon] - Artwork shown above the title.
  * @param {string} props.title - Localized heading text.
  * @param {string} props.body - Localized explanatory paragraph.
  * @param {React.ReactNode} [props.children] - Action buttons laid out in a row below the body.
@@ -65,10 +65,10 @@ const P = {
  *   <Button onClick={retry}>Try Again</Button>
  * </ErrorShell>
  */
-function ErrorShell({ icon, title, body, children }: { icon: React.ReactNode; title: string; body: string; children?: React.ReactNode }) {
+function ErrorShell({ icon, title, body, children }: { icon?: React.ReactNode; title: string; body: string; children?: React.ReactNode }) {
   return (
     <div className={styles.error}>
-      <div className={styles.errorIcon}>{icon}</div>
+      {icon && <div className={styles.errorIcon}>{icon}</div>}
       <h1 className={styles.errorTitle}>{title}</h1>
       <p className={styles.errorBody}>{body}</p>
       {children && <div className={styles.errorActions}>{children}</div>}
@@ -161,8 +161,7 @@ export function HomeAgainPage({ api }: { api: PageAPI }) {
 /**
  * Page shown when a website refuses to be displayed inside a frame.
  *
- * The icon is the GitHub mark for GitHub URLs, otherwise a colored letter tile derived
- * from the host with `letterIcon`. The primary button opens the URL in a real browser
+ * GitHub URLs show the GitHub mark above the message; other sites show no icon. The primary button opens the URL in a real browser
  * tab. For GitHub user or repository URLs a `GitHubPreview` is rendered below the
  * message; it is keyed by `user/repo`, so switching to another target remounts it and
  * starts a fresh fetch.
@@ -179,19 +178,10 @@ export function BlockedPage({ url, api }: { url: string; api: PageAPI }) {
   const t = useT();
   const host = displayHost(url);
   const gh = githubTarget(url);
-  const li = letterIcon(host, url);
   return (
     <div className={styles.errorPage}>
       <ErrorShell
-        icon={
-          gh ? (
-            <GitHubMark size={52} />
-          ) : (
-            <span className={styles.blockedTile} style={{ '--tile': li.color } as CSSProperties}>
-              {li.letter}
-            </span>
-          )
-        }
+        icon={gh ? <GitHubMark size={52} /> : undefined}
         title={t(P.blockedTitle)}
         body={fmt(t(P.blockedBody), { host })}
       >

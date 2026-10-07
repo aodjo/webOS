@@ -28,12 +28,11 @@ const P = {
 /**
  * A Liquid Glass tile linking to a site, used by the Favorites and Frequently Visited grids.
  *
- * Shows the site's deterministic letter icon and title, with the URL as tooltip. The large
- * variant is a favorites tile; the small variant uses a thicker glass and additionally shows
- * the display host for web URLs.
+ * Shows the site's title and, for web URLs, its display host, with the URL as tooltip. The
+ * large variant is a favorites tile; the small variant uses a thicker glass.
  *
  * @param {Object} props - Component props.
- * @param {string} props.title - Label under the icon; also picks the icon letter.
+ * @param {string} props.title - Label of the tile.
  * @param {string} props.url - Target URL.
  * @param {() => void} props.onOpen - Called when the tile is clicked.
  * @param {(e: React.MouseEvent) => void} props.onMenu - Called on right-click to show a context menu.
@@ -44,14 +43,10 @@ const P = {
  * <Tile title={f.title} url={f.url} onOpen={() => api.navigate(f.url)} onMenu={favMenu(f)} />
  */
 export function Tile({ title, url, onOpen, onMenu, size = 'large' }: { title: string; url: string; onOpen: () => void; onMenu: (e: React.MouseEvent) => void; size?: 'large' | 'small' }) {
-  const li = letterIcon(title, url);
   return (
     <button type="button" className={size === 'large' ? `lg lg-interactive ${styles.tile}` : `lg lg-thick lg-interactive ${styles.tileSmall}`} title={url} onClick={onOpen} onContextMenu={onMenu}>
-      <span className={styles.tileIcon} style={{ '--tile': li.color } as CSSProperties}>
-        {li.letter}
-      </span>
       <span className={styles.tileLabel}>{title}</span>
-      {size === 'small' && kindOfURL(url) === 'web' && <span className={styles.tileHost}>{displayHost(url)}</span>}
+      {kindOfURL(url) === 'web' && <span className={styles.tileHost}>{displayHost(url)}</span>}
     </button>
   );
 }
