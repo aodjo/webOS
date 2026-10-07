@@ -1,0 +1,276 @@
+/*
+ * Terminal profiles. Each defines the background/foreground/cursor/selection colors and the
+ * 16-color ANSI palette (--ansi-0 … --ansi-15). "Basic" follows the system appearance, like
+ * Terminal.app's Basic profile; "Pro" and "Homebrew" are always dark. With those two the window
+ * is vibrant (Liquid Glass, like Tahoe's Terminal): `.translucent` lets the blurred desktop show
+ * through a tinted background, and falls back to the solid color with Reduce Transparency.
+ */
+
+.root {
+  --t-font-size: 12px;
+  --t-line-height: 1.25;
+  --t-cell-h: calc(var(--t-font-size) * var(--t-line-height));
+
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--t-bg);
+  color: var(--t-fg);
+  font-family: var(--font-mono);
+  font-size: var(--t-font-size);
+  line-height: var(--t-line-height);
+  font-variant-ligatures: none;
+  font-feature-settings: 'liga' 0, 'calt' 0;
+  -webkit-font-smoothing: antialiased;
+  outline: none;
+  cursor: text;
+  transition: background-color 0.25s var(--ease-out), color 0.25s var(--ease-out);
+}
+
+/* ── Pro (default): translucent charcoal, light gray text ── */
+.root[data-profile='pro'] {
+  --t-bg: rgba(28, 28, 30, 0.95);
+  --t-bg-glass: rgba(28, 28, 30, 0.86);
+  --t-bg-solid: #1c1c1e;
+  --t-fg: #e6e6e6;
+  --t-cursor: rgba(230, 230, 230, 0.78);
+  --t-sel: rgba(255, 255, 255, 0.24);
+}
+
+/* ── Homebrew: black with phosphor green ── */
+.root[data-profile='homebrew'] {
+  --t-bg: rgba(0, 0, 0, 0.95);
+  --t-bg-glass: rgba(0, 0, 0, 0.86);
+  --t-bg-solid: #000;
+  --t-fg: #28fe14;
+  --t-cursor: rgba(56, 254, 39, 0.85);
+  --t-sel: rgba(40, 254, 20, 0.28);
+}
+
+.root[data-profile='pro'],
+.root[data-profile='homebrew'] {
+  --ansi-0: #1b1b1d;
+  --ansi-1: #ff6b68;
+  --ansi-2: #5fd38d;
+  --ansi-3: #e8c46a;
+  --ansi-4: #6aa8ff;
+  --ansi-5: #d38aea;
+  --ansi-6: #4fd2d6;
+  --ansi-7: #c7c7c7;
+  --ansi-8: #6e6e73;
+  --ansi-9: #ff8a85;
+  --ansi-10: #7ef0a5;
+  --ansi-11: #f4dc8f;
+  --ansi-12: #8fbfff;
+  --ansi-13: #e5a8f5;
+  --ansi-14: #79e6e9;
+  --ansi-15: #ffffff;
+  color-scheme: dark;
+}
+
+/* ── Basic: uses the window colors of the current appearance ── */
+.root[data-profile='basic'] {
+  --t-bg: var(--content-bg);
+  --t-bg-solid: var(--content-bg);
+  --t-fg: var(--text);
+  --t-cursor: color-mix(in srgb, var(--text) 62%, transparent);
+  --t-sel: var(--accent-soft);
+  --ansi-0: #000000;
+  --ansi-1: #c4281c;
+  --ansi-2: #1f8a24;
+  --ansi-3: #9a7200;
+  --ansi-4: #1452c9;
+  --ansi-5: #a224a8;
+  --ansi-6: #0a8a96;
+  --ansi-7: #8e8e93;
+  --ansi-8: #6e6e73;
+  --ansi-9: #e5453a;
+  --ansi-10: #2fa83a;
+  --ansi-11: #b38900;
+  --ansi-12: #2f6fe6;
+  --ansi-13: #c03fc6;
+  --ansi-14: #109fad;
+  --ansi-15: #3a3a3c;
+}
+
+:global(html[data-theme='dark']) .root[data-profile='basic'] {
+  --ansi-0: #3a3a3c;
+  --ansi-1: #ff6b68;
+  --ansi-2: #5fd38d;
+  --ansi-3: #e8c46a;
+  --ansi-4: #6aa8ff;
+  --ansi-5: #d38aea;
+  --ansi-6: #4fd2d6;
+  --ansi-7: #c7c7c7;
+  --ansi-8: #8e8e93;
+  --ansi-9: #ff8a85;
+  --ansi-10: #7ef0a5;
+  --ansi-11: #f4dc8f;
+  --ansi-12: #8fbfff;
+  --ansi-13: #e5a8f5;
+  --ansi-14: #79e6e9;
+  --ansi-15: #ffffff;
+}
+
+/* Glass profiles: a tinted pane over the vibrant (blurred) window background. The blur itself is
+   the window's (vibrancy); a second backdrop-filter here would only re-blur that flat layer. */
+.translucent {
+  background: var(--t-bg-glass, var(--t-bg));
+}
+
+/* In light mode the vibrant window under the terminal is a light frost, which would grey the
+   charcoal out: Pro lets a little less of it through so the surface stays dark. */
+:global(html:not([data-theme='dark'])) .root[data-profile='pro'] {
+  --t-bg-glass: rgba(28, 28, 30, 0.9);
+}
+
+:global(html[data-reduce-transparency='true']) .root {
+  background: var(--t-bg-solid);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* The root is focused programmatically (e.g. after selecting text): no focus ring. */
+.root:focus,
+.root:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.root ::selection {
+  background: var(--t-sel);
+}
+
+/* ── Layout ── */
+
+.viewport {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 4px 6px 4px 8px;
+  overscroll-behavior: contain;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* Lines of the current page (after the last `clear`). Its inline min-height equals the viewport
+   height, so it fills at least one screen and earlier output scrolls out of view above it. */
+.page {
+  display: flow-root;
+}
+
+.line {
+  min-height: var(--t-cell-h);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+  tab-size: 8;
+}
+
+.alt {
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.alt .line {
+  white-space: pre;
+  overflow: hidden;
+}
+
+/* East Asian wide characters take exactly two cells. */
+.wide {
+  display: inline-block;
+  width: 2ch;
+  text-align: center;
+  text-indent: 0;
+}
+
+/* ── Cursor ── */
+
+.cursor {
+  display: inline-block;
+  min-width: 1ch;
+  border-radius: 1px;
+  white-space: pre;
+}
+
+.blink {
+  animation: blink 1.06s steps(1, end) infinite;
+}
+
+.hollow {
+  box-shadow: inset 0 0 0 1px var(--t-cursor);
+}
+
+@keyframes blink {
+  0% {
+    background: var(--t-cursor);
+    color: var(--t-bg-solid);
+  }
+  50% {
+    background: transparent;
+    color: inherit;
+  }
+}
+
+/* Keep the cursor visible (no blinking) when the user prefers reduced motion. */
+:global(html[data-reduce-motion='true']) .blink {
+  animation: none;
+  background: var(--t-cursor);
+  color: var(--t-bg-solid);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blink {
+    animation: none;
+    background: var(--t-cursor);
+    color: var(--t-bg-solid);
+  }
+}
+
+.searchCaret {
+  text-decoration: underline;
+  color: var(--t-cursor);
+}
+
+/* ── Hidden line editor & metrics probe ── */
+
+.hiddenInput {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: var(--t-cell-h);
+  padding: 0;
+  margin: 0;
+  border: 0;
+  opacity: 0;
+  /* ≥16px stops iOS from zooming into the field on focus. */
+  font-size: 16px;
+  color: transparent;
+  background: transparent;
+  caret-color: transparent;
+  pointer-events: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.hiddenInput:focus-visible {
+  box-shadow: none;
+}
+
+.measure {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  visibility: hidden;
+  white-space: pre;
+  pointer-events: none;
+  line-height: var(--t-line-height);
+}

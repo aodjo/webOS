@@ -1,0 +1,96 @@
+<!-- webOS wallpaper · Graphite (dark) — quiet neutral folds -->
+<svg xmlns="http://www.w3.org/2000/svg" width="2880" height="1800" viewBox="0 0 2880 1800" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="2880" y2="1800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2a2c31"/>
+      <stop offset="0.55" stop-color="#212226"/>
+      <stop offset="1" stop-color="#18191c"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="900" cy="300" r="1400" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5b616d" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#5b616d" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="2500" cy="1700" r="1300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+    <path id="e0" d="M1700-120C1500 140 1180 420 700 560C340 660 60 700-120 800"/>
+    <path id="e1" d="M-120 1180C520 980 1180 1320 1840 1060C2280 890 2620 620 3000 520"/>
+    <path id="e2" d="M-120 1500C640 1340 1360 1640 2060 1420C2460 1290 2720 1090 3000 1020"/>
+    <linearGradient id="f0" x1="0" y1="0" x2="1200" y2="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#303238"/>
+      <stop offset="1" stop-color="#26282c"/>
+    </linearGradient>
+    <linearGradient id="f1" x1="0" y1="900" x2="0" y2="1800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2c2e33"/>
+      <stop offset="1" stop-color="#1f2023"/>
+    </linearGradient>
+    <linearGradient id="f2" x1="0" y1="1300" x2="0" y2="1800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#26272b"/>
+      <stop offset="1" stop-color="#18191b"/>
+    </linearGradient>
+  </defs>
+  <rect width="2880" height="1800" fill="url(#bg)"/>
+  <rect width="2880" height="1800" fill="url(#glowA)"/>
+  <rect width="2880" height="1800" fill="url(#glowB)"/>
+  <g fill="none" stroke="#000" stroke-opacity="0.0319" stroke-linejoin="round" transform="translate(0 8)">
+    <use href="#e0" stroke-width="12.5"/>
+    <use href="#e0" stroke-width="25"/>
+    <use href="#e0" stroke-width="37.5"/>
+    <use href="#e0" stroke-width="50"/>
+    <use href="#e0" stroke-width="62.5"/>
+    <use href="#e0" stroke-width="75"/>
+    <use href="#e0" stroke-width="87.5"/>
+    <use href="#e0" stroke-width="100"/>
+    <use href="#e0" stroke-width="112.5"/>
+    <use href="#e0" stroke-width="125"/>
+    <use href="#e0" stroke-width="137.5"/>
+    <use href="#e0" stroke-width="150"/>
+    <use href="#e0" stroke-width="162.5"/>
+    <use href="#e0" stroke-width="175"/>
+    <use href="#e0" stroke-width="187.5"/>
+    <use href="#e0" stroke-width="200"/>
+  </g>
+  <path d="M-120-120H1700C1500 140 1180 420 700 560C340 660 60 700-120 800Z" fill="url(#f0)"/>
+  <use href="#e0" fill="none" stroke="#fff" stroke-opacity="0.064" stroke-width="2"/>
+  <g fill="none" stroke="#000" stroke-opacity="0.0319" stroke-linejoin="round" transform="translate(0 -10)">
+    <use href="#e1" stroke-width="12.5"/>
+    <use href="#e1" stroke-width="25"/>
+    <use href="#e1" stroke-width="37.5"/>
+    <use href="#e1" stroke-width="50"/>
+    <use href="#e1" stroke-width="62.5"/>
+    <use href="#e1" stroke-width="75"/>
+    <use href="#e1" stroke-width="87.5"/>
+    <use href="#e1" stroke-width="100"/>
+    <use href="#e1" stroke-width="112.5"/>
+    <use href="#e1" stroke-width="125"/>
+    <use href="#e1" stroke-width="137.5"/>
+    <use href="#e1" stroke-width="150"/>
+    <use href="#e1" stroke-width="162.5"/>
+    <use href="#e1" stroke-width="175"/>
+    <use href="#e1" stroke-width="187.5"/>
+    <use href="#e1" stroke-width="200"/>
+  </g>
+  <path d="M-120 1180C520 980 1180 1320 1840 1060C2280 890 2620 620 3000 520V1920H-120Z" fill="url(#f1)"/>
+  <use href="#e1" fill="none" stroke="#fff" stroke-opacity="0.064" stroke-width="2"/>
+  <g fill="none" stroke="#000" stroke-opacity="0.0319" stroke-linejoin="round" transform="translate(0 -8)">
+    <use href="#e2" stroke-width="12.5"/>
+    <use href="#e2" stroke-width="25"/>
+    <use href="#e2" stroke-width="37.5"/>
+    <use href="#e2" stroke-width="50"/>
+    <use href="#e2" stroke-width="62.5"/>
+    <use href="#e2" stroke-width="75"/>
+    <use href="#e2" stroke-width="87.5"/>
+    <use href="#e2" stroke-width="100"/>
+    <use href="#e2" stroke-width="112.5"/>
+    <use href="#e2" stroke-width="125"/>
+    <use href="#e2" stroke-width="137.5"/>
+    <use href="#e2" stroke-width="150"/>
+    <use href="#e2" stroke-width="162.5"/>
+    <use href="#e2" stroke-width="175"/>
+    <use href="#e2" stroke-width="187.5"/>
+    <use href="#e2" stroke-width="200"/>
+  </g>
+  <path d="M-120 1500C640 1340 1360 1640 2060 1420C2460 1290 2720 1090 3000 1020V1920H-120Z" fill="url(#f2)"/>
+  <use href="#e2" fill="none" stroke="#fff" stroke-opacity="0.064" stroke-width="2"/>
+</svg>

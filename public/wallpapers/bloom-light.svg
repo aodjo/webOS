@@ -1,0 +1,160 @@
+<!-- webOS wallpaper · Bloom (light) — macro close-up of translucent petals -->
+<svg xmlns="http://www.w3.org/2000/svg" width="2880" height="1800" viewBox="0 0 2880 1800" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <path id="petal" d="M0 0C120-170 420-340 760-305C930-288 1012-150 1000 0C1012 150 930 288 760 305C420 340 120 170 0 0Z"/>
+    <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.45"/>
+      <stop offset="0.42" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#7a1f5a" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="gA" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff6f9c" stop-opacity="0.85"/>
+      <stop offset="0.55" stop-color="#ffa8c8" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#ffe3ee" stop-opacity="0.45"/>
+    </linearGradient>
+    <linearGradient id="gB" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#c77dff" stop-opacity="0.8"/>
+      <stop offset="0.6" stop-color="#f0a8e6" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ffe0f2" stop-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="gC" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff9a6b" stop-opacity="0.85"/>
+      <stop offset="0.6" stop-color="#ffc2b0" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#fff0e6" stop-opacity="0.45"/>
+    </linearGradient>
+    <linearGradient id="gD" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff4f8b" stop-opacity="0.9"/>
+      <stop offset="0.6" stop-color="#ff8fb8" stop-opacity="0.65"/>
+      <stop offset="1" stop-color="#ffd6e6" stop-opacity="0.5"/>
+    </linearGradient>
+    <linearGradient id="gE" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff7a59" stop-opacity="0.9"/>
+      <stop offset="0.6" stop-color="#ffa98f" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#ffe2d6" stop-opacity="0.5"/>
+    </linearGradient>
+    <linearGradient id="gF" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffb547" stop-opacity="0.95"/>
+      <stop offset="0.6" stop-color="#ffc98a" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#ffeacc" stop-opacity="0.55"/>
+    </linearGradient>
+    <linearGradient id="gG" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff1b8"/>
+      <stop offset="0.6" stop-color="#ffd77a" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#ffbf66" stop-opacity="0.6"/>
+    </linearGradient>
+    <linearGradient id="bg" x1="0" y1="0" x2="2880" y2="1800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff7f2"/>
+      <stop offset="0.5" stop-color="#fdecf2"/>
+      <stop offset="1" stop-color="#f8e6fb"/>
+    </linearGradient>
+    <radialGradient id="aura" cx="2330" cy="1440" r="1700" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffd0de" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#ffd0de" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="heart" cx="2330" cy="1440" r="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fffdf0"/>
+      <stop offset="0.4" stop-color="#ffe9a8" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#ffc56b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bk0">
+      <stop offset="0" stop-color="#ffc2d6"/>
+      <stop offset=".4" stop-color="#ffc2d6" stop-opacity=".7"/>
+      <stop offset=".72" stop-color="#ffc2d6" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#ffc2d6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bk1">
+      <stop offset="0" stop-color="#e4c9ff"/>
+      <stop offset=".4" stop-color="#e4c9ff" stop-opacity=".7"/>
+      <stop offset=".72" stop-color="#e4c9ff" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#e4c9ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bk2">
+      <stop offset="0" stop-color="#ffe0c2"/>
+      <stop offset=".4" stop-color="#ffe0c2" stop-opacity=".7"/>
+      <stop offset=".72" stop-color="#ffe0c2" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#ffe0c2" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="pShadow">
+      <stop offset="0" stop-color="#a3325f" stop-opacity="0.13"/>
+      <stop offset="0.55" stop-color="#a3325f" stop-opacity="0.13"/>
+      <stop offset="0.775" stop-color="#a3325f" stop-opacity="0.052"/>
+      <stop offset="1" stop-color="#a3325f" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="dofA">
+      <stop offset="0" stop-color="#ff7fa8"/>
+      <stop offset=".4" stop-color="#ff7fa8" stop-opacity=".7"/>
+      <stop offset=".72" stop-color="#ff7fa8" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#ff7fa8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="dofB">
+      <stop offset="0" stop-color="#c98bff"/>
+      <stop offset=".4" stop-color="#c98bff" stop-opacity=".7"/>
+      <stop offset=".72" stop-color="#c98bff" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#c98bff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="2880" height="1800" fill="url(#bg)"/>
+  <rect width="2880" height="1800" fill="url(#aura)"/>
+  <circle cx="1321.7" cy="585" r="107.1" fill="url(#bk0)" fill-opacity="0.67"/>
+  <circle cx="1575.5" cy="1135.5" r="142.4" fill="url(#bk1)" fill-opacity="0.59"/>
+  <circle cx="1406.9" cy="205.3" r="189.7" fill="url(#bk2)" fill-opacity="0.53"/>
+  <circle cx="763.6" cy="1503" r="155.9" fill="url(#bk0)" fill-opacity="0.51"/>
+  <circle cx="1210" cy="660.1" r="220.3" fill="url(#bk1)" fill-opacity="0.47"/>
+  <circle cx="1647.4" cy="111.9" r="81.1" fill="url(#bk2)" fill-opacity="0.53"/>
+  <circle cx="12.8" cy="1692.2" r="134.6" fill="url(#bk0)" fill-opacity="0.70"/>
+  <circle cx="1779.1" cy="419" r="137.2" fill="url(#bk1)" fill-opacity="0.59"/>
+  <circle cx="94.7" cy="938.2" r="75.7" fill="url(#bk2)" fill-opacity="0.47"/>
+  <circle cx="1728.5" cy="1449" r="60.1" fill="url(#bk0)" fill-opacity="0.84"/>
+  <circle cx="130.5" cy="1750.3" r="147" fill="url(#bk1)" fill-opacity="0.53"/>
+  <circle cx="1220.2" cy="92.7" r="188.4" fill="url(#bk2)" fill-opacity="0.81"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(198) scale(2.5 2.3)" fill="url(#gA)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(198) scale(2.5 2.3)" fill="url(#sheen)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(198) scale(2.5 2.3)" fill="none" stroke="#fff" stroke-opacity="0.6" stroke-width="0.9"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(246) scale(2.4 2)" fill="url(#gB)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(246) scale(2.4 2)" fill="url(#sheen)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(246) scale(2.4 2)" fill="none" stroke="#fff" stroke-opacity="0.6" stroke-width="0.9"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(292) scale(2.1 1.8)" fill="url(#gC)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(292) scale(2.1 1.8)" fill="url(#sheen)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(292) scale(2.1 1.8)" fill="none" stroke="#fff" stroke-opacity="0.6" stroke-width="1"/>
+  <ellipse cx="520" rx="590" ry="400" transform="translate(2348 1474) rotate(152) scale(2.2 1.7)" fill="url(#pShadow)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(152) scale(2.2 1.7)" fill="url(#gB)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(152) scale(2.2 1.7)" fill="url(#sheen)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(152) scale(2.2 1.7)" fill="none" stroke="#fff" stroke-opacity="0.6" stroke-width="1"/>
+  <ellipse cx="520" rx="590" ry="400" transform="translate(2348 1474) rotate(222) scale(1.9 1.5)" fill="url(#pShadow)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(222) scale(1.9 1.5)" fill="url(#gD)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(222) scale(1.9 1.5)" fill="url(#sheen)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(222) scale(1.9 1.5)" fill="none" stroke="#fff" stroke-opacity="0.6" stroke-width="1.2"/>
+  <ellipse cx="520" rx="590" ry="400" transform="translate(2348 1474) rotate(268) scale(1.8 1.4)" fill="url(#pShadow)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(268) scale(1.8 1.4)" fill="url(#gA)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(268) scale(1.8 1.4)" fill="url(#sheen)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(268) scale(1.8 1.4)" fill="none" stroke="#fff" stroke-opacity="0.6" stroke-width="1.3"/>
+  <ellipse cx="520" rx="590" ry="400" transform="translate(2348 1474) rotate(182) scale(1.4 1.2)" fill="url(#pShadow)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(182) scale(1.4 1.2)" fill="url(#gE)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(182) scale(1.4 1.2)" fill="url(#sheen)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(182) scale(1.4 1.2)" fill="none" stroke="#fff" stroke-opacity="0.6" stroke-width="1.6"/>
+  <ellipse cx="520" rx="590" ry="400" transform="translate(2348 1474) rotate(242) scale(1.3 1.1)" fill="url(#pShadow)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(242) scale(1.3 1.1)" fill="url(#gD)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(242) scale(1.3 1.1)" fill="url(#sheen)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(242) scale(1.3 1.1)" fill="none" stroke="#fff" stroke-opacity="0.6" stroke-width="1.7"/>
+  <ellipse cx="520" rx="590" ry="400" transform="translate(2348 1474) rotate(300) scale(1.2 1)" fill="url(#pShadow)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(300) scale(1.2 1)" fill="url(#gE)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(300) scale(1.2 1)" fill="url(#sheen)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(300) scale(1.2 1)" fill="none" stroke="#fff" stroke-opacity="0.6" stroke-width="1.9"/>
+  <ellipse cx="520" rx="590" ry="400" transform="translate(2348 1474) rotate(208) scale(0.9 0.8)" fill="url(#pShadow)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(208) scale(0.9 0.8)" fill="url(#gF)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(208) scale(0.9 0.8)" fill="url(#sheen)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(208) scale(0.9 0.8)" fill="none" stroke="#fff" stroke-opacity="0.6" stroke-width="2.5"/>
+  <ellipse cx="520" rx="590" ry="400" transform="translate(2348 1474) rotate(260) scale(0.8 0.7)" fill="url(#pShadow)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(260) scale(0.8 0.7)" fill="url(#gF)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(260) scale(0.8 0.7)" fill="url(#sheen)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(260) scale(0.8 0.7)" fill="none" stroke="#fff" stroke-opacity="0.6" stroke-width="2.7"/>
+  <ellipse cx="520" rx="590" ry="400" transform="translate(2348 1474) rotate(234) scale(0.5 0.5)" fill="url(#pShadow)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(234) scale(0.5 0.5)" fill="url(#gG)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(234) scale(0.5 0.5)" fill="url(#sheen)"/>
+  <use href="#petal" transform="translate(2330 1440) rotate(234) scale(0.5 0.5)" fill="none" stroke="#fff" stroke-opacity="0.6" stroke-width="4.2"/>
+  <circle cx="2330" cy="1440" r="260" fill="url(#heart)"/>
+  <g opacity="0.55">
+    <ellipse cx="520" rx="590" ry="400" transform="translate(-260 -240) rotate(28) scale(1.5 1.4)" fill="url(#dofA)"/>
+    <ellipse cx="520" rx="590" ry="400" transform="translate(-200 1980) rotate(-40) scale(1.3 1.2)" fill="url(#dofB)"/>
+  </g>
+</svg>

@@ -1,0 +1,249 @@
+/* ───────────────────────── Layers ───────────────────────── */
+
+/* The dim layers fade their color, not their opacity: an ancestor with opacity < 1 is a backdrop
+   root, so the glass panel inside would lose its blur until the fade finished. */
+.modalLayer {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 26px 16px 9vh;
+  background: rgba(0, 0, 0, 0.08);
+  animation: dimIn 0.18s ease-out both;
+}
+.modalLayer:has(> .leaving) {
+  animation: dimOut 0.17s ease-in both;
+}
+
+.sheetHost {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: var(--sheet-top, 28px);
+  z-index: 60;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+  pointer-events: auto;
+  /* Same corners as the window frame (--win-radius: standard, overlay or compact windows). */
+  border-bottom-left-radius: var(--win-radius, var(--radius-window));
+  border-bottom-right-radius: var(--win-radius, var(--radius-window));
+}
+
+.sheetDim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.22s ease-out both;
+}
+.sheetHost:has(> .leaving) .sheetDim {
+  animation: fadeOut 0.17s ease-in both;
+}
+
+/* ───────────────────────── Panel material ─────────────────────────
+   Thick Liquid Glass (`lg lg-thick lg-float`, added by PanelShell). Alerts are 26px round;
+   sheets and file panels 22px (they set --panel-radius). */
+
+.panel {
+  position: relative;
+  max-width: calc(100% - 24px);
+  max-height: calc(100% - 16px);
+  color: var(--text);
+  border-radius: var(--panel-radius, 26px);
+  outline: none;
+  font-size: 13px;
+  cursor: default;
+}
+/* The panel itself takes focus so Return/Esc reach it; when focused it keeps its regular glass
+   shadow instead of showing a focus ring. */
+.panel:focus-visible {
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    inset 0 0 0 0.5px var(--lg-rim-side),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-float);
+}
+
+.modal {
+  animation: modalIn 0.34s var(--lg-spring) both;
+}
+/* Sheets drop out from under the toolbar with a little give at the end. */
+.sheet {
+  --panel-radius: 22px;
+  margin-top: 8px;
+  max-height: calc(100% - 20px);
+  animation: sheetIn 0.4s cubic-bezier(0.3, 1.18, 0.4, 1) both;
+}
+.modal.leaving {
+  animation: modalOut 0.17s ease-in both;
+  pointer-events: none;
+}
+.sheet.leaving {
+  animation: sheetOut 0.17s ease-in both;
+  pointer-events: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes dimIn {
+  from {
+    background-color: transparent;
+  }
+}
+@keyframes dimOut {
+  to {
+    background-color: transparent;
+  }
+}
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+@keyframes modalOut {
+  to {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+@keyframes sheetIn {
+  from {
+    transform: translateY(calc(-100% - 12px));
+  }
+}
+@keyframes sheetOut {
+  to {
+    transform: translateY(calc(-100% - 12px));
+  }
+}
+
+/* ───────────────────────── Alert ─────────────────────────
+   macOS Tahoe alert: app icon on top, bold title, secondary message, capsule buttons (side by
+   side, or full width and stacked with the default button at the bottom). */
+
+.alert {
+  width: 280px;
+  max-width: 100%;
+  padding: 24px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.alertIcon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.12));
+}
+
+.systemIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #8e8e93, #48484a);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 rgba(255, 255, 255, 0.45),
+    inset -0.5px -0.5px 0 0 rgba(255, 255, 255, 0.16),
+    0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.alertTitle {
+  padding: 0 8px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.alertMessage {
+  margin-top: 6px;
+  padding: 0 8px;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--text-secondary);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.accessory {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.accessory .promptField {
+  width: 100%;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 10px;
+}
+
+.alertButtons {
+  width: 100%;
+  margin-top: 20px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 8px;
+}
+.alertButtons.vertical {
+  grid-auto-flow: row;
+}
+
+/* Full-width capsules, a bit taller than regular buttons. */
+.alert .alertButtons .alertBtn {
+  width: 100%;
+  min-width: 0;
+  height: 32px;
+  padding: 0 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* The capsule's own shadow would otherwise hide the global keyboard focus ring. */
+.alert .alertButtons .alertBtn:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+/* ───────────────────────── Nested alert inside a file panel ───────────────────────── */
+
+.innerLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 18px;
+  border-radius: inherit;
+  background: rgba(0, 0, 0, 0.14);
+  animation: dimIn 0.18s ease-out both;
+}
+
+/* The thick glass material comes from the `lg lg-thick lg-float` classes set in DialogParts.tsx. */
+.innerAlert {
+  border-radius: 22px;
+  color: var(--text);
+  animation: modalIn 0.34s var(--lg-spring) both;
+}

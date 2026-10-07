@@ -1,0 +1,910 @@
+<!-- webOS wallpaper · Jeju Sea (dark) — night waves with bioluminescence -->
+<svg xmlns="http://www.w3.org/2000/svg" width="2880" height="1800" viewBox="0 0 2880 1800" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#010309"/>
+      <stop offset="0.3" stop-color="#020818"/>
+      <stop offset="1" stop-color="#06183c"/>
+    </linearGradient>
+    <radialGradient id="moonlight" cx="900" cy="120" r="1300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4bc6ff" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#4bc6ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="spark">
+      <stop offset="0" stop-color="#39e6ff"/>
+      <stop offset=".4" stop-color="#39e6ff" stop-opacity=".7"/>
+      <stop offset=".72" stop-color="#39e6ff" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#39e6ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="patch">
+      <stop offset="0" stop-color="#29e3ff"/>
+      <stop offset=".4" stop-color="#29e3ff" stop-opacity=".7"/>
+      <stop offset=".72" stop-color="#29e3ff" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#29e3ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="w0" x1="0" y1="260.18878814079767" x2="0" y2="700.1887881407977" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0a2148"/>
+      <stop offset="1" stop-color="#06142e"/>
+    </linearGradient>
+    <linearGradient id="h0" x1="0" y1="260.18878814079767" x2="2880" y2="760.1887881407977" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000" stop-opacity="0.15"/>
+      <stop offset="0.25" stop-color="#000" stop-opacity="0.17"/>
+      <stop offset="0.5" stop-color="#000" stop-opacity="0.05"/>
+      <stop offset="0.75" stop-color="#000" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.02"/>
+    </linearGradient>
+    <path id="b0" d="M-200 558.6C-165.8 563.3 -63.3 581 5 586.5C73.3 592 141.7 593.4 210 591.5C278.3 589.6 346.7 581 415 575.2C483.3 569.4 551.7 561.5 620 556.6C688.3 551.8 756.7 550.3 825 546.2C893.3 542.2 961.7 540.7 1030 532.3C1098.3 523.9 1166.7 511.8 1235 495.9C1303.3 479.9 1371.7 456.4 1440 436.4C1508.3 416.5 1576.7 392.6 1645 376.1C1713.3 359.5 1781.7 346.6 1850 337.1C1918.3 327.6 1986.7 324.7 2055 319.2C2123.3 313.7 2191.7 310.5 2260 304.1C2328.3 297.7 2396.7 288 2465 280.7C2533.3 273.4 2601.7 263.3 2670 260.2C2738.3 257.1 2806.7 257.4 2875 262.1C2943.3 266.9 3045.8 284.2 3080 288.6L3080 1900L-200 1900Z"/>
+    <path id="c0" d="M-200 558.6C-165.8 563.3 -63.3 581 5 586.5C73.3 592 141.7 593.4 210 591.5C278.3 589.6 346.7 581 415 575.2C483.3 569.4 551.7 561.5 620 556.6C688.3 551.8 756.7 550.3 825 546.2C893.3 542.2 961.7 540.7 1030 532.3C1098.3 523.9 1166.7 511.8 1235 495.9C1303.3 479.9 1371.7 456.4 1440 436.4C1508.3 416.5 1576.7 392.6 1645 376.1C1713.3 359.5 1781.7 346.6 1850 337.1C1918.3 327.6 1986.7 324.7 2055 319.2C2123.3 313.7 2191.7 310.5 2260 304.1C2328.3 297.7 2396.7 288 2465 280.7C2533.3 273.4 2601.7 263.3 2670 260.2C2738.3 257.1 2806.7 257.4 2875 262.1C2943.3 266.9 3045.8 284.2 3080 288.6"/>
+    <clipPath id="k0">
+      <use href="#b0"/>
+    </clipPath>
+    <linearGradient id="g0" x1="0" y1="0" x2="2880" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5ff4ff" stop-opacity="0.36"/>
+      <stop offset="0.125" stop-color="#5ff4ff" stop-opacity="0.52"/>
+      <stop offset="0.25" stop-color="#5ff4ff" stop-opacity="0.23"/>
+      <stop offset="0.375" stop-color="#5ff4ff" stop-opacity="0.82"/>
+      <stop offset="0.5" stop-color="#5ff4ff" stop-opacity="0.1"/>
+      <stop offset="0.625" stop-color="#5ff4ff" stop-opacity="0.6"/>
+      <stop offset="0.75" stop-color="#5ff4ff" stop-opacity="0.55"/>
+      <stop offset="0.875" stop-color="#5ff4ff" stop-opacity="0.44"/>
+      <stop offset="1" stop-color="#5ff4ff" stop-opacity="0.06"/>
+    </linearGradient>
+    <linearGradient id="w1" x1="0" y1="479.5964466833184" x2="0" y2="919.5964466833184" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0b2650"/>
+      <stop offset="1" stop-color="#061531"/>
+    </linearGradient>
+    <linearGradient id="h1" x1="0" y1="479.5964466833184" x2="2880" y2="979.5964466833184" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000" stop-opacity="0.17"/>
+      <stop offset="0.25" stop-color="#000" stop-opacity="0.01"/>
+      <stop offset="0.5" stop-color="#000" stop-opacity="0.18"/>
+      <stop offset="0.75" stop-color="#000" stop-opacity="0.02"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.11"/>
+    </linearGradient>
+    <path id="b1" d="M-200 781.6C-165.8 784.9 -63.3 799.4 5 801.2C73.3 802.9 141.7 802.8 210 791.9C278.3 781.1 346.7 757.5 415 735.9C483.3 714.4 551.7 683.4 620 662.7C688.3 642 756.7 625.1 825 611.9C893.3 598.8 961.7 594.2 1030 583.8C1098.3 573.3 1166.7 562.7 1235 549.3C1303.3 535.9 1371.7 514.9 1440 503.3C1508.3 491.7 1576.7 479.6 1645 479.6C1713.3 479.6 1781.7 491.2 1850 503.4C1918.3 515.6 1986.7 539 2055 552.7C2123.3 566.4 2191.7 578.8 2260 585.6C2328.3 592.4 2396.7 590.6 2465 593.8C2533.3 597 2601.7 598.6 2670 604.7C2738.3 610.7 2806.7 624.2 2875 630.1C2943.3 636.1 3045.8 638.8 3080 640.5L3080 1900L-200 1900Z"/>
+    <path id="c1" d="M-200 781.6C-165.8 784.9 -63.3 799.4 5 801.2C73.3 802.9 141.7 802.8 210 791.9C278.3 781.1 346.7 757.5 415 735.9C483.3 714.4 551.7 683.4 620 662.7C688.3 642 756.7 625.1 825 611.9C893.3 598.8 961.7 594.2 1030 583.8C1098.3 573.3 1166.7 562.7 1235 549.3C1303.3 535.9 1371.7 514.9 1440 503.3C1508.3 491.7 1576.7 479.6 1645 479.6C1713.3 479.6 1781.7 491.2 1850 503.4C1918.3 515.6 1986.7 539 2055 552.7C2123.3 566.4 2191.7 578.8 2260 585.6C2328.3 592.4 2396.7 590.6 2465 593.8C2533.3 597 2601.7 598.6 2670 604.7C2738.3 610.7 2806.7 624.2 2875 630.1C2943.3 636.1 3045.8 638.8 3080 640.5"/>
+    <clipPath id="k1">
+      <use href="#b1"/>
+    </clipPath>
+    <linearGradient id="g1" x1="0" y1="0" x2="2880" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5ff4ff" stop-opacity="0.68"/>
+      <stop offset="0.125" stop-color="#5ff4ff" stop-opacity="0.09"/>
+      <stop offset="0.25" stop-color="#5ff4ff" stop-opacity="0.36"/>
+      <stop offset="0.375" stop-color="#5ff4ff" stop-opacity="0.07"/>
+      <stop offset="0.5" stop-color="#5ff4ff" stop-opacity="0.16"/>
+      <stop offset="0.625" stop-color="#5ff4ff" stop-opacity="0.44"/>
+      <stop offset="0.75" stop-color="#5ff4ff" stop-opacity="0.11"/>
+      <stop offset="0.875" stop-color="#5ff4ff" stop-opacity="0.46"/>
+      <stop offset="1" stop-color="#5ff4ff" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="w2" x1="0" y1="671.153979834921" x2="0" y2="1111.1539798349208" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0c2a57"/>
+      <stop offset="1" stop-color="#061634"/>
+    </linearGradient>
+    <linearGradient id="h2" x1="0" y1="671.153979834921" x2="2880" y2="1171.1539798349208" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000" stop-opacity="0.22"/>
+      <stop offset="0.25" stop-color="#000" stop-opacity="0.11"/>
+      <stop offset="0.5" stop-color="#000" stop-opacity="0.04"/>
+      <stop offset="0.75" stop-color="#000" stop-opacity="0.05"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.21"/>
+    </linearGradient>
+    <path id="b2" d="M-200 884.1C-165.8 878.2 -63.3 866.3 5 848.8C73.3 831.3 141.7 802.3 210 779C278.3 755.6 346.7 726.7 415 708.8C483.3 690.8 551.7 677.1 620 671.2C688.3 665.2 756.7 669 825 673.3C893.3 677.6 961.7 688.8 1030 697.1C1098.3 705.4 1166.7 714.1 1235 722.9C1303.3 731.8 1371.7 738.4 1440 750.3C1508.3 762.2 1576.7 775.7 1645 794.4C1713.3 813.1 1781.7 838.7 1850 862.3C1918.3 886 1986.7 916.3 2055 936.2C2123.3 956.2 2191.7 975.1 2260 982.1C2328.3 989 2396.7 986 2465 977.7C2533.3 969.4 2601.7 949.1 2670 932.2C2738.3 915.4 2806.7 892.6 2875 876.6C2943.3 860.6 3045.8 843.1 3080 836.4L3080 1900L-200 1900Z"/>
+    <path id="c2" d="M-200 884.1C-165.8 878.2 -63.3 866.3 5 848.8C73.3 831.3 141.7 802.3 210 779C278.3 755.6 346.7 726.7 415 708.8C483.3 690.8 551.7 677.1 620 671.2C688.3 665.2 756.7 669 825 673.3C893.3 677.6 961.7 688.8 1030 697.1C1098.3 705.4 1166.7 714.1 1235 722.9C1303.3 731.8 1371.7 738.4 1440 750.3C1508.3 762.2 1576.7 775.7 1645 794.4C1713.3 813.1 1781.7 838.7 1850 862.3C1918.3 886 1986.7 916.3 2055 936.2C2123.3 956.2 2191.7 975.1 2260 982.1C2328.3 989 2396.7 986 2465 977.7C2533.3 969.4 2601.7 949.1 2670 932.2C2738.3 915.4 2806.7 892.6 2875 876.6C2943.3 860.6 3045.8 843.1 3080 836.4"/>
+    <clipPath id="k2">
+      <use href="#b2"/>
+    </clipPath>
+    <linearGradient id="g2" x1="0" y1="0" x2="2880" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5ff4ff" stop-opacity="0.09"/>
+      <stop offset="0.125" stop-color="#5ff4ff" stop-opacity="0.62"/>
+      <stop offset="0.25" stop-color="#5ff4ff" stop-opacity="0.52"/>
+      <stop offset="0.375" stop-color="#5ff4ff" stop-opacity="0.36"/>
+      <stop offset="0.5" stop-color="#5ff4ff" stop-opacity="0.06"/>
+      <stop offset="0.625" stop-color="#5ff4ff" stop-opacity="0.21"/>
+      <stop offset="0.75" stop-color="#5ff4ff" stop-opacity="0.84"/>
+      <stop offset="0.875" stop-color="#5ff4ff" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#5ff4ff" stop-opacity="0.58"/>
+    </linearGradient>
+    <linearGradient id="w3" x1="0" y1="793.8995826434848" x2="0" y2="1233.8995826434848" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0c2c5b"/>
+      <stop offset="1" stop-color="#051434"/>
+    </linearGradient>
+    <linearGradient id="h3" x1="0" y1="793.8995826434848" x2="2880" y2="1293.8995826434848" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000" stop-opacity="0.07"/>
+      <stop offset="0.25" stop-color="#000" stop-opacity="0.07"/>
+      <stop offset="0.5" stop-color="#000" stop-opacity="0.05"/>
+      <stop offset="0.75" stop-color="#000" stop-opacity="0.09"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.2"/>
+    </linearGradient>
+    <path id="b3" d="M-200 874.9C-165.8 874.1 -63.3 876.2 5 870.3C73.3 864.5 141.7 852.3 210 839.5C278.3 826.8 346.7 801.1 415 793.9C483.3 786.7 551.7 785.4 620 796.2C688.3 807 756.7 837.6 825 858.9C893.3 880.2 961.7 907.3 1030 923.9C1098.3 940.6 1166.7 945.5 1235 958.8C1303.3 972 1371.7 981.6 1440 1003.4C1508.3 1025.3 1576.7 1061.5 1645 1089.7C1713.3 1118 1781.7 1155.2 1850 1172.9C1918.3 1190.6 1986.7 1195.2 2055 1196.1C2123.3 1196.9 2191.7 1181.6 2260 1178.2C2328.3 1174.9 2396.7 1174.8 2465 1176.1C2533.3 1177.4 2601.7 1189.6 2670 1186.2C2738.3 1182.9 2806.7 1173 2875 1155.9C2943.3 1138.8 3045.8 1095.7 3080 1083.7L3080 1900L-200 1900Z"/>
+    <path id="c3" d="M-200 874.9C-165.8 874.1 -63.3 876.2 5 870.3C73.3 864.5 141.7 852.3 210 839.5C278.3 826.8 346.7 801.1 415 793.9C483.3 786.7 551.7 785.4 620 796.2C688.3 807 756.7 837.6 825 858.9C893.3 880.2 961.7 907.3 1030 923.9C1098.3 940.6 1166.7 945.5 1235 958.8C1303.3 972 1371.7 981.6 1440 1003.4C1508.3 1025.3 1576.7 1061.5 1645 1089.7C1713.3 1118 1781.7 1155.2 1850 1172.9C1918.3 1190.6 1986.7 1195.2 2055 1196.1C2123.3 1196.9 2191.7 1181.6 2260 1178.2C2328.3 1174.9 2396.7 1174.8 2465 1176.1C2533.3 1177.4 2601.7 1189.6 2670 1186.2C2738.3 1182.9 2806.7 1173 2875 1155.9C2943.3 1138.8 3045.8 1095.7 3080 1083.7"/>
+    <clipPath id="k3">
+      <use href="#b3"/>
+    </clipPath>
+    <linearGradient id="g3" x1="0" y1="0" x2="2880" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5ff4ff" stop-opacity="0.57"/>
+      <stop offset="0.125" stop-color="#5ff4ff" stop-opacity="0.22"/>
+      <stop offset="0.25" stop-color="#5ff4ff" stop-opacity="0.4"/>
+      <stop offset="0.375" stop-color="#5ff4ff" stop-opacity="0.75"/>
+      <stop offset="0.5" stop-color="#5ff4ff" stop-opacity="0.11"/>
+      <stop offset="0.625" stop-color="#5ff4ff" stop-opacity="0.17"/>
+      <stop offset="0.75" stop-color="#5ff4ff" stop-opacity="0.34"/>
+      <stop offset="0.875" stop-color="#5ff4ff" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#5ff4ff" stop-opacity="0.33"/>
+    </linearGradient>
+    <linearGradient id="w4" x1="0" y1="1041.6257791917333" x2="0" y2="1481.6257791917333" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0b2a58"/>
+      <stop offset="1" stop-color="#041230"/>
+    </linearGradient>
+    <linearGradient id="h4" x1="0" y1="1041.6257791917333" x2="2880" y2="1541.6257791917333" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000" stop-opacity="0.14"/>
+      <stop offset="0.25" stop-color="#000" stop-opacity="0.01"/>
+      <stop offset="0.5" stop-color="#000" stop-opacity="0.13"/>
+      <stop offset="0.75" stop-color="#000" stop-opacity="0.11"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.16"/>
+    </linearGradient>
+    <path id="b4" d="M-200 1059C-165.8 1056.1 -63.3 1043.2 5 1041.6C73.3 1040 141.7 1039.9 210 1049.4C278.3 1058.9 346.7 1076 415 1098.8C483.3 1121.6 551.7 1155.5 620 1185.9C688.3 1216.3 756.7 1254.5 825 1281C893.3 1307.4 961.7 1332.6 1030 1344.5C1098.3 1356.5 1166.7 1358.2 1235 1352.7C1303.3 1347.3 1371.7 1329 1440 1311.9C1508.3 1294.8 1576.7 1269.6 1645 1250.2C1713.3 1230.8 1781.7 1211 1850 1195.5C1918.3 1180.1 1986.7 1168.6 2055 1157.6C2123.3 1146.7 2191.7 1138.5 2260 1129.9C2328.3 1121.3 2396.7 1112.1 2465 1106.2C2533.3 1100.3 2601.7 1093.2 2670 1094.5C2738.3 1095.9 2806.7 1100.5 2875 1114.4C2943.3 1128.2 3045.8 1167 3080 1177.5L3080 1900L-200 1900Z"/>
+    <path id="c4" d="M-200 1059C-165.8 1056.1 -63.3 1043.2 5 1041.6C73.3 1040 141.7 1039.9 210 1049.4C278.3 1058.9 346.7 1076 415 1098.8C483.3 1121.6 551.7 1155.5 620 1185.9C688.3 1216.3 756.7 1254.5 825 1281C893.3 1307.4 961.7 1332.6 1030 1344.5C1098.3 1356.5 1166.7 1358.2 1235 1352.7C1303.3 1347.3 1371.7 1329 1440 1311.9C1508.3 1294.8 1576.7 1269.6 1645 1250.2C1713.3 1230.8 1781.7 1211 1850 1195.5C1918.3 1180.1 1986.7 1168.6 2055 1157.6C2123.3 1146.7 2191.7 1138.5 2260 1129.9C2328.3 1121.3 2396.7 1112.1 2465 1106.2C2533.3 1100.3 2601.7 1093.2 2670 1094.5C2738.3 1095.9 2806.7 1100.5 2875 1114.4C2943.3 1128.2 3045.8 1167 3080 1177.5"/>
+    <clipPath id="k4">
+      <use href="#b4"/>
+    </clipPath>
+    <linearGradient id="g4" x1="0" y1="0" x2="2880" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5ff4ff" stop-opacity="0.1"/>
+      <stop offset="0.125" stop-color="#5ff4ff" stop-opacity="0.36"/>
+      <stop offset="0.25" stop-color="#5ff4ff" stop-opacity="0.2"/>
+      <stop offset="0.375" stop-color="#5ff4ff" stop-opacity="0.17"/>
+      <stop offset="0.5" stop-color="#5ff4ff" stop-opacity="0.52"/>
+      <stop offset="0.625" stop-color="#5ff4ff" stop-opacity="0.5"/>
+      <stop offset="0.75" stop-color="#5ff4ff" stop-opacity="0.28"/>
+      <stop offset="0.875" stop-color="#5ff4ff" stop-opacity="0.59"/>
+      <stop offset="1" stop-color="#5ff4ff" stop-opacity="0.51"/>
+    </linearGradient>
+    <linearGradient id="w5" x1="0" y1="1177.103772099402" x2="0" y2="1617.103772099402" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#09254f"/>
+      <stop offset="1" stop-color="#030f29"/>
+    </linearGradient>
+    <linearGradient id="h5" x1="0" y1="1177.103772099402" x2="2880" y2="1677.103772099402" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000" stop-opacity="0.02"/>
+      <stop offset="0.25" stop-color="#000" stop-opacity="0.19"/>
+      <stop offset="0.5" stop-color="#000" stop-opacity="0.03"/>
+      <stop offset="0.75" stop-color="#000" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.11"/>
+    </linearGradient>
+    <path id="b5" d="M-200 1404.7C-165.8 1411.7 -63.3 1436.5 5 1446.5C73.3 1456.4 141.7 1458.9 210 1464.4C278.3 1469.8 346.7 1470.3 415 1479.1C483.3 1487.8 551.7 1503.5 620 1517C688.3 1530.6 756.7 1552.8 825 1560.4C893.3 1568 961.7 1571.2 1030 1562.8C1098.3 1554.3 1166.7 1530.4 1235 1509.7C1303.3 1488.9 1371.7 1458.6 1440 1438.2C1508.3 1417.8 1576.7 1402.1 1645 1387.4C1713.3 1372.6 1781.7 1365.5 1850 1350C1918.3 1334.5 1986.7 1315.7 2055 1294.4C2123.3 1273.1 2191.7 1241.8 2260 1222.3C2328.3 1202.7 2396.7 1182.6 2465 1177.1C2533.3 1171.6 2601.7 1179.5 2670 1189.1C2738.3 1198.6 2806.7 1221.4 2875 1234.6C2943.3 1247.7 3045.8 1262.5 3080 1268.1L3080 1900L-200 1900Z"/>
+    <path id="c5" d="M-200 1404.7C-165.8 1411.7 -63.3 1436.5 5 1446.5C73.3 1456.4 141.7 1458.9 210 1464.4C278.3 1469.8 346.7 1470.3 415 1479.1C483.3 1487.8 551.7 1503.5 620 1517C688.3 1530.6 756.7 1552.8 825 1560.4C893.3 1568 961.7 1571.2 1030 1562.8C1098.3 1554.3 1166.7 1530.4 1235 1509.7C1303.3 1488.9 1371.7 1458.6 1440 1438.2C1508.3 1417.8 1576.7 1402.1 1645 1387.4C1713.3 1372.6 1781.7 1365.5 1850 1350C1918.3 1334.5 1986.7 1315.7 2055 1294.4C2123.3 1273.1 2191.7 1241.8 2260 1222.3C2328.3 1202.7 2396.7 1182.6 2465 1177.1C2533.3 1171.6 2601.7 1179.5 2670 1189.1C2738.3 1198.6 2806.7 1221.4 2875 1234.6C2943.3 1247.7 3045.8 1262.5 3080 1268.1"/>
+    <clipPath id="k5">
+      <use href="#b5"/>
+    </clipPath>
+    <linearGradient id="g5" x1="0" y1="0" x2="2880" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5ff4ff" stop-opacity="0.07"/>
+      <stop offset="0.125" stop-color="#5ff4ff" stop-opacity="0.64"/>
+      <stop offset="0.25" stop-color="#5ff4ff" stop-opacity="0.13"/>
+      <stop offset="0.375" stop-color="#5ff4ff" stop-opacity="0.1"/>
+      <stop offset="0.5" stop-color="#5ff4ff" stop-opacity="0.21"/>
+      <stop offset="0.625" stop-color="#5ff4ff" stop-opacity="0.06"/>
+      <stop offset="0.75" stop-color="#5ff4ff" stop-opacity="0.85"/>
+      <stop offset="0.875" stop-color="#5ff4ff" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#5ff4ff" stop-opacity="0.87"/>
+    </linearGradient>
+    <linearGradient id="w6" x1="0" y1="1462.056930119101" x2="0" y2="1902.056930119101" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#071f45"/>
+      <stop offset="1" stop-color="#020b20"/>
+    </linearGradient>
+    <linearGradient id="h6" x1="0" y1="1462.056930119101" x2="2880" y2="1962.056930119101" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000" stop-opacity="0.16"/>
+      <stop offset="0.25" stop-color="#000" stop-opacity="0.16"/>
+      <stop offset="0.5" stop-color="#000" stop-opacity="0.08"/>
+      <stop offset="0.75" stop-color="#000" stop-opacity="0.02"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.22"/>
+    </linearGradient>
+    <path id="b6" d="M-200 1678.2C-165.8 1684.9 -63.3 1707.9 5 1718.1C73.3 1728.2 141.7 1737.7 210 1739.1C278.3 1740.4 346.7 1734.1 415 1726C483.3 1718 551.7 1702 620 1690.7C688.3 1679.3 756.7 1666.5 825 1657.9C893.3 1649.2 961.7 1644.9 1030 1638.6C1098.3 1632.2 1166.7 1629.1 1235 1619.8C1303.3 1610.5 1371.7 1598.1 1440 1582.8C1508.3 1567.6 1576.7 1545.5 1645 1528.4C1713.3 1511.3 1781.7 1491.3 1850 1480.2C1918.3 1469.2 1986.7 1463.1 2055 1462.1C2123.3 1461 2191.7 1468.6 2260 1473.8C2328.3 1479 2396.7 1488.7 2465 1493.4C2533.3 1498.1 2601.7 1500.2 2670 1501.9C2738.3 1503.6 2806.7 1500.7 2875 1503.4C2943.3 1506.1 3045.8 1515.6 3080 1518.1L3080 1900L-200 1900Z"/>
+    <path id="c6" d="M-200 1678.2C-165.8 1684.9 -63.3 1707.9 5 1718.1C73.3 1728.2 141.7 1737.7 210 1739.1C278.3 1740.4 346.7 1734.1 415 1726C483.3 1718 551.7 1702 620 1690.7C688.3 1679.3 756.7 1666.5 825 1657.9C893.3 1649.2 961.7 1644.9 1030 1638.6C1098.3 1632.2 1166.7 1629.1 1235 1619.8C1303.3 1610.5 1371.7 1598.1 1440 1582.8C1508.3 1567.6 1576.7 1545.5 1645 1528.4C1713.3 1511.3 1781.7 1491.3 1850 1480.2C1918.3 1469.2 1986.7 1463.1 2055 1462.1C2123.3 1461 2191.7 1468.6 2260 1473.8C2328.3 1479 2396.7 1488.7 2465 1493.4C2533.3 1498.1 2601.7 1500.2 2670 1501.9C2738.3 1503.6 2806.7 1500.7 2875 1503.4C2943.3 1506.1 3045.8 1515.6 3080 1518.1"/>
+    <clipPath id="k6">
+      <use href="#b6"/>
+    </clipPath>
+    <linearGradient id="g6" x1="0" y1="0" x2="2880" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5ff4ff" stop-opacity="0.26"/>
+      <stop offset="0.125" stop-color="#5ff4ff" stop-opacity="0.06"/>
+      <stop offset="0.25" stop-color="#5ff4ff" stop-opacity="0.51"/>
+      <stop offset="0.375" stop-color="#5ff4ff" stop-opacity="0.21"/>
+      <stop offset="0.5" stop-color="#5ff4ff" stop-opacity="0.1"/>
+      <stop offset="0.625" stop-color="#5ff4ff" stop-opacity="0.08"/>
+      <stop offset="0.75" stop-color="#5ff4ff" stop-opacity="0.27"/>
+      <stop offset="0.875" stop-color="#5ff4ff" stop-opacity="0.51"/>
+      <stop offset="1" stop-color="#5ff4ff" stop-opacity="0.12"/>
+    </linearGradient>
+  </defs>
+  <rect width="2880" height="1800" fill="url(#bg)"/>
+  <rect width="2880" height="1800" fill="url(#moonlight)"/>
+  <g fill="#dff6ff">
+    <circle cx="1473.4" cy="254.4" r="1.8" fill-opacity="0.60"/>
+    <circle cx="2450.2" cy="258.3" r="0.9" fill-opacity="0.57"/>
+    <circle cx="1750.3" cy="216.2" r="1.6" fill-opacity="0.76"/>
+    <circle cx="1209.5" cy="321.7" r="1.9" fill-opacity="0.35"/>
+    <circle cx="514.1" cy="132.5" r="1.4" fill-opacity="0.48"/>
+    <circle cx="1677.6" cy="61.2" r="1.8" fill-opacity="0.60"/>
+    <circle cx="1205" cy="405.2" r="2.1" fill-opacity="0.71"/>
+    <circle cx="914.7" cy="299.1" r="1.2" fill-opacity="0.28"/>
+    <circle cx="2133.8" cy="469.3" r="1.3" fill-opacity="0.34"/>
+    <circle cx="2141.4" cy="166.7" r="1.7" fill-opacity="0.60"/>
+    <circle cx="2435.1" cy="68.7" r="2.2" fill-opacity="0.74"/>
+    <circle cx="1108" cy="12.2" r="0.9" fill-opacity="0.75"/>
+    <circle cx="1432.1" cy="252.5" r="1.2" fill-opacity="0.55"/>
+    <circle cx="2114.6" cy="42.7" r="1.8" fill-opacity="0.28"/>
+    <circle cx="1280.3" cy="304.7" r="2.4" fill-opacity="0.51"/>
+    <circle cx="1342.6" cy="169.4" r="0.9" fill-opacity="0.69"/>
+    <circle cx="1208" cy="364.5" r="1.3" fill-opacity="0.58"/>
+    <circle cx="1001.7" cy="404.4" r="1.1" fill-opacity="0.32"/>
+    <circle cx="1815.1" cy="299.3" r="1" fill-opacity="0.47"/>
+    <circle cx="1087.5" cy="449.9" r="2.2" fill-opacity="0.63"/>
+    <circle cx="1183.3" cy="441" r="1.7" fill-opacity="0.51"/>
+    <circle cx="886.6" cy="247" r="0.8" fill-opacity="0.78"/>
+    <circle cx="868.6" cy="195.9" r="1" fill-opacity="0.30"/>
+    <circle cx="2145.9" cy="261.4" r="1.6" fill-opacity="0.31"/>
+    <circle cx="1611.9" cy="298.6" r="2.2" fill-opacity="0.83"/>
+    <circle cx="1722.8" cy="289.8" r="1.7" fill-opacity="0.54"/>
+    <circle cx="272" cy="312.8" r="1.8" fill-opacity="0.85"/>
+    <circle cx="2046.3" cy="64.8" r="1" fill-opacity="0.64"/>
+    <circle cx="2799.6" cy="164.9" r="2.3" fill-opacity="0.48"/>
+    <circle cx="2190.8" cy="313.8" r="0.9" fill-opacity="0.42"/>
+    <circle cx="1912.4" cy="236.3" r="1.8" fill-opacity="0.39"/>
+    <circle cx="2068.2" cy="151.2" r="0.9" fill-opacity="0.58"/>
+    <circle cx="1097.1" cy="86.9" r="2.1" fill-opacity="0.81"/>
+    <circle cx="2161.7" cy="2.4" r="1.5" fill-opacity="0.76"/>
+    <circle cx="1639.5" cy="336.1" r="1.8" fill-opacity="0.25"/>
+    <circle cx="1428.7" cy="235.8" r="1.1" fill-opacity="0.73"/>
+    <circle cx="183.4" cy="40.7" r="2.4" fill-opacity="0.62"/>
+    <circle cx="2027.3" cy="400.7" r="2.3" fill-opacity="0.84"/>
+    <circle cx="145.8" cy="80.8" r="1.8" fill-opacity="0.49"/>
+    <circle cx="1201.9" cy="255.8" r="0.9" fill-opacity="0.29"/>
+    <circle cx="1332.2" cy="129.8" r="1.5" fill-opacity="0.69"/>
+    <circle cx="1191.8" cy="162.3" r="1.7" fill-opacity="0.47"/>
+    <circle cx="2808.9" cy="142.5" r="1.5" fill-opacity="0.40"/>
+    <circle cx="1970" cy="152.3" r="1.7" fill-opacity="0.64"/>
+    <circle cx="8.1" cy="62.7" r="1.1" fill-opacity="0.74"/>
+    <circle cx="390.7" cy="392.1" r="1.1" fill-opacity="0.63"/>
+    <circle cx="2377.7" cy="354.7" r="2.1" fill-opacity="0.31"/>
+    <circle cx="255" cy="357.2" r="1.1" fill-opacity="0.32"/>
+    <circle cx="987.1" cy="46.6" r="2.2" fill-opacity="0.63"/>
+    <circle cx="2075.5" cy="277.4" r="2" fill-opacity="0.67"/>
+    <circle cx="1105.1" cy="366.7" r="1.2" fill-opacity="0.37"/>
+    <circle cx="399.1" cy="300.2" r="0.8" fill-opacity="0.59"/>
+    <circle cx="2781.9" cy="415.6" r="1.6" fill-opacity="0.78"/>
+    <circle cx="161.4" cy="253.4" r="2" fill-opacity="0.40"/>
+    <circle cx="2830.4" cy="66.7" r="2.2" fill-opacity="0.53"/>
+    <circle cx="2669.7" cy="475.4" r="1.4" fill-opacity="0.53"/>
+    <circle cx="1254.8" cy="47.4" r="1.1" fill-opacity="0.31"/>
+    <circle cx="254.5" cy="449.8" r="1.7" fill-opacity="0.59"/>
+    <circle cx="666.9" cy="448.4" r="0.9" fill-opacity="0.75"/>
+    <circle cx="782" cy="30.2" r="1.5" fill-opacity="0.48"/>
+    <circle cx="403.6" cy="178.6" r="1" fill-opacity="0.79"/>
+    <circle cx="1667.5" cy="221.2" r="2.4" fill-opacity="0.46"/>
+    <circle cx="1639.1" cy="260.9" r="1.2" fill-opacity="0.55"/>
+    <circle cx="2722.7" cy="144.8" r="1.6" fill-opacity="0.49"/>
+    <circle cx="367" cy="113.8" r="1.8" fill-opacity="0.26"/>
+    <circle cx="265.6" cy="355.8" r="1.1" fill-opacity="0.38"/>
+    <circle cx="1244" cy="375.8" r="1.8" fill-opacity="0.61"/>
+    <circle cx="1945.3" cy="181.4" r="2" fill-opacity="0.80"/>
+    <circle cx="947.5" cy="341" r="0.9" fill-opacity="0.33"/>
+    <circle cx="1505.9" cy="327.4" r="1" fill-opacity="0.80"/>
+    <circle cx="2626.2" cy="64.2" r="2.2" fill-opacity="0.48"/>
+    <circle cx="2049.7" cy="273.8" r="2.1" fill-opacity="0.83"/>
+    <circle cx="1277.7" cy="107.9" r="1.3" fill-opacity="0.68"/>
+    <circle cx="2026.7" cy="23.7" r="1.9" fill-opacity="0.32"/>
+    <circle cx="1232.6" cy="363.1" r="1.5" fill-opacity="0.82"/>
+    <circle cx="2134.2" cy="58.8" r="1" fill-opacity="0.35"/>
+    <circle cx="47.8" cy="452.7" r="1.2" fill-opacity="0.64"/>
+    <circle cx="841.1" cy="155.1" r="1.9" fill-opacity="0.70"/>
+    <circle cx="1757.6" cy="467.6" r="1.7" fill-opacity="0.73"/>
+    <circle cx="1578.3" cy="188.4" r="1.3" fill-opacity="0.79"/>
+  </g>
+  <g fill="none" stroke="#000308" stroke-opacity="0.0634" stroke-linejoin="round" transform="translate(0 -10)">
+    <use href="#c0" stroke-width="6"/>
+    <use href="#c0" stroke-width="12"/>
+    <use href="#c0" stroke-width="18"/>
+    <use href="#c0" stroke-width="24"/>
+    <use href="#c0" stroke-width="30"/>
+    <use href="#c0" stroke-width="36"/>
+    <use href="#c0" stroke-width="42"/>
+    <use href="#c0" stroke-width="48"/>
+    <use href="#c0" stroke-width="54"/>
+    <use href="#c0" stroke-width="60"/>
+    <use href="#c0" stroke-width="66"/>
+    <use href="#c0" stroke-width="72"/>
+    <use href="#c0" stroke-width="78"/>
+    <use href="#c0" stroke-width="84"/>
+  </g>
+  <use href="#b0" fill="url(#w0)"/>
+  <use href="#b0" fill="url(#h0)"/>
+  <g clip-path="url(#k0)">
+    <g fill="none" stroke="#7ff7ff" stroke-opacity="0.0136" stroke-linejoin="round">
+      <use href="#c0" stroke-width="9.6"/>
+      <use href="#c0" stroke-width="19.2"/>
+      <use href="#c0" stroke-width="28.8"/>
+      <use href="#c0" stroke-width="38.4"/>
+      <use href="#c0" stroke-width="48"/>
+      <use href="#c0" stroke-width="57.6"/>
+      <use href="#c0" stroke-width="67.2"/>
+      <use href="#c0" stroke-width="76.8"/>
+      <use href="#c0" stroke-width="86.4"/>
+      <use href="#c0" stroke-width="96"/>
+    </g>
+    <g fill="none" stroke="#2bd9ff" stroke-opacity="0.0104" stroke-linejoin="round" transform="translate(0 70)">
+      <use href="#c0" stroke-width="18.2"/>
+      <use href="#c0" stroke-width="31.7"/>
+      <use href="#c0" stroke-width="43.8"/>
+      <use href="#c0" stroke-width="55.1"/>
+      <use href="#c0" stroke-width="65.9"/>
+      <use href="#c0" stroke-width="76.3"/>
+      <use href="#c0" stroke-width="86.3"/>
+      <use href="#c0" stroke-width="96"/>
+    </g>
+  </g>
+  <g fill="none" stroke="url(#g0)" stroke-opacity="0.0670" stroke-linejoin="round">
+    <use href="#c0" stroke-width="2.1"/>
+    <use href="#c0" stroke-width="5.5"/>
+    <use href="#c0" stroke-width="9.6"/>
+    <use href="#c0" stroke-width="14.4"/>
+    <use href="#c0" stroke-width="19.7"/>
+    <use href="#c0" stroke-width="25.4"/>
+    <use href="#c0" stroke-width="31.6"/>
+    <use href="#c0" stroke-width="38"/>
+    <use href="#c0" stroke-width="44.9"/>
+    <use href="#c0" stroke-width="52"/>
+  </g>
+  <use href="#c0" fill="none" stroke="url(#g0)" stroke-width="3"/>
+  <g clip-path="url(#k0)" fill="url(#patch)" fill-opacity=".3">
+    <ellipse cx="1440" cy="462.4" rx="286.1" ry="73.9"/>
+    <ellipse cx="825" cy="572.2" rx="386.2" ry="70.5"/>
+  </g>
+  <g fill="url(#spark)" fill-opacity=".55">
+    <circle cx="2530" cy="297.1" r="18.1"/>
+    <circle cx="1074.5" cy="600.4" r="11.8"/>
+    <circle cx="2740" cy="279.9" r="15.2"/>
+    <circle cx="380.9" cy="592.9" r="18.5"/>
+    <circle cx="980.5" cy="552.5" r="10.6"/>
+    <circle cx="2638.6" cy="301.5" r="17.3"/>
+    <circle cx="2941.9" cy="323.2" r="12.3"/>
+    <circle cx="1040.6" cy="554.4" r="16.3"/>
+  </g>
+  <g fill="#c6fdff">
+    <circle cx="623.9" cy="621.1" r="1" fill-opacity="0.53"/>
+    <circle cx="101.4" cy="685.4" r="1.1" fill-opacity="0.40"/>
+    <circle cx="2530" cy="297.1" r="3.6" fill-opacity="0.53"/>
+    <circle cx="1074.5" cy="600.4" r="2.4" fill-opacity="0.92"/>
+    <circle cx="1605" cy="433.8" r="1" fill-opacity="0.76"/>
+    <circle cx="1709.6" cy="426.4" r="1.9" fill-opacity="0.36"/>
+    <circle cx="2740" cy="279.9" r="3" fill-opacity="0.51"/>
+    <circle cx="380.9" cy="592.9" r="3.7" fill-opacity="0.36"/>
+    <circle cx="980.5" cy="552.5" r="2.1" fill-opacity="0.40"/>
+    <circle cx="155.7" cy="623" r="1.1" fill-opacity="0.95"/>
+    <circle cx="-49.4" cy="669" r="1.1" fill-opacity="0.70"/>
+    <circle cx="2638.6" cy="301.5" r="3.5" fill-opacity="0.81"/>
+    <circle cx="1462.5" cy="445.6" r="1.7" fill-opacity="0.45"/>
+    <circle cx="777.2" cy="558.4" r="0.9" fill-opacity="0.56"/>
+    <circle cx="2391.8" cy="312.4" r="0.9" fill-opacity="0.54"/>
+    <circle cx="2941.9" cy="323.2" r="2.5" fill-opacity="0.42"/>
+    <circle cx="2451" cy="323.3" r="0.9" fill-opacity="0.59"/>
+    <circle cx="1040.6" cy="554.4" r="3.3" fill-opacity="0.55"/>
+  </g>
+  <g fill="none" stroke="#000308" stroke-opacity="0.0634" stroke-linejoin="round" transform="translate(0 -10)">
+    <use href="#c1" stroke-width="6"/>
+    <use href="#c1" stroke-width="12"/>
+    <use href="#c1" stroke-width="18"/>
+    <use href="#c1" stroke-width="24"/>
+    <use href="#c1" stroke-width="30"/>
+    <use href="#c1" stroke-width="36"/>
+    <use href="#c1" stroke-width="42"/>
+    <use href="#c1" stroke-width="48"/>
+    <use href="#c1" stroke-width="54"/>
+    <use href="#c1" stroke-width="60"/>
+    <use href="#c1" stroke-width="66"/>
+    <use href="#c1" stroke-width="72"/>
+    <use href="#c1" stroke-width="78"/>
+    <use href="#c1" stroke-width="84"/>
+  </g>
+  <use href="#b1" fill="url(#w1)"/>
+  <use href="#b1" fill="url(#h1)"/>
+  <g clip-path="url(#k1)">
+    <g fill="none" stroke="#7ff7ff" stroke-opacity="0.0136" stroke-linejoin="round">
+      <use href="#c1" stroke-width="9.6"/>
+      <use href="#c1" stroke-width="19.2"/>
+      <use href="#c1" stroke-width="28.8"/>
+      <use href="#c1" stroke-width="38.4"/>
+      <use href="#c1" stroke-width="48"/>
+      <use href="#c1" stroke-width="57.6"/>
+      <use href="#c1" stroke-width="67.2"/>
+      <use href="#c1" stroke-width="76.8"/>
+      <use href="#c1" stroke-width="86.4"/>
+      <use href="#c1" stroke-width="96"/>
+    </g>
+    <g fill="none" stroke="#2bd9ff" stroke-opacity="0.0104" stroke-linejoin="round" transform="translate(0 70)">
+      <use href="#c1" stroke-width="18.2"/>
+      <use href="#c1" stroke-width="31.7"/>
+      <use href="#c1" stroke-width="43.8"/>
+      <use href="#c1" stroke-width="55.1"/>
+      <use href="#c1" stroke-width="65.9"/>
+      <use href="#c1" stroke-width="76.3"/>
+      <use href="#c1" stroke-width="86.3"/>
+      <use href="#c1" stroke-width="96"/>
+    </g>
+  </g>
+  <g fill="none" stroke="url(#g1)" stroke-opacity="0.0670" stroke-linejoin="round">
+    <use href="#c1" stroke-width="2.1"/>
+    <use href="#c1" stroke-width="5.5"/>
+    <use href="#c1" stroke-width="9.6"/>
+    <use href="#c1" stroke-width="14.4"/>
+    <use href="#c1" stroke-width="19.7"/>
+    <use href="#c1" stroke-width="25.4"/>
+    <use href="#c1" stroke-width="31.6"/>
+    <use href="#c1" stroke-width="38"/>
+    <use href="#c1" stroke-width="44.9"/>
+    <use href="#c1" stroke-width="52"/>
+  </g>
+  <use href="#c1" fill="none" stroke="url(#g1)" stroke-width="3"/>
+  <g clip-path="url(#k1)" fill="url(#patch)" fill-opacity=".3">
+    <ellipse cx="825" cy="637.9" rx="436.6" ry="68.9"/>
+    <ellipse cx="1235" cy="575.3" rx="383.3" ry="56.8"/>
+  </g>
+  <g fill="url(#spark)" fill-opacity=".55">
+    <circle cx="1703.6" cy="566.4" r="12.9"/>
+    <circle cx="2273.8" cy="606.2" r="11.2"/>
+  </g>
+  <g fill="#c6fdff">
+    <circle cx="1779.4" cy="503.2" r="1" fill-opacity="0.57"/>
+    <circle cx="956.7" cy="682.9" r="1.9" fill-opacity="0.91"/>
+    <circle cx="2318.1" cy="596.3" r="1" fill-opacity="0.38"/>
+    <circle cx="597.6" cy="697.1" r="0.9" fill-opacity="0.86"/>
+    <circle cx="1703.6" cy="566.4" r="2.6" fill-opacity="0.98"/>
+    <circle cx="265.8" cy="843" r="1.1" fill-opacity="0.54"/>
+    <circle cx="2260.8" cy="632.6" r="1.7" fill-opacity="0.53"/>
+    <circle cx="551.4" cy="754.2" r="1.8" fill-opacity="0.74"/>
+    <circle cx="1937.4" cy="561.6" r="1" fill-opacity="0.42"/>
+    <circle cx="926.7" cy="606.3" r="1.9" fill-opacity="0.65"/>
+    <circle cx="1313.7" cy="562.2" r="1.3" fill-opacity="0.51"/>
+    <circle cx="1137.9" cy="613" r="1.3" fill-opacity="0.51"/>
+    <circle cx="2273.8" cy="606.2" r="2.2" fill-opacity="0.43"/>
+    <circle cx="413.4" cy="745" r="1.6" fill-opacity="0.60"/>
+    <circle cx="252.8" cy="875.3" r="1.3" fill-opacity="0.37"/>
+    <circle cx="1785.9" cy="557.1" r="1.7" fill-opacity="0.50"/>
+    <circle cx="592.5" cy="763.3" r="1.6" fill-opacity="0.42"/>
+    <circle cx="1951.4" cy="544.4" r="0.9" fill-opacity="0.67"/>
+  </g>
+  <g fill="none" stroke="#000308" stroke-opacity="0.0634" stroke-linejoin="round" transform="translate(0 -10)">
+    <use href="#c2" stroke-width="6"/>
+    <use href="#c2" stroke-width="12"/>
+    <use href="#c2" stroke-width="18"/>
+    <use href="#c2" stroke-width="24"/>
+    <use href="#c2" stroke-width="30"/>
+    <use href="#c2" stroke-width="36"/>
+    <use href="#c2" stroke-width="42"/>
+    <use href="#c2" stroke-width="48"/>
+    <use href="#c2" stroke-width="54"/>
+    <use href="#c2" stroke-width="60"/>
+    <use href="#c2" stroke-width="66"/>
+    <use href="#c2" stroke-width="72"/>
+    <use href="#c2" stroke-width="78"/>
+    <use href="#c2" stroke-width="84"/>
+  </g>
+  <use href="#b2" fill="url(#w2)"/>
+  <use href="#b2" fill="url(#h2)"/>
+  <g clip-path="url(#k2)">
+    <g fill="none" stroke="#7ff7ff" stroke-opacity="0.0136" stroke-linejoin="round">
+      <use href="#c2" stroke-width="9.6"/>
+      <use href="#c2" stroke-width="19.2"/>
+      <use href="#c2" stroke-width="28.8"/>
+      <use href="#c2" stroke-width="38.4"/>
+      <use href="#c2" stroke-width="48"/>
+      <use href="#c2" stroke-width="57.6"/>
+      <use href="#c2" stroke-width="67.2"/>
+      <use href="#c2" stroke-width="76.8"/>
+      <use href="#c2" stroke-width="86.4"/>
+      <use href="#c2" stroke-width="96"/>
+    </g>
+    <g fill="none" stroke="#2bd9ff" stroke-opacity="0.0104" stroke-linejoin="round" transform="translate(0 70)">
+      <use href="#c2" stroke-width="18.2"/>
+      <use href="#c2" stroke-width="31.7"/>
+      <use href="#c2" stroke-width="43.8"/>
+      <use href="#c2" stroke-width="55.1"/>
+      <use href="#c2" stroke-width="65.9"/>
+      <use href="#c2" stroke-width="76.3"/>
+      <use href="#c2" stroke-width="86.3"/>
+      <use href="#c2" stroke-width="96"/>
+    </g>
+  </g>
+  <g fill="none" stroke="url(#g2)" stroke-opacity="0.0670" stroke-linejoin="round">
+    <use href="#c2" stroke-width="2.1"/>
+    <use href="#c2" stroke-width="5.5"/>
+    <use href="#c2" stroke-width="9.6"/>
+    <use href="#c2" stroke-width="14.4"/>
+    <use href="#c2" stroke-width="19.7"/>
+    <use href="#c2" stroke-width="25.4"/>
+    <use href="#c2" stroke-width="31.6"/>
+    <use href="#c2" stroke-width="38"/>
+    <use href="#c2" stroke-width="44.9"/>
+    <use href="#c2" stroke-width="52"/>
+  </g>
+  <use href="#c2" fill="none" stroke="url(#g2)" stroke-width="3"/>
+  <g clip-path="url(#k2)" fill="url(#patch)" fill-opacity=".3">
+    <ellipse cx="1440" cy="776.3" rx="342.4" ry="64.9"/>
+    <ellipse cx="1030" cy="723.1" rx="364.5" ry="73.2"/>
+  </g>
+  <g fill="url(#spark)" fill-opacity=".55">
+    <circle cx="36.1" cy="857.9" r="15.1"/>
+    <circle cx="2765" cy="914.5" r="12.6"/>
+    <circle cx="2966.6" cy="867" r="11.2"/>
+    <circle cx="481.5" cy="717.9" r="12.9"/>
+    <circle cx="1259.5" cy="764.5" r="15.7"/>
+    <circle cx="787.7" cy="696.9" r="10.5"/>
+  </g>
+  <g fill="#c6fdff">
+    <circle cx="694.2" cy="679.9" r="1.1" fill-opacity="0.88"/>
+    <circle cx="1409.9" cy="840.3" r="1.6" fill-opacity="0.77"/>
+    <circle cx="27.3" cy="871.9" r="1.6" fill-opacity="0.70"/>
+    <circle cx="1935.6" cy="901.2" r="1.8" fill-opacity="0.99"/>
+    <circle cx="36.1" cy="857.9" r="3" fill-opacity="0.96"/>
+    <circle cx="2765" cy="914.5" r="2.5" fill-opacity="0.57"/>
+    <circle cx="2607.4" cy="954.4" r="1.9" fill-opacity="0.91"/>
+    <circle cx="2966.6" cy="867" r="2.2" fill-opacity="0.72"/>
+    <circle cx="2302.5" cy="1021.2" r="1.3" fill-opacity="0.75"/>
+    <circle cx="1518" cy="777.2" r="1.3" fill-opacity="0.60"/>
+    <circle cx="481.5" cy="717.9" r="2.6" fill-opacity="0.65"/>
+    <circle cx="463.7" cy="750.9" r="1.1" fill-opacity="0.87"/>
+    <circle cx="1259.5" cy="764.5" r="3.1" fill-opacity="0.44"/>
+    <circle cx="2169.4" cy="1018.1" r="1.6" fill-opacity="0.60"/>
+    <circle cx="2566.7" cy="966.9" r="0.9" fill-opacity="0.35"/>
+    <circle cx="787.7" cy="696.9" r="2.1" fill-opacity="0.37"/>
+    <circle cx="2492.6" cy="1011.1" r="1.7" fill-opacity="0.61"/>
+    <circle cx="475.9" cy="751.5" r="1.3" fill-opacity="0.76"/>
+  </g>
+  <g fill="none" stroke="#000308" stroke-opacity="0.0634" stroke-linejoin="round" transform="translate(0 -10)">
+    <use href="#c3" stroke-width="6"/>
+    <use href="#c3" stroke-width="12"/>
+    <use href="#c3" stroke-width="18"/>
+    <use href="#c3" stroke-width="24"/>
+    <use href="#c3" stroke-width="30"/>
+    <use href="#c3" stroke-width="36"/>
+    <use href="#c3" stroke-width="42"/>
+    <use href="#c3" stroke-width="48"/>
+    <use href="#c3" stroke-width="54"/>
+    <use href="#c3" stroke-width="60"/>
+    <use href="#c3" stroke-width="66"/>
+    <use href="#c3" stroke-width="72"/>
+    <use href="#c3" stroke-width="78"/>
+    <use href="#c3" stroke-width="84"/>
+  </g>
+  <use href="#b3" fill="url(#w3)"/>
+  <use href="#b3" fill="url(#h3)"/>
+  <g clip-path="url(#k3)">
+    <g fill="none" stroke="#7ff7ff" stroke-opacity="0.0136" stroke-linejoin="round">
+      <use href="#c3" stroke-width="9.6"/>
+      <use href="#c3" stroke-width="19.2"/>
+      <use href="#c3" stroke-width="28.8"/>
+      <use href="#c3" stroke-width="38.4"/>
+      <use href="#c3" stroke-width="48"/>
+      <use href="#c3" stroke-width="57.6"/>
+      <use href="#c3" stroke-width="67.2"/>
+      <use href="#c3" stroke-width="76.8"/>
+      <use href="#c3" stroke-width="86.4"/>
+      <use href="#c3" stroke-width="96"/>
+    </g>
+    <g fill="none" stroke="#2bd9ff" stroke-opacity="0.0104" stroke-linejoin="round" transform="translate(0 70)">
+      <use href="#c3" stroke-width="18.2"/>
+      <use href="#c3" stroke-width="31.7"/>
+      <use href="#c3" stroke-width="43.8"/>
+      <use href="#c3" stroke-width="55.1"/>
+      <use href="#c3" stroke-width="65.9"/>
+      <use href="#c3" stroke-width="76.3"/>
+      <use href="#c3" stroke-width="86.3"/>
+      <use href="#c3" stroke-width="96"/>
+    </g>
+  </g>
+  <g fill="none" stroke="url(#g3)" stroke-opacity="0.0670" stroke-linejoin="round">
+    <use href="#c3" stroke-width="2.1"/>
+    <use href="#c3" stroke-width="5.5"/>
+    <use href="#c3" stroke-width="9.6"/>
+    <use href="#c3" stroke-width="14.4"/>
+    <use href="#c3" stroke-width="19.7"/>
+    <use href="#c3" stroke-width="25.4"/>
+    <use href="#c3" stroke-width="31.6"/>
+    <use href="#c3" stroke-width="38"/>
+    <use href="#c3" stroke-width="44.9"/>
+    <use href="#c3" stroke-width="52"/>
+  </g>
+  <use href="#c3" fill="none" stroke="url(#g3)" stroke-width="3"/>
+  <g clip-path="url(#k3)" fill="url(#patch)" fill-opacity=".3">
+    <ellipse cx="210" cy="865.5" rx="230.7" ry="73"/>
+    <ellipse cx="2670" cy="1212.2" rx="304" ry="66"/>
+  </g>
+  <g fill="url(#spark)" fill-opacity=".55">
+    <circle cx="2128.3" cy="1198" r="17.6"/>
+    <circle cx="983.4" cy="992.1" r="17.4"/>
+    <circle cx="2272.5" cy="1187.2" r="14.2"/>
+    <circle cx="1295.1" cy="1001.9" r="12.3"/>
+    <circle cx="2501.8" cy="1250.3" r="14.1"/>
+    <circle cx="452.8" cy="802.4" r="13.9"/>
+    <circle cx="2952.6" cy="1208.1" r="14.5"/>
+    <circle cx="1346.2" cy="1023.2" r="18.1"/>
+  </g>
+  <g fill="#c6fdff">
+    <circle cx="2513.2" cy="1190.6" r="2" fill-opacity="0.52"/>
+    <circle cx="2128.3" cy="1198" r="3.5" fill-opacity="0.77"/>
+    <circle cx="2420.1" cy="1208.9" r="1.6" fill-opacity="0.59"/>
+    <circle cx="983.4" cy="992.1" r="3.5" fill-opacity="0.45"/>
+    <circle cx="2272.5" cy="1187.2" r="2.8" fill-opacity="0.98"/>
+    <circle cx="1955.2" cy="1213.7" r="1.3" fill-opacity="0.70"/>
+    <circle cx="2888" cy="1161.3" r="1.9" fill-opacity="0.92"/>
+    <circle cx="553.5" cy="874" r="0.9" fill-opacity="0.87"/>
+    <circle cx="2432.5" cy="1202" r="1.1" fill-opacity="0.45"/>
+    <circle cx="1295.1" cy="1001.9" r="2.5" fill-opacity="0.49"/>
+    <circle cx="2501.8" cy="1250.3" r="2.8" fill-opacity="0.64"/>
+    <circle cx="452.8" cy="802.4" r="2.8" fill-opacity="0.94"/>
+    <circle cx="198.8" cy="860.3" r="1.3" fill-opacity="0.58"/>
+    <circle cx="1319.4" cy="985.3" r="0.9" fill-opacity="0.38"/>
+    <circle cx="706.8" cy="834.7" r="1.4" fill-opacity="0.70"/>
+    <circle cx="2952.6" cy="1208.1" r="2.9" fill-opacity="0.92"/>
+    <circle cx="1346.2" cy="1023.2" r="3.6" fill-opacity="0.49"/>
+    <circle cx="2908.2" cy="1159.4" r="1" fill-opacity="0.48"/>
+  </g>
+  <g fill="none" stroke="#000308" stroke-opacity="0.0634" stroke-linejoin="round" transform="translate(0 -10)">
+    <use href="#c4" stroke-width="6"/>
+    <use href="#c4" stroke-width="12"/>
+    <use href="#c4" stroke-width="18"/>
+    <use href="#c4" stroke-width="24"/>
+    <use href="#c4" stroke-width="30"/>
+    <use href="#c4" stroke-width="36"/>
+    <use href="#c4" stroke-width="42"/>
+    <use href="#c4" stroke-width="48"/>
+    <use href="#c4" stroke-width="54"/>
+    <use href="#c4" stroke-width="60"/>
+    <use href="#c4" stroke-width="66"/>
+    <use href="#c4" stroke-width="72"/>
+    <use href="#c4" stroke-width="78"/>
+    <use href="#c4" stroke-width="84"/>
+  </g>
+  <use href="#b4" fill="url(#w4)"/>
+  <use href="#b4" fill="url(#h4)"/>
+  <g clip-path="url(#k4)">
+    <g fill="none" stroke="#7ff7ff" stroke-opacity="0.0136" stroke-linejoin="round">
+      <use href="#c4" stroke-width="9.6"/>
+      <use href="#c4" stroke-width="19.2"/>
+      <use href="#c4" stroke-width="28.8"/>
+      <use href="#c4" stroke-width="38.4"/>
+      <use href="#c4" stroke-width="48"/>
+      <use href="#c4" stroke-width="57.6"/>
+      <use href="#c4" stroke-width="67.2"/>
+      <use href="#c4" stroke-width="76.8"/>
+      <use href="#c4" stroke-width="86.4"/>
+      <use href="#c4" stroke-width="96"/>
+    </g>
+    <g fill="none" stroke="#2bd9ff" stroke-opacity="0.0104" stroke-linejoin="round" transform="translate(0 70)">
+      <use href="#c4" stroke-width="18.2"/>
+      <use href="#c4" stroke-width="31.7"/>
+      <use href="#c4" stroke-width="43.8"/>
+      <use href="#c4" stroke-width="55.1"/>
+      <use href="#c4" stroke-width="65.9"/>
+      <use href="#c4" stroke-width="76.3"/>
+      <use href="#c4" stroke-width="86.3"/>
+      <use href="#c4" stroke-width="96"/>
+    </g>
+  </g>
+  <g fill="none" stroke="url(#g4)" stroke-opacity="0.0670" stroke-linejoin="round">
+    <use href="#c4" stroke-width="2.1"/>
+    <use href="#c4" stroke-width="5.5"/>
+    <use href="#c4" stroke-width="9.6"/>
+    <use href="#c4" stroke-width="14.4"/>
+    <use href="#c4" stroke-width="19.7"/>
+    <use href="#c4" stroke-width="25.4"/>
+    <use href="#c4" stroke-width="31.6"/>
+    <use href="#c4" stroke-width="38"/>
+    <use href="#c4" stroke-width="44.9"/>
+    <use href="#c4" stroke-width="52"/>
+  </g>
+  <use href="#c4" fill="none" stroke="url(#g4)" stroke-width="3"/>
+  <g clip-path="url(#k4)" fill="url(#patch)" fill-opacity=".3">
+    <ellipse cx="210" cy="1075.4" rx="342.2" ry="61.5"/>
+    <ellipse cx="1645" cy="1276.2" rx="421" ry="75.2"/>
+  </g>
+  <g fill="url(#spark)" fill-opacity=".55">
+    <circle cx="2136.7" cy="1180.1" r="10.7"/>
+    <circle cx="2560.5" cy="1146.3" r="13.8"/>
+    <circle cx="1388.3" cy="1363.8" r="18.3"/>
+    <circle cx="3072.5" cy="1197.9" r="15.9"/>
+    <circle cx="517.3" cy="1170.8" r="13"/>
+    <circle cx="969.3" cy="1349.4" r="13.4"/>
+  </g>
+  <g fill="#c6fdff">
+    <circle cx="554.5" cy="1220" r="1.5" fill-opacity="0.63"/>
+    <circle cx="2136.7" cy="1180.1" r="2.1" fill-opacity="0.65"/>
+    <circle cx="1113.5" cy="1387.7" r="1.3" fill-opacity="0.85"/>
+    <circle cx="1659" cy="1319.9" r="1" fill-opacity="0.71"/>
+    <circle cx="2461.2" cy="1122.9" r="0.9" fill-opacity="0.67"/>
+    <circle cx="1356.3" cy="1342.4" r="1.2" fill-opacity="0.86"/>
+    <circle cx="2560.5" cy="1146.3" r="2.8" fill-opacity="0.84"/>
+    <circle cx="1388.3" cy="1363.8" r="3.7" fill-opacity="0.81"/>
+    <circle cx="3072.5" cy="1197.9" r="3.2" fill-opacity="0.77"/>
+    <circle cx="-0.9" cy="1063.5" r="1.5" fill-opacity="0.96"/>
+    <circle cx="1670.1" cy="1252.3" r="0.9" fill-opacity="0.93"/>
+    <circle cx="2093.5" cy="1160.9" r="1.4" fill-opacity="0.68"/>
+    <circle cx="1961.4" cy="1183.4" r="1.3" fill-opacity="0.67"/>
+    <circle cx="563.1" cy="1211.2" r="1.5" fill-opacity="0.64"/>
+    <circle cx="-125" cy="1118.8" r="1.3" fill-opacity="0.43"/>
+    <circle cx="854.9" cy="1344.8" r="0.9" fill-opacity="0.63"/>
+    <circle cx="517.3" cy="1170.8" r="2.6" fill-opacity="0.57"/>
+    <circle cx="969.3" cy="1349.4" r="2.7" fill-opacity="0.69"/>
+  </g>
+  <g fill="none" stroke="#000308" stroke-opacity="0.0634" stroke-linejoin="round" transform="translate(0 -10)">
+    <use href="#c5" stroke-width="6"/>
+    <use href="#c5" stroke-width="12"/>
+    <use href="#c5" stroke-width="18"/>
+    <use href="#c5" stroke-width="24"/>
+    <use href="#c5" stroke-width="30"/>
+    <use href="#c5" stroke-width="36"/>
+    <use href="#c5" stroke-width="42"/>
+    <use href="#c5" stroke-width="48"/>
+    <use href="#c5" stroke-width="54"/>
+    <use href="#c5" stroke-width="60"/>
+    <use href="#c5" stroke-width="66"/>
+    <use href="#c5" stroke-width="72"/>
+    <use href="#c5" stroke-width="78"/>
+    <use href="#c5" stroke-width="84"/>
+  </g>
+  <use href="#b5" fill="url(#w5)"/>
+  <use href="#b5" fill="url(#h5)"/>
+  <g clip-path="url(#k5)">
+    <g fill="none" stroke="#7ff7ff" stroke-opacity="0.0136" stroke-linejoin="round">
+      <use href="#c5" stroke-width="9.6"/>
+      <use href="#c5" stroke-width="19.2"/>
+      <use href="#c5" stroke-width="28.8"/>
+      <use href="#c5" stroke-width="38.4"/>
+      <use href="#c5" stroke-width="48"/>
+      <use href="#c5" stroke-width="57.6"/>
+      <use href="#c5" stroke-width="67.2"/>
+      <use href="#c5" stroke-width="76.8"/>
+      <use href="#c5" stroke-width="86.4"/>
+      <use href="#c5" stroke-width="96"/>
+    </g>
+    <g fill="none" stroke="#2bd9ff" stroke-opacity="0.0104" stroke-linejoin="round" transform="translate(0 70)">
+      <use href="#c5" stroke-width="18.2"/>
+      <use href="#c5" stroke-width="31.7"/>
+      <use href="#c5" stroke-width="43.8"/>
+      <use href="#c5" stroke-width="55.1"/>
+      <use href="#c5" stroke-width="65.9"/>
+      <use href="#c5" stroke-width="76.3"/>
+      <use href="#c5" stroke-width="86.3"/>
+      <use href="#c5" stroke-width="96"/>
+    </g>
+  </g>
+  <g fill="none" stroke="url(#g5)" stroke-opacity="0.0670" stroke-linejoin="round">
+    <use href="#c5" stroke-width="2.1"/>
+    <use href="#c5" stroke-width="5.5"/>
+    <use href="#c5" stroke-width="9.6"/>
+    <use href="#c5" stroke-width="14.4"/>
+    <use href="#c5" stroke-width="19.7"/>
+    <use href="#c5" stroke-width="25.4"/>
+    <use href="#c5" stroke-width="31.6"/>
+    <use href="#c5" stroke-width="38"/>
+    <use href="#c5" stroke-width="44.9"/>
+    <use href="#c5" stroke-width="52"/>
+  </g>
+  <use href="#c5" fill="none" stroke="url(#g5)" stroke-width="3"/>
+  <g clip-path="url(#k5)" fill="url(#patch)" fill-opacity=".3">
+    <ellipse cx="1030" cy="1588.8" rx="386.3" ry="75"/>
+    <ellipse cx="1235" cy="1535.7" rx="323.5" ry="58.7"/>
+  </g>
+  <g fill="url(#spark)" fill-opacity=".55">
+    <circle cx="2676.3" cy="1222.2" r="11.4"/>
+    <circle cx="2705.2" cy="1207.2" r="12.7"/>
+    <circle cx="840.5" cy="1601.5" r="11.1"/>
+    <circle cx="983.5" cy="1579.6" r="12.5"/>
+    <circle cx="984" cy="1654.8" r="14.5"/>
+    <circle cx="259.3" cy="1521.7" r="10.8"/>
+    <circle cx="2773.9" cy="1241.1" r="13.4"/>
+  </g>
+  <g fill="#c6fdff">
+    <circle cx="1361.9" cy="1499.3" r="1" fill-opacity="0.37"/>
+    <circle cx="1881.7" cy="1436.2" r="1.3" fill-opacity="0.37"/>
+    <circle cx="1714.6" cy="1471.6" r="1.1" fill-opacity="0.37"/>
+    <circle cx="2676.3" cy="1222.2" r="2.3" fill-opacity="0.93"/>
+    <circle cx="2705.2" cy="1207.2" r="2.5" fill-opacity="0.60"/>
+    <circle cx="2248.1" cy="1274.9" r="1.3" fill-opacity="0.61"/>
+    <circle cx="1543.8" cy="1426.1" r="1" fill-opacity="0.56"/>
+    <circle cx="840.5" cy="1601.5" r="2.2" fill-opacity="0.76"/>
+    <circle cx="983.5" cy="1579.6" r="2.5" fill-opacity="0.46"/>
+    <circle cx="984" cy="1654.8" r="2.9" fill-opacity="0.82"/>
+    <circle cx="259.3" cy="1521.7" r="2.2" fill-opacity="0.35"/>
+    <circle cx="2773.9" cy="1241.1" r="2.7" fill-opacity="0.72"/>
+    <circle cx="214.5" cy="1474.7" r="1.7" fill-opacity="0.36"/>
+    <circle cx="2260.1" cy="1261.8" r="0.9" fill-opacity="0.84"/>
+    <circle cx="1477" cy="1520.1" r="1.6" fill-opacity="0.52"/>
+    <circle cx="280.2" cy="1478.1" r="1" fill-opacity="0.39"/>
+    <circle cx="1836.7" cy="1442.7" r="1.1" fill-opacity="0.44"/>
+    <circle cx="1172" cy="1614.8" r="0.9" fill-opacity="0.76"/>
+  </g>
+  <g fill="none" stroke="#000308" stroke-opacity="0.0634" stroke-linejoin="round" transform="translate(0 -10)">
+    <use href="#c6" stroke-width="6"/>
+    <use href="#c6" stroke-width="12"/>
+    <use href="#c6" stroke-width="18"/>
+    <use href="#c6" stroke-width="24"/>
+    <use href="#c6" stroke-width="30"/>
+    <use href="#c6" stroke-width="36"/>
+    <use href="#c6" stroke-width="42"/>
+    <use href="#c6" stroke-width="48"/>
+    <use href="#c6" stroke-width="54"/>
+    <use href="#c6" stroke-width="60"/>
+    <use href="#c6" stroke-width="66"/>
+    <use href="#c6" stroke-width="72"/>
+    <use href="#c6" stroke-width="78"/>
+    <use href="#c6" stroke-width="84"/>
+  </g>
+  <use href="#b6" fill="url(#w6)"/>
+  <use href="#b6" fill="url(#h6)"/>
+  <g clip-path="url(#k6)">
+    <g fill="none" stroke="#7ff7ff" stroke-opacity="0.0136" stroke-linejoin="round">
+      <use href="#c6" stroke-width="9.6"/>
+      <use href="#c6" stroke-width="19.2"/>
+      <use href="#c6" stroke-width="28.8"/>
+      <use href="#c6" stroke-width="38.4"/>
+      <use href="#c6" stroke-width="48"/>
+      <use href="#c6" stroke-width="57.6"/>
+      <use href="#c6" stroke-width="67.2"/>
+      <use href="#c6" stroke-width="76.8"/>
+      <use href="#c6" stroke-width="86.4"/>
+      <use href="#c6" stroke-width="96"/>
+    </g>
+    <g fill="none" stroke="#2bd9ff" stroke-opacity="0.0104" stroke-linejoin="round" transform="translate(0 70)">
+      <use href="#c6" stroke-width="18.2"/>
+      <use href="#c6" stroke-width="31.7"/>
+      <use href="#c6" stroke-width="43.8"/>
+      <use href="#c6" stroke-width="55.1"/>
+      <use href="#c6" stroke-width="65.9"/>
+      <use href="#c6" stroke-width="76.3"/>
+      <use href="#c6" stroke-width="86.3"/>
+      <use href="#c6" stroke-width="96"/>
+    </g>
+  </g>
+  <g fill="none" stroke="url(#g6)" stroke-opacity="0.0670" stroke-linejoin="round">
+    <use href="#c6" stroke-width="2.1"/>
+    <use href="#c6" stroke-width="5.5"/>
+    <use href="#c6" stroke-width="9.6"/>
+    <use href="#c6" stroke-width="14.4"/>
+    <use href="#c6" stroke-width="19.7"/>
+    <use href="#c6" stroke-width="25.4"/>
+    <use href="#c6" stroke-width="31.6"/>
+    <use href="#c6" stroke-width="38"/>
+    <use href="#c6" stroke-width="44.9"/>
+    <use href="#c6" stroke-width="52"/>
+  </g>
+  <use href="#c6" fill="none" stroke="url(#g6)" stroke-width="3"/>
+  <g clip-path="url(#k6)" fill="url(#patch)" fill-opacity=".3">
+    <ellipse cx="1030" cy="1664.6" rx="317.3" ry="62.6"/>
+    <ellipse cx="2260" cy="1499.8" rx="302" ry="56.3"/>
+  </g>
+  <g fill="url(#spark)" fill-opacity=".55">
+    <circle cx="375.3" cy="1810.7" r="15.9"/>
+    <circle cx="2263.9" cy="1488.7" r="11.7"/>
+    <circle cx="3065.5" cy="1527.5" r="11.6"/>
+    <circle cx="549.9" cy="1757.3" r="11"/>
+    <circle cx="2853.4" cy="1518.7" r="15.8"/>
+    <circle cx="1802.1" cy="1565" r="13"/>
+    <circle cx="889.1" cy="1707.8" r="14.3"/>
+  </g>
+  <g fill="#c6fdff">
+    <circle cx="375.3" cy="1810.7" r="3.2" fill-opacity="0.56"/>
+    <circle cx="2869.1" cy="1514" r="1.5" fill-opacity="0.59"/>
+    <circle cx="2263.9" cy="1488.7" r="2.3" fill-opacity="0.58"/>
+    <circle cx="216.7" cy="1797.4" r="1" fill-opacity="0.61"/>
+    <circle cx="3065.5" cy="1527.5" r="2.3" fill-opacity="0.86"/>
+    <circle cx="547" cy="1781.3" r="1.5" fill-opacity="0.81"/>
+    <circle cx="549.9" cy="1757.3" r="2.2" fill-opacity="0.83"/>
+    <circle cx="2084" cy="1483" r="1.1" fill-opacity="0.99"/>
+    <circle cx="-6.4" cy="1797.4" r="1.7" fill-opacity="0.60"/>
+    <circle cx="2853.4" cy="1518.7" r="3.2" fill-opacity="0.58"/>
+    <circle cx="1257.8" cy="1657.6" r="1" fill-opacity="0.97"/>
+    <circle cx="407.1" cy="1738.4" r="1.6" fill-opacity="0.71"/>
+    <circle cx="1574.6" cy="1602.8" r="1.8" fill-opacity="0.76"/>
+    <circle cx="893.7" cy="1702.9" r="0.9" fill-opacity="0.90"/>
+    <circle cx="1802.1" cy="1565" r="2.6" fill-opacity="0.50"/>
+    <circle cx="889.1" cy="1707.8" r="2.9" fill-opacity="0.35"/>
+    <circle cx="107.1" cy="1743.2" r="1" fill-opacity="0.41"/>
+    <circle cx="1255.1" cy="1629.9" r="1" fill-opacity="0.75"/>
+  </g>
+</svg>

@@ -1,0 +1,704 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Design tokens. Light by default; html[data-theme="dark"] switches to dark.
+   --accent is set at runtime from Settings.
+   ───────────────────────────────────────────────────────────────────────────── */
+:root {
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Pretendard Variable', Pretendard, 'Apple SD Gothic Neo', 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Pretendard Variable', Pretendard, 'Segoe UI', sans-serif;
+  --font-mono: 'SF Mono', ui-monospace, Menlo, Monaco, 'JetBrains Mono', 'D2Coding', Consolas, monospace;
+
+  --accent: #0a84ff;
+  --accent-contrast: #ffffff;
+  /* Translucent accent for text selection and soft highlighted backgrounds. */
+  --accent-soft: color-mix(in srgb, var(--accent) 22%, transparent);
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--accent) 45%, transparent);
+
+  --text: #1d1d1f;
+  --text-secondary: rgba(0, 0, 0, 0.55);
+  --text-tertiary: rgba(0, 0, 0, 0.32);
+  --text-on-accent: #fff;
+
+  --window-bg: #ffffff;
+  --window-bg-secondary: #f5f5f7;
+  --titlebar-bg: #ececec;
+  --titlebar-bg-inactive: #f6f6f6;
+  --sidebar-bg: rgba(232, 232, 236, 0.78);
+  --toolbar-bg: rgba(246, 246, 246, 0.86);
+  --content-bg: #ffffff;
+  --control-bg: #ffffff;
+  --control-bg-pressed: #e7e7e9;
+  --control-border: rgba(0, 0, 0, 0.12);
+  --input-bg: #ffffff;
+  --hover: rgba(0, 0, 0, 0.05);
+  --active: rgba(0, 0, 0, 0.09);
+  --separator: rgba(0, 0, 0, 0.1);
+  --separator-strong: rgba(0, 0, 0, 0.18);
+  --selection-inactive: rgba(0, 0, 0, 0.1);
+
+  --menu-bg: rgba(242, 242, 244, 0.78);
+  --menu-border: rgba(0, 0, 0, 0.12);
+  --menubar-bg: rgba(246, 246, 248, 0.5);
+  --menubar-text: #1d1d1f;
+  --glass-bg: rgba(250, 250, 252, 0.62);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --dock-bg: rgba(255, 255, 255, 0.28);
+  --dock-border: rgba(255, 255, 255, 0.45);
+
+  --shadow-window: 0 22px 70px rgba(0, 0, 0, 0.32), 0 0 0 0.5px rgba(0, 0, 0, 0.22);
+  --shadow-window-inactive: 0 12px 34px rgba(0, 0, 0, 0.16), 0 0 0 0.5px rgba(0, 0, 0, 0.16);
+  --shadow-popover: 0 10px 38px rgba(0, 0, 0, 0.22), 0 0 0 0.5px rgba(0, 0, 0, 0.18);
+  --shadow-control: 0 0.5px 1.5px rgba(0, 0, 0, 0.18), 0 0 0 0.5px rgba(0, 0, 0, 0.08);
+
+  --radius-window: 16px;
+  --radius-popover: 14px;
+  --radius-control: 8px;
+
+  --red: #ff3b30;
+  --orange: #ff9500;
+  --yellow: #ffcc00;
+  --green: #28cd41;
+  --blue: #007aff;
+  --purple: #af52de;
+  --pink: #ff2d55;
+  --gray: #8e8e93;
+
+  --traffic-close: #ff5f57;
+  --traffic-min: #febc2e;
+  --traffic-max: #28c840;
+  --traffic-inactive: rgba(0, 0, 0, 0.14);
+
+  --blur: saturate(180%) blur(24px);
+  --ease-out: cubic-bezier(0.2, 0.9, 0.25, 1);
+  --ease-spring: cubic-bezier(0.34, 1.36, 0.64, 1);
+
+  /* Smallest font-size a focusable text field may use. iOS zooms the whole page into any
+     field under 16px on focus and never zooms back, which leaves the menu bar, dock and
+     windows magnified. 0 with a mouse, so fields keep the 13px desktop look; 16px on touch.
+     A component that sets its own font-size on a field writes max(<size>, var(--input-font-min)). */
+  --input-font-min: 0px;
+
+  color-scheme: light;
+}
+
+@media (pointer: coarse) {
+  :root {
+    --input-font-min: 16px;
+  }
+}
+
+html[data-theme='dark'] {
+  --text: #f5f5f7;
+  --text-secondary: rgba(255, 255, 255, 0.58);
+  --text-tertiary: rgba(255, 255, 255, 0.3);
+
+  --window-bg: #1e1e1e;
+  --window-bg-secondary: #262626;
+  --titlebar-bg: #2b2b2b;
+  --titlebar-bg-inactive: #262626;
+  --sidebar-bg: rgba(42, 42, 46, 0.72);
+  --toolbar-bg: rgba(40, 40, 40, 0.86);
+  --content-bg: #1e1e1e;
+  --control-bg: #3a3a3c;
+  --control-bg-pressed: #4a4a4c;
+  --control-border: rgba(255, 255, 255, 0.1);
+  --input-bg: rgba(255, 255, 255, 0.06);
+  --hover: rgba(255, 255, 255, 0.07);
+  --active: rgba(255, 255, 255, 0.12);
+  --separator: rgba(255, 255, 255, 0.1);
+  --separator-strong: rgba(255, 255, 255, 0.18);
+  --selection-inactive: rgba(255, 255, 255, 0.12);
+
+  --menu-bg: rgba(38, 38, 40, 0.74);
+  --menu-border: rgba(255, 255, 255, 0.14);
+  --menubar-bg: rgba(20, 20, 22, 0.42);
+  --menubar-text: #f5f5f7;
+  --glass-bg: rgba(36, 36, 38, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --dock-bg: rgba(40, 40, 42, 0.36);
+  --dock-border: rgba(255, 255, 255, 0.16);
+
+  --shadow-window: 0 22px 70px rgba(0, 0, 0, 0.6), 0 0 0 0.5px rgba(255, 255, 255, 0.16);
+  --shadow-window-inactive: 0 12px 34px rgba(0, 0, 0, 0.4), 0 0 0 0.5px rgba(255, 255, 255, 0.1);
+  --shadow-popover: 0 10px 38px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.16);
+  --shadow-control: 0 0.5px 1px rgba(0, 0, 0, 0.4), inset 0 0.5px 0 rgba(255, 255, 255, 0.08);
+
+  --red: #ff453a;
+  --orange: #ff9f0a;
+  --yellow: #ffd60a;
+  --green: #32d74b;
+  --blue: #0a84ff;
+  --purple: #bf5af2;
+  --pink: #ff375f;
+  --gray: #98989d;
+
+  --traffic-inactive: rgba(255, 255, 255, 0.16);
+
+  color-scheme: dark;
+}
+
+html[data-reduce-transparency='true'] {
+  --sidebar-bg: var(--window-bg-secondary);
+  --menu-bg: var(--window-bg);
+  --menubar-bg: var(--window-bg);
+  --glass-bg: var(--window-bg);
+  --dock-bg: var(--window-bg-secondary);
+  --toolbar-bg: var(--titlebar-bg);
+}
+
+/* ───────────────────────── Base ───────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  background: #000;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+  -webkit-user-select: none;
+  /* Suppresses the iOS system callout so long-press opens the in-page context menus instead. */
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Korean: break between words (eojeol), not between syllables. */
+html[lang='ko'] body {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  /* Element-level only, so a component's own (larger) size still wins. See --input-font-min. */
+  font-size: max(var(--input-font-min, 0px), 1em);
+  color: inherit;
+}
+
+input,
+textarea,
+[contenteditable='true'],
+.selectable {
+  user-select: text;
+  -webkit-user-select: text;
+  -webkit-touch-callout: default;
+}
+
+a {
+  color: var(--accent);
+}
+
+img {
+  -webkit-user-drag: none;
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* macOS-like scrollbars: a rounded thumb on a transparent track, inset from the edges by a
+   transparent border clipped out of its background. */
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.42);
+  border-radius: 8px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(128, 128, 128, 0.62);
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+html[data-reduce-motion='true'] *,
+html[data-reduce-motion='true'] *::before,
+html[data-reduce-motion='true'] *::after {
+  animation-duration: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* ───────────────────────── Shared controls (see components/ui.tsx) ─────────────────────────
+   macOS 26 (Liquid Glass) style: capsule buttons and popups, glass knobs, inset glass sidebars,
+   transparent toolbars whose items float in glass capsules (see styles/glass.css). */
+
+.ui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: none;
+  background: var(--lg-control);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-control);
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: default;
+  transition:
+    transform 0.3s var(--lg-spring),
+    background-color 0.15s ease;
+}
+.ui-btn:hover:not(:disabled) {
+  background: var(--lg-control-hover);
+}
+.ui-btn:active:not(:disabled) {
+  background: var(--lg-control-press);
+  transform: scale(0.96);
+  transition-duration: 0.1s;
+}
+.ui-btn:disabled {
+  opacity: 0.45;
+}
+.ui-btn.primary {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 55%),
+    var(--accent);
+  color: var(--accent-contrast);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 rgba(255, 255, 255, 0.45),
+    inset -0.5px -0.5px 0 0 rgba(255, 255, 255, 0.2),
+    0 1px 3px color-mix(in srgb, var(--accent) 40%, transparent),
+    0 4px 12px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.ui-btn.primary:hover:not(:disabled),
+.ui-btn.primary:active:not(:disabled) {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 55%),
+    var(--accent);
+}
+.ui-btn.primary:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+.ui-btn.primary:active:not(:disabled) {
+  filter: brightness(0.94);
+}
+/* Control box-shadows would otherwise hide the global keyboard focus ring. */
+.ui-btn:focus-visible,
+.ui-select:focus-visible,
+.ui-segmented button:focus-visible,
+.ui-switch:focus-visible {
+  box-shadow:
+    0 0 0 0.5px var(--lg-edge),
+    var(--focus-ring);
+}
+.ui-btn.danger {
+  color: var(--red);
+}
+.ui-btn.large {
+  height: 30px;
+  padding: 0 18px;
+}
+.ui-btn.plain {
+  background: transparent;
+  box-shadow: none;
+}
+.ui-btn.plain:hover:not(:disabled) {
+  background: var(--hover);
+}
+
+.ui-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 28px;
+  padding: 0 6px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: default;
+  transition:
+    transform 0.3s var(--lg-spring),
+    background-color 0.15s ease;
+}
+.ui-icon-btn:hover:not(:disabled) {
+  background: var(--hover);
+  color: var(--text);
+}
+.ui-icon-btn:active:not(:disabled),
+.ui-icon-btn.active {
+  background: var(--active);
+  color: var(--text);
+}
+.ui-icon-btn:active:not(:disabled) {
+  transform: scale(0.92);
+  transition-duration: 0.1s;
+}
+.ui-icon-btn:disabled {
+  opacity: 0.35;
+}
+
+.ui-input {
+  height: 24px;
+  padding: 0 9px;
+  border-radius: 8px;
+  border: none;
+  background: var(--input-bg);
+  box-shadow:
+    inset 0 0 0 0.5px var(--control-border),
+    inset 0 1px 2px rgba(0, 0, 0, 0.06);
+  font-size: max(13px, var(--input-font-min, 0px));
+  outline: none;
+  min-width: 0;
+  transition: box-shadow 0.15s ease;
+}
+.ui-input:focus {
+  box-shadow:
+    inset 0 0 0 0.5px color-mix(in srgb, var(--accent) 60%, transparent),
+    var(--focus-ring);
+}
+textarea.ui-input {
+  height: auto;
+  padding: 7px 10px;
+  border-radius: 10px;
+  resize: none;
+}
+
+.ui-search {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.ui-search svg {
+  position: absolute;
+  left: 10px;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+.ui-search input {
+  height: 28px;
+  padding: 0 12px 0 29px;
+  border-radius: 999px;
+  border: none;
+  background: var(--lg-control);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge);
+  outline: none;
+  width: 100%;
+  transition: box-shadow 0.15s ease;
+}
+.ui-search input:focus {
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    0 0 0 0.5px var(--lg-edge),
+    var(--focus-ring);
+}
+
+/* Switch: a capsule track with a glass knob that stretches while pressed. */
+.ui-switch {
+  position: relative;
+  width: 38px;
+  height: 22px;
+  border-radius: 999px;
+  border: none;
+  padding: 0;
+  background: var(--active);
+  box-shadow: inset 0 0 0 0.5px var(--control-border);
+  transition: background 0.25s ease;
+  flex: none;
+  cursor: default;
+}
+.ui-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fff, #f2f2f4);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.22),
+    0 0 0 0.5px rgba(0, 0, 0, 0.06),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.9);
+  transition:
+    transform 0.34s var(--lg-spring),
+    width 0.2s var(--ease-out);
+}
+.ui-switch:active:not(:disabled)::after {
+  width: 24px;
+}
+.ui-switch[aria-checked='true'] {
+  background: var(--accent);
+}
+.ui-switch[aria-checked='true']::after {
+  transform: translateX(16px);
+}
+.ui-switch[aria-checked='true']:active:not(:disabled)::after {
+  transform: translateX(10px);
+}
+.ui-switch:disabled {
+  opacity: 0.45;
+}
+
+.ui-segmented {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 999px;
+  background: var(--hover);
+  box-shadow: inset 0 0 0 0.5px var(--control-border);
+  gap: 2px;
+}
+.ui-segmented button {
+  height: 24px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: default;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.3s var(--lg-spring);
+}
+.ui-segmented button:active {
+  transform: scale(0.95);
+}
+.ui-segmented button[aria-pressed='true'] {
+  background: var(--lg-control-hover);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-control);
+}
+
+/* Slider: thicker track, capsule glass thumb that grows while dragged. */
+.ui-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--accent) var(--fill, 50%), var(--active) var(--fill, 50%));
+  outline: none;
+}
+.ui-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 26px;
+  height: 18px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fff, #f2f2f4);
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.25),
+    0 0 0 0.5px rgba(0, 0, 0, 0.06),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.9);
+  transition: transform 0.3s var(--lg-spring);
+}
+.ui-slider:active::-webkit-slider-thumb {
+  transform: scale(1.22);
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.ui-slider::-moz-range-thumb {
+  width: 26px;
+  height: 18px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fff, #f2f2f4);
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.25),
+    0 0 0 0.5px rgba(0, 0, 0, 0.06);
+}
+
+.ui-select {
+  height: 24px;
+  padding: 0 26px 0 12px;
+  border-radius: 999px;
+  border: none;
+  background: var(--lg-control)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='12' viewBox='0 0 8 12'%3E%3Cpath d='M1 4l3-3 3 3M1 8l3 3 3-3' fill='none' stroke='%23888' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    no-repeat right 10px center;
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-control);
+  appearance: none;
+  -webkit-appearance: none;
+  font-size: max(13px, var(--input-font-min, 0px));
+  outline: none;
+}
+
+/* Sidebar: a glass pane floating inside the window, inset with concentric corners
+   (the window frame publishes its radius as --win-radius). */
+.ui-sidebar {
+  margin: var(--lg-inset);
+  margin-right: 0;
+  border-radius: max(6px, calc(var(--win-radius, var(--lg-radius-window)) - var(--lg-inset)));
+  background: var(--sidebar-bg);
+  -webkit-backdrop-filter: var(--lg-filter);
+  backdrop-filter: var(--lg-filter);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    0 2px 10px rgba(0, 0, 0, 0.06);
+  overflow-y: auto;
+  padding: 8px;
+}
+html[data-reduce-transparency='true'] .ui-sidebar {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.ui-sidebar-section {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  padding: 10px 8px 4px;
+}
+.ui-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 30px;
+  padding: 0 9px;
+  border-radius: 9px;
+  font-size: 13px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: default;
+}
+.ui-sidebar-item svg {
+  color: var(--accent);
+  flex: none;
+}
+.ui-sidebar-item:hover {
+  background: var(--hover);
+}
+.ui-sidebar-item.selected {
+  background: var(--active);
+}
+.ui-sidebar-item.drop-target {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+/* Toolbar: transparent — the window shows through; controls float in glass capsules. */
+.ui-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 52px;
+  padding: 0 12px;
+  background: transparent;
+  flex: none;
+}
+/* Segmented switchers inside toolbars sit on a glass track. */
+.ui-toolbar .ui-segmented {
+  height: 32px;
+  padding: 3px;
+  background: var(--lg-control);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-control);
+}
+.ui-toolbar .ui-segmented button {
+  height: 26px;
+}
+.ui-toolbar .ui-segmented button[aria-pressed='true'] {
+  background: var(--active);
+  box-shadow: none;
+}
+.ui-toolbar-title {
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ui-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--hover);
+  color: var(--text-secondary);
+}
+
+.ui-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 100%;
+  color: var(--text-tertiary);
+  font-size: 13px;
+  text-align: center;
+  padding: 24px;
+}
+
+.ui-scroll {
+  overflow: auto;
+  min-height: 0;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}

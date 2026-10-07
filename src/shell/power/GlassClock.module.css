@@ -1,0 +1,34 @@
+/* The <time> element only positions the glass clock SVG; the digits get their look from the
+   SVG filter in GlassClock.tsx. */
+.clock {
+  display: block;
+  line-height: 0;
+}
+
+.svg {
+  display: block;
+  width: min(760px, 92vw);
+  height: auto;
+  overflow: visible;
+}
+
+/* The fill is only the glyph shape the filter works from; with Reduce Transparency it is the
+   visible white text. */
+.digits {
+  font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: -1px;
+  fill: rgba(255, 255, 255, 0.95);
+}
+
+/* Compact screens: the SVG scales down with its width. */
+@media (max-width: 640px), (max-height: 640px) {
+  .svg {
+    width: min(480px, 92vw);
+  }
+}
+@media (max-height: 460px) {
+  .svg {
+    width: min(340px, 92vw);
+  }
+}

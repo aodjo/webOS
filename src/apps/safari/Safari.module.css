@@ -1,0 +1,570 @@
+.safari {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--window-bg);
+  overflow: hidden;
+  container: safari / inline-size;
+}
+
+/* ───────── Toolbar ─────────
+   Compact layout: a transparent toolbar, buttons grouped in floating glass capsules and
+   the smart search field as a centered glass capsule. */
+
+.toolbar {
+  /* Above the page so the Top Hits popover isn't covered by tab content or the sidebar. */
+  position: relative;
+  z-index: 1;
+  gap: 8px;
+  padding-right: 12px;
+}
+.fieldSlot {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  padding: 0 6px;
+}
+
+/* ───────── Smart search field ───────── */
+
+.field {
+  position: relative;
+  flex: 0 1 620px;
+  min-width: 140px;
+  height: 32px;
+  border-radius: 999px;
+}
+
+/* The glass capsule (lg lg-control lg-capsule) drawn behind the input. */
+.fieldGlass {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition:
+    background-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.field:hover .fieldGlass {
+  background: var(--lg-control-hover);
+}
+.fieldFocused .fieldGlass,
+.fieldFocused:hover .fieldGlass {
+  background: var(--lg-control-hover);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    inset 0 0 0 0.5px color-mix(in srgb, var(--accent) 60%, transparent),
+    var(--focus-ring),
+    var(--lg-shadow-control);
+}
+
+.fieldInput {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0 34px 0 16px;
+  border: none;
+  border-radius: inherit;
+  background: transparent;
+  outline: none;
+  font-size: max(13px, var(--input-font-min));
+  color: var(--text);
+  text-align: left;
+}
+.fieldInput::placeholder {
+  color: var(--text-tertiary);
+  text-align: center;
+}
+.fieldFocused .fieldInput::placeholder {
+  text-align: left;
+}
+.fieldInput:focus-visible {
+  box-shadow: none;
+}
+
+/* Domain shown while the field isn't being edited; clicks fall through to the input. */
+.fieldIdle {
+  position: absolute;
+  inset: 0 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  pointer-events: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.fieldIdle span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fieldIdle svg {
+  flex: none;
+  color: var(--text-secondary);
+}
+
+.fieldBtn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: default;
+  transition:
+    transform 0.3s var(--lg-spring),
+    background-color 0.15s ease;
+}
+.fieldBtn:hover {
+  background: var(--active);
+  color: var(--text);
+}
+.fieldBtn:active {
+  transform: scale(0.88);
+  transition-duration: 0.1s;
+}
+
+/* Phone-width windows (compact mode fills a ~375px screen): the button capsules keep their size
+   and the search field shrinks instead of sliding under the Share / New Tab capsule. */
+@container safari (max-width: 520px) {
+  .toolbar {
+    gap: 6px;
+    padding-right: 8px;
+  }
+  .fieldSlot {
+    padding: 0;
+  }
+  .field {
+    min-width: 0;
+  }
+  .fieldInput {
+    padding-left: 12px;
+  }
+  .fieldIdle {
+    inset: 0 30px 0 12px;
+  }
+}
+
+/* Page-load progress: a bar along the bottom of the capsule (clipped by its curve). */
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--accent);
+  transform-origin: left center;
+  transform: scaleX(0);
+  pointer-events: none;
+}
+.progress[data-state='loading'] {
+  animation: progress 9s cubic-bezier(0.05, 0.75, 0.2, 1) forwards;
+}
+.progress[data-state='loaded'] {
+  transform: scaleX(1);
+  opacity: 0;
+  transition:
+    transform 0.25s ease-out,
+    opacity 0.3s 0.25s ease;
+}
+.progress[data-state='timeout'] {
+  opacity: 0;
+}
+@keyframes progress {
+  from {
+    transform: scaleX(0.06);
+  }
+  to {
+    transform: scaleX(0.9);
+  }
+}
+
+/* Suggestions popover: thick glass (lg lg-thick lg-float), concentric rows. */
+.suggest {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: -6px;
+  right: -6px;
+  z-index: 20;
+  padding: 6px;
+  border-radius: 20px;
+  animation: pop 0.22s var(--lg-spring);
+  transform-origin: 50% 0;
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+  }
+}
+.suggestHeader {
+  padding: 5px 10px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.suggestRow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 32px;
+  padding: 0 10px;
+  /* Concentric with the popover: its 20px radius minus its 6px padding. */
+  border-radius: 14px;
+  font-size: 13px;
+  cursor: default;
+}
+.suggestActive {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+.suggestIcon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--gray);
+}
+.suggestTitle {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.suggestSub {
+  margin-left: auto;
+  padding-left: 8px;
+  flex: none;
+  max-width: 45%;
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.suggestActive .suggestSub {
+  color: color-mix(in srgb, var(--accent-contrast) 75%, transparent);
+}
+
+/* ───────── Tab bar ─────────
+   A glass strip (lg lg-flat lg-capsule) holding capsule tabs; the active one is a raised
+   glass pill, like a segmented control. */
+
+:global(.lg).tabbar {
+  flex: none;
+  display: flex;
+  gap: 2px;
+  height: 34px;
+  margin: 0 12px 8px;
+  padding: 3px;
+  background: color-mix(in srgb, var(--text) 5%, var(--lg-tint));
+}
+.tab {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: default;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.15s ease,
+    transform 0.3s var(--lg-spring);
+}
+.tab:hover {
+  background: var(--hover);
+}
+.tab:active {
+  transform: scale(0.97);
+}
+.tabActive,
+.tabActive:hover {
+  background: var(--lg-control-hover);
+  color: var(--text);
+  font-weight: 500;
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-control);
+}
+.tabDragging {
+  opacity: 0.4;
+}
+.tabDropTarget,
+.tabDropTarget:hover {
+  box-shadow: inset 0 0 0 1.5px var(--accent);
+}
+.tab:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+.tabClose {
+  position: absolute;
+  left: 5px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-secondary);
+  opacity: 0;
+  cursor: default;
+}
+.tab:hover .tabClose {
+  opacity: 1;
+}
+.tabClose:hover {
+  background: var(--active);
+  color: var(--text);
+}
+.tabIcon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 5px;
+  background: var(--tile);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+}
+.tabTitle {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.spinner {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-top-color: #fff;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ───────── Body ───────── */
+
+.body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+/* .ui-sidebar: an inset glass pane floating inside the window. */
+:global(.ui-sidebar).sidebar {
+  flex: none;
+  width: 224px;
+  margin-right: var(--lg-inset);
+  animation: slideIn 0.32s var(--lg-spring);
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+}
+.sideIcon {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  background: var(--tile);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  flex: none;
+}
+.sideEmpty {
+  padding: 2px 8px 6px;
+  color: var(--text-tertiary);
+}
+
+.content {
+  position: relative;
+  /* Keeps the page's own layers (hint, toast, focus shield) below the toolbar and window sheets. */
+  isolation: isolate;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--content-bg);
+}
+
+.tabView {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.tabView[hidden] {
+  display: none;
+}
+
+.zoomBox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: 0 0;
+}
+
+.frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+}
+.blank {
+  position: absolute;
+  inset: 0;
+  background: var(--content-bg);
+}
+
+.overlayPage {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.shield {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+}
+
+/* "Some websites can't be displayed…" — a floating glass capsule (lg lg-thick lg-capsule lg-float). */
+.hint {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100% - 32px);
+  padding: 6px 6px 6px 16px;
+  font-size: 12px;
+  color: var(--text);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  animation: hintIn 0.5s 0.4s var(--lg-spring) both;
+}
+@keyframes hintIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 14px) scale(0.94);
+  }
+}
+.hint > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-secondary);
+}
+.hintLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  height: 24px;
+  padding: 0 11px;
+  border: none;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft);
+  cursor: default;
+  transition: transform 0.3s var(--lg-spring);
+}
+.hintLink:hover {
+  filter: brightness(1.1);
+}
+.hintLink:active {
+  transform: scale(0.95);
+  transition-duration: 0.1s;
+}
+.hintClose {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background: var(--hover);
+  color: var(--text-secondary);
+  cursor: default;
+  transition: transform 0.3s var(--lg-spring);
+}
+.hintClose:hover {
+  background: var(--active);
+}
+.hintClose:active {
+  transform: scale(0.9);
+  transition-duration: 0.1s;
+}
+
+/* Zoom level / "Added to Bookmarks" — a glass capsule HUD (lg lg-thick lg-capsule lg-float). */
+.toast {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  z-index: 6;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  transform: translateX(-50%);
+  pointer-events: none;
+  animation: toast 1.6s var(--lg-spring) both;
+}
+@keyframes toast {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -8px) scale(0.9);
+  }
+  14%,
+  80% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 0) scale(0.96);
+  }
+}

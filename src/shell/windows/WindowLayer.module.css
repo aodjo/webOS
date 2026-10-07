@@ -1,0 +1,88 @@
+.layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+
+  /* Window-system tokens (used by Window.module.css and the close ghost below).
+     Liquid Glass windows float on soft, large, diffuse shadows; inactive ones sit lower. */
+  --win-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.14),
+    0 2px 6px rgba(0, 0, 0, 0.06),
+    0 12px 30px rgba(0, 0, 0, 0.12),
+    0 30px 80px rgba(0, 0, 0, 0.2);
+  --win-shadow-inactive:
+    0 0 0 0.5px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 8px 20px rgba(0, 0, 0, 0.07),
+    0 20px 50px rgba(0, 0, 0, 0.1);
+  --win-rim: rgba(255, 255, 255, 0.45);
+  --win-rim-top: rgba(255, 255, 255, 0.85);
+}
+
+:global(html[data-theme='dark']) .layer {
+  --win-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.7),
+    0 2px 6px rgba(0, 0, 0, 0.3),
+    0 12px 30px rgba(0, 0, 0, 0.34),
+    0 30px 80px rgba(0, 0, 0, 0.46);
+  --win-shadow-inactive:
+    0 0 0 0.5px rgba(0, 0, 0, 0.6),
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    0 8px 20px rgba(0, 0, 0, 0.24),
+    0 20px 50px rgba(0, 0, 0, 0.3);
+  --win-rim: rgba(255, 255, 255, 0.11);
+  --win-rim-top: rgba(255, 255, 255, 0.22);
+}
+
+/* ───────────────────────── Close animation ───────────────────────── */
+
+.ghost {
+  position: absolute;
+  pointer-events: none;
+  transform-origin: 50% 50%;
+  animation: ghostOut 0.17s var(--ease-out) forwards;
+}
+
+.ghostEmpty {
+  border-radius: var(--win-radius, var(--radius-window));
+  background: var(--window-bg);
+  box-shadow: var(--win-shadow, var(--shadow-window));
+}
+
+@keyframes ghostOut {
+  to {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+/* ───────────────────────── Edge-snap preview ───────────────────────── */
+
+/* A clear Liquid Glass pane (the `lg lg-clear` classes draw the material). */
+.snap {
+  position: absolute;
+  pointer-events: none;
+  border-radius: var(--lg-radius-window);
+  opacity: 0;
+  transform: scale(0.97);
+  transition:
+    opacity 0.18s ease,
+    transform 0.22s var(--ease-out),
+    left 0.22s var(--ease-out),
+    top 0.22s var(--ease-out),
+    width 0.22s var(--ease-out),
+    height 0.22s var(--ease-out);
+}
+
+.snapVisible {
+  opacity: 1;
+  transform: none;
+  animation: snapIn 0.2s var(--ease-out);
+}
+
+@keyframes snapIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}

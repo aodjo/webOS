@@ -1,0 +1,414 @@
+/*
+ * Spotlight in the macOS Tahoe look: a floating Liquid Glass capsule (`lg lg-float lg-capsule`,
+ * with edge refraction) and, once there are results, a separate thick-glass panel
+ * (`lg lg-thick lg-float`) 8px beneath it. Tint, blur, rim light, shadows and the Reduce
+ * Transparency fallback come from styles/glass.css; the rules here only shape the two surfaces.
+ */
+.root {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Clicks pass through while the panel fades out. */
+.rootClosing .backdrop {
+  pointer-events: none;
+}
+
+/* Transparent click-catcher: clicking anywhere outside the panel dismisses Spotlight. */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+}
+
+/*
+ * Positions the bar and the results panel. It is click-through (the gap between the two surfaces
+ * dismisses like any other click outside) and is never animated itself: an animated opacity here
+ * would cut the glass children off from the desktop behind them, so each surface animates alone.
+ */
+.panel {
+  --spotlight-w: min(640px, calc(100vw - 32px));
+  position: absolute;
+  left: 50%;
+  top: 25vh;
+  width: var(--spotlight-w);
+  margin-left: calc(var(--spotlight-w) / -2);
+  pointer-events: none;
+  color: var(--text);
+}
+.panel.closing .bar,
+.panel.closing .body {
+  animation: surfaceOut 0.14s ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes barIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.96);
+  }
+}
+@keyframes bodyIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+}
+@keyframes surfaceOut {
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+/* ───────── Search bar ───────── */
+
+.bar {
+  /* Denser than the regular tint so the 20px query reads over any wallpaper; the blur stays the
+     regular (lighter) one so the edge lensing remains visible. */
+  --lg-tint: color-mix(in srgb, var(--lg-tint-thick) 78%, transparent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 14px 0 18px;
+  pointer-events: auto;
+  transform-origin: 50% 50%;
+  animation: barIn 0.2s var(--ease-out);
+}
+/* Dark glass over a bright window would leave the white query at ~3.8:1; a little denser keeps it ≥4.5:1. */
+:global(html[data-theme='dark']) .bar {
+  --lg-tint: color-mix(in srgb, var(--lg-tint-thick) 92%, transparent);
+}
+
+.magnifier {
+  flex: none;
+  color: var(--text-secondary);
+}
+
+.field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+}
+
+.input,
+.ghost {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  padding: 0;
+  font-family: var(--font-display);
+  font-size: max(20px, var(--input-font-min));
+  font-weight: 400;
+  letter-spacing: -0.2px;
+  line-height: 52px;
+  white-space: pre;
+}
+
+.input {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  caret-color: var(--accent);
+}
+.input::placeholder {
+  color: var(--text-secondary);
+}
+.input:focus-visible {
+  box-shadow: none;
+}
+
+.ghost {
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--text-secondary);
+}
+.ghostTyped {
+  visibility: hidden;
+}
+.ghostRest {
+  color: var(--text-secondary);
+}
+.ghostHint {
+  color: var(--text-secondary);
+}
+
+.barIcon {
+  flex: none;
+  display: flex;
+  width: 24px;
+  height: 24px;
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ───────── Results ───────── */
+
+/* The results: a separate thick-glass panel floating 8px under the capsule (not attached). */
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 270px;
+  height: min(420px, 50vh);
+  margin-top: 8px;
+  border-radius: 22px;
+  overflow: hidden;
+  pointer-events: auto;
+  transform-origin: 50% 0;
+  animation: bodyIn 0.2s var(--ease-out);
+}
+
+/* Rows sit 8px inside the panel: 10px corners inside its 22px ones. */
+.list {
+  position: relative;
+  overflow-y: auto;
+  padding: 4px 8px 10px;
+  overscroll-behavior: contain;
+}
+
+.groupHeader {
+  padding: 10px 10px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: default;
+  scroll-margin: 6px;
+}
+.topRow {
+  height: 44px;
+  gap: 10px;
+}
+.topRow .rowTitle {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.rowIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.rowTitle {
+  flex: none;
+  max-width: 62%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rowSub {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-secondary);
+}
+.rowSub::before {
+  content: '— ';
+  color: var(--text-tertiary);
+}
+
+.selected {
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+.selected .rowSub,
+.selected .rowSub::before {
+  color: color-mix(in srgb, var(--text-on-accent) 72%, transparent);
+}
+
+.thumb {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  overflow: hidden;
+  box-shadow: 0 0 0 0.5px var(--separator);
+}
+.thumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ───────── Preview pane ───────── */
+
+/* Divided from the list by a hairline that stops short of the panel's rounded top and bottom. */
+.preview {
+  margin: 12px 0;
+  border-left: 0.5px solid var(--separator);
+  overflow-y: auto;
+  padding: 10px 18px 4px;
+}
+
+.pv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  animation: fadeIn 0.12s ease-out;
+}
+
+.pvTitle {
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.pvSub {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.pvHint {
+  margin-top: 4px;
+  font-size: 11px;
+  /* Secondary, not tertiary: 11px text on glass needs the contrast. */
+  color: var(--text-secondary);
+}
+
+.pvBadge {
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  /* Plain green on light glass is too faint for 11px text: pull it toward the text colour. */
+  color: color-mix(in srgb, var(--green) 60%, var(--text));
+  background: color-mix(in srgb, var(--green) 14%, transparent);
+}
+
+.pvImage {
+  max-width: 100%;
+  max-height: 150px;
+  border-radius: 10px;
+  object-fit: contain;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18), 0 0 0 0.5px var(--separator);
+}
+
+.pvText {
+  align-self: stretch;
+  max-height: 150px;
+  margin: 4px 0 0;
+  padding: 8px 10px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--hover);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  line-height: 1.45;
+  text-align: left;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text-secondary);
+  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent);
+  mask-image: linear-gradient(to bottom, #000 70%, transparent);
+}
+
+.meta {
+  align-self: stretch;
+  margin: 12px 0 0;
+  padding-top: 10px;
+  border-top: 0.5px solid var(--separator);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 11px;
+}
+.metaRow {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 8px;
+  text-align: left;
+}
+.metaRow dt {
+  color: var(--text-secondary);
+  text-align: right;
+}
+.metaRow dd {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.level {
+  display: flex;
+  gap: 5px;
+  margin-top: 6px;
+}
+.level i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--active);
+}
+.level i.on {
+  background: var(--accent);
+}
+
+.pvCalc {
+  justify-content: center;
+  min-height: 100%;
+  padding-top: 28px;
+}
+.calcExpr {
+  font-size: 13px;
+  color: var(--text-secondary);
+  word-break: break-all;
+}
+.calcValue {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 300;
+  letter-spacing: -0.5px;
+  word-break: break-all;
+  user-select: text;
+}
+.copied {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .panel {
+    top: 12vh;
+  }
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .preview {
+    display: none;
+  }
+}

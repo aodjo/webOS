@@ -1,0 +1,231 @@
+.desktop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  touch-action: none;
+}
+
+/* ───────────────────────── Wallpaper ───────────────────────── */
+
+.wallpaper {
+  position: absolute;
+  inset: 0;
+  background: #1c1c1e;
+}
+
+.wallpaperLayer {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.wallpaperFadeIn {
+  animation: wallpaperIn 0.7s ease both;
+}
+
+@keyframes wallpaperIn {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ───────────────────────── Icons ───────────────────────── */
+
+.icons {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Played when Finder relaunches: the icons vanish for a moment and fade back in. */
+.iconsReturning {
+  animation: iconsReturn 1s ease both;
+}
+@keyframes iconsReturn {
+  0%,
+  45% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 90px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 3px;
+  pointer-events: auto;
+  outline: none;
+  cursor: default;
+}
+
+/* Icon image box; when selected it becomes a 12px rounded glass square (rim light on the top-left). */
+.image {
+  width: 74px;
+  height: 70px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  transition:
+    background-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.labelWrap {
+  width: 100%;
+  margin-top: 2px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Hit target (and line clamp); the visible highlight is drawn per line by .labelText. */
+.label {
+  max-width: 86px;
+  padding: 1px 0;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 15px;
+  text-align: center;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.72),
+    0 0 2px rgba(0, 0, 0, 0.4);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+/* data-label-tone='dark' (set by Desktop.tsx when the wallpaper behind the icons is light): dark names with a light halo. */
+.desktop[data-label-tone='dark'] .label {
+  color: #1d1d1f;
+  text-shadow:
+    0 0 2px rgba(255, 255, 255, 0.85),
+    0 1px 4px rgba(255, 255, 255, 0.7);
+}
+.desktop[data-label-tone='dark'] .selected .label {
+  color: var(--accent-contrast);
+  text-shadow: none;
+}
+.desktop[data-label-tone='dark'] .selected.inactive .label {
+  color: #fff;
+}
+
+/* Each line of the name gets its own capsule (like Finder), so long names stay round. */
+.labelText {
+  padding: 1px 5px;
+  border-radius: 999px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.selected {
+  z-index: 1;
+}
+.selected .image {
+  background: rgba(0, 0, 0, 0.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.6);
+  backdrop-filter: blur(10px) saturate(1.6);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 rgba(255, 255, 255, 0.55),
+    inset -0.5px -0.5px 0 0 rgba(255, 255, 255, 0.2),
+    0 0 0 0.5px rgba(0, 0, 0, 0.14),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+}
+html[data-theme='dark'] .selected .image {
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 rgba(255, 255, 255, 0.4),
+    inset -0.5px -0.5px 0 0 rgba(255, 255, 255, 0.12),
+    0 0 0 0.5px rgba(0, 0, 0, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.2);
+}
+.selected .label {
+  color: var(--accent-contrast);
+  text-shadow: none;
+  /* Finder shows the full name of a selected icon. */
+  -webkit-line-clamp: 8;
+  line-clamp: 8;
+}
+.selected .labelText {
+  background: var(--accent);
+}
+.selected.inactive .label {
+  color: #fff;
+}
+.selected.inactive .labelText {
+  background: rgba(118, 118, 128, 0.82);
+}
+
+.dropTarget .image {
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.82),
+    0 2px 10px rgba(0, 0, 0, 0.14);
+}
+
+html[data-reduce-transparency='true'] .selected .image {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.dragging {
+  opacity: 0.45;
+}
+
+.animate {
+  transition: transform 0.5s var(--ease-out);
+}
+
+.renameField {
+  width: 88px;
+  margin-top: 2px;
+  padding: 1px 4px;
+  border: none;
+  border-radius: 7px;
+  resize: none;
+  overflow: hidden;
+  color: var(--text);
+  background: var(--window-bg);
+  box-shadow: 0 0 0 2.5px color-mix(in srgb, var(--accent) 70%, transparent);
+  font: 500 12px/1.25 var(--font);
+  /* 16px on touch screens so iOS doesn't zoom the page into the field. */
+  font-size: max(12px, var(--input-font-min));
+  text-align: center;
+  outline: none;
+  overflow-wrap: anywhere;
+}
+
+/* ───────────────────────── Rubber band ───────────────────────── */
+
+.band {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 72%, white);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.25);
+}
+
+/* ───────────────────────── Quick Look (portal above the windows) ───────────────────────── */
+
+.quickLook {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}

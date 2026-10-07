@@ -1,0 +1,282 @@
+.scroll {
+  min-width: 0;
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  outline: none;
+  background: var(--content-bg);
+  /* Keyboard selection scrolls rows clear of the sticky (translucent) header. */
+  scroll-padding-top: 28px;
+  transition: box-shadow 0.12s;
+}
+
+.dropping {
+  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 4px;
+}
+
+/* ── Header ── */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: grid;
+  height: 28px;
+  padding: 0 10px;
+  background: color-mix(in srgb, var(--content-bg) 86%, transparent);
+  backdrop-filter: blur(14px) saturate(1.6);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+}
+
+/* A faint hairline aligned with the rounded rows instead of a full-width rule. */
+.header::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 0;
+  height: 0.5px;
+  background: var(--separator);
+  pointer-events: none;
+}
+
+:global(html[data-reduce-transparency='true']) .header {
+  background: var(--content-bg);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.headCell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.headCell + .headCell::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 0.5px;
+  background: var(--separator);
+}
+
+.headBtn,
+.headStatic {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  width: 100%;
+  height: 22px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  text-align: left;
+  cursor: default;
+  min-width: 0;
+  transition: background-color 0.15s ease;
+}
+
+.headBtn:hover {
+  background: var(--hover);
+}
+
+.headBtn:focus-visible {
+  box-shadow: inset var(--focus-ring);
+}
+
+.headBtn svg {
+  flex: none;
+  color: var(--text-secondary);
+}
+
+.sorted {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.headLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.right .headBtn {
+  flex-direction: row-reverse;
+}
+
+.resizer {
+  position: absolute;
+  right: -4px;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  z-index: 2;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+/* ── Rows ── */
+
+.row {
+  display: grid;
+  align-items: center;
+  height: 26px;
+  margin: 0 10px;
+  /* Rounded rows; a selection is an inset accent pill (contiguous rows join, see .joinTop). */
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text);
+  flex: none;
+}
+
+.odd {
+  background: var(--hover);
+}
+
+.filler {
+  pointer-events: none;
+}
+
+.cell {
+  padding: 0 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.right {
+  text-align: right;
+}
+
+.nameCell {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  height: 100%;
+  padding-right: 8px;
+}
+
+.disclosure {
+  position: relative;
+  flex: none;
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: default;
+  color: var(--text-secondary);
+}
+
+.disclosure::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 3.5px;
+  border-left: 5px solid currentColor;
+  border-top: 3.5px solid transparent;
+  border-bottom: 3.5px solid transparent;
+  transition: transform 0.15s var(--ease-out);
+}
+
+.open::before {
+  transform: rotate(90deg);
+}
+
+.disclosureSpacer {
+  flex: none;
+  width: 14px;
+}
+
+.icon {
+  display: flex;
+  flex: none;
+}
+
+.name {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tag {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.selected,
+.selected.odd {
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+
+.selected .cell,
+.selected .disclosure {
+  color: color-mix(in srgb, var(--text-on-accent) 85%, transparent);
+}
+
+.inactive .selected,
+.inactive .selected.odd {
+  background: var(--selection-inactive);
+  color: var(--text);
+}
+
+.inactive .selected .cell,
+.inactive .selected .disclosure {
+  color: var(--text-secondary);
+}
+
+.joinTop {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.joinBottom {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.drop {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.band {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--accent) 75%, transparent);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.empty {
+  position: absolute;
+  inset: 28px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}

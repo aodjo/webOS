@@ -1,0 +1,483 @@
+.stack {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ───────────────────────── Widget card ─────────────────────────
+   A Liquid Glass tile (`lg` in Widgets.tsx). While the desktop is in front it uses a slightly
+   denser tint than regular glass so theme-colored text stays legible on any wallpaper; while an
+   app is in front it recedes into clear glass (`lg-clear`) with monochrome content (Sonoma). */
+
+.widget {
+  --widget-tint: rgba(255, 255, 255, 0.4);
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 22px;
+  color: var(--text);
+  transition:
+    background-color 0.35s ease,
+    box-shadow 0.35s ease;
+  animation: widgetIn 0.42s var(--ease-spring) both;
+}
+html[data-theme='dark'] .widget {
+  --widget-tint: rgba(34, 34, 38, 0.42);
+}
+.widget:not(.dimmed) {
+  background: var(--widget-tint);
+}
+
+.content {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  transition:
+    filter 0.35s ease,
+    opacity 0.35s ease;
+}
+
+/* While an app is in front, widgets recede into monochrome clear glass. */
+.widget.dimmed {
+  /* Keeps the clear glass's lighter blur, but not its near-zero tint: theme-colored text must
+     stay legible over any wallpaper, including the user's own pictures. */
+  background: var(--lg-tint);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    0 4px 14px rgba(0, 0, 0, 0.08);
+}
+.dimmed .content {
+  filter: grayscale(1);
+  opacity: 0.78;
+}
+
+.editing .content {
+  pointer-events: none;
+}
+
+/* Glass "−" badge (lg lg-thick lg-circle in Widgets.tsx). */
+.remove {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  z-index: 2;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  color: var(--text);
+  cursor: default;
+  animation: pop 0.28s var(--lg-spring) both;
+  transition: transform 0.3s var(--lg-spring);
+}
+.remove:active {
+  transform: scale(0.88);
+  transition-duration: 0.1s;
+}
+.remove:focus-visible {
+  box-shadow:
+    var(--focus-ring),
+    var(--lg-shadow-control);
+}
+
+@keyframes widgetIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+@keyframes pop {
+  from {
+    transform: scale(0);
+  }
+}
+
+/* ───────────────────────── Clock ───────────────────────── */
+
+.clock {
+  width: 100%;
+  height: 100%;
+  padding: 9px;
+}
+
+.face {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.12));
+}
+
+/* The face sits inset in the glass tile, a little translucent, with a bright rim on top. */
+.dial {
+  fill: color-mix(in srgb, var(--window-bg) 86%, transparent);
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 0.5;
+}
+html[data-theme='dark'] .dial {
+  stroke: rgba(255, 255, 255, 0.14);
+}
+html[data-reduce-transparency='true'] .dial {
+  fill: var(--window-bg);
+}
+
+.tick {
+  stroke: var(--text-tertiary);
+  stroke-width: 0.6;
+  stroke-linecap: round;
+}
+.tickMajor {
+  stroke: var(--text-secondary);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+}
+
+.numeral {
+  fill: var(--text);
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  font-weight: 500;
+  text-anchor: middle;
+}
+
+.city {
+  fill: var(--text-secondary);
+  font-size: 6.4px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-anchor: middle;
+}
+
+.date {
+  fill: var(--red);
+  font-size: 6.8px;
+  font-weight: 600;
+  text-anchor: middle;
+}
+
+.hand {
+  transform-origin: 50px 50px;
+  animation-name: spin;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.hourHand {
+  stroke: var(--text);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  animation-duration: 43200s;
+  animation-delay: var(--hour-delay, 0s);
+}
+.minuteHand {
+  stroke: var(--text);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  animation-duration: 3600s;
+  animation-delay: var(--min-delay, 0s);
+}
+.secondHand {
+  animation-duration: 60s;
+  animation-delay: var(--sec-delay, 0s);
+}
+.secondHand line {
+  stroke: var(--orange);
+  stroke-width: 0.9;
+  stroke-linecap: round;
+}
+.secondHand circle {
+  fill: var(--orange);
+}
+.pin {
+  fill: var(--window-bg);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+html[data-reduce-motion='true'] .hand {
+  animation-name: none !important;
+}
+html[data-reduce-motion='true'] .hourHand {
+  transform: rotate(var(--hour-deg, 0deg));
+}
+html[data-reduce-motion='true'] .minuteHand {
+  transform: rotate(var(--min-deg, 0deg));
+}
+html[data-reduce-motion='true'] .secondHand {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hand {
+    animation-name: none !important;
+  }
+  .hourHand {
+    transform: rotate(var(--hour-deg, 0deg));
+  }
+  .minuteHand {
+    transform: rotate(var(--min-deg, 0deg));
+  }
+  .secondHand {
+    display: none;
+  }
+}
+
+/* ───────────────────────── Now ───────────────────────── */
+
+.now {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 14px 12px;
+}
+
+.nowMain {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text);
+  text-align: left;
+  cursor: default;
+}
+
+.avatar {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 8px;
+  flex: none;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #a1a1a6, #6e6e73);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    0 0 0 0.5px rgba(255, 255, 255, 0.35);
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+.initials {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+}
+.status {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9);
+}
+html[data-theme='dark'] .status {
+  box-shadow: 0 0 0 2px rgba(40, 40, 44, 0.9);
+}
+
+.nowName {
+  max-width: 100%;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nowRole {
+  max-width: 100%;
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nowLocation {
+  max-width: 100%;
+  margin-top: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  line-height: 13px;
+  color: var(--text-tertiary);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Accent-tinted glass capsule that squishes on press. */
+.nowCta {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 24px;
+  padding: 0 11px;
+  border: none;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px color-mix(in srgb, var(--accent) 22%, transparent);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: default;
+  transition:
+    transform 0.3s var(--lg-spring),
+    background-color 0.15s ease;
+}
+.nowCta:hover {
+  background: color-mix(in srgb, var(--accent) 24%, transparent);
+}
+.nowCta:active {
+  background: color-mix(in srgb, var(--accent) 32%, transparent);
+  transform: scale(0.94);
+  transition-duration: 0.1s;
+}
+.nowCta:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+/* ───────────────────────── Gallery (edit mode) ─────────────────────────
+   Thick glass sheet (lg lg-thick lg-float in Widgets.tsx). Concentric corners: 24px outside,
+   12px padding, 12px items. */
+
+.gallery {
+  position: absolute;
+  left: 50%;
+  z-index: 3;
+  width: min(460px, calc(100vw - 32px));
+  padding: 12px;
+  border-radius: 24px;
+  color: var(--text);
+  transform: translateX(-50%);
+  animation: galleryIn 0.42s var(--lg-spring) both;
+}
+@keyframes galleryIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 24px) scale(0.96);
+  }
+}
+
+.galleryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 4px 0 8px;
+  margin-bottom: 10px;
+}
+.galleryTitle {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.galleryItems {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.galleryItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: var(--hover);
+  box-shadow: inset 0 0 0 0.5px var(--separator);
+}
+
+.galleryIcon {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  background: var(--lg-control);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-control);
+}
+
+.galleryText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.galleryName {
+  font-weight: 600;
+}
+.galleryDesc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toggle {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--green);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 rgba(255, 255, 255, 0.45),
+    inset -0.5px -0.5px 0 0 rgba(255, 255, 255, 0.18),
+    0 1px 3px rgba(0, 0, 0, 0.18);
+  cursor: default;
+  transition: transform 0.3s var(--lg-spring);
+}
+.toggle:active {
+  transform: scale(0.86);
+  transition-duration: 0.1s;
+}
+.toggle:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+.toggleOn {
+  background: var(--gray);
+}

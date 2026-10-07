@@ -1,0 +1,789 @@
+/* ───────── Layout ───────── */
+
+.mail {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  background: var(--content-bg);
+  container: mail / inline-size;
+  overflow: hidden;
+}
+
+/* .ui-sidebar: an inset glass pane floating inside the window, running its full height with the
+   traffic lights sitting in its top. */
+:global(.ui-sidebar).sidebar {
+  flex: none;
+  width: 204px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px 10px;
+}
+/* Room for the traffic lights (52px toolbar − the 8px inset), and a place to drag the window from. */
+.sidebarTop {
+  flex: none;
+  height: 44px;
+}
+.sidebarSection {
+  padding: 4px 10px 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+.mailboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mailbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  padding: 0 10px;
+  border: none;
+  /* Same rounding as .ui-sidebar-item. */
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+  text-align: left;
+  cursor: default;
+  transition: background-color 0.15s ease;
+}
+.mailbox svg {
+  flex: none;
+  color: var(--accent);
+}
+.mailbox span:first-of-type {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mailbox:hover {
+  background: var(--hover);
+}
+.mailboxActive,
+.mailboxActive:hover {
+  background: var(--active);
+}
+.mailboxDrop {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+.mailbox .flagIcon,
+.flagIcon {
+  color: var(--orange);
+}
+.count {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.sidebarFoot {
+  margin-top: auto;
+  padding: 8px 10px 0;
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Transparent toolbar; its buttons float in glass capsules (GlassGroup). */
+.toolbar {
+  gap: 8px;
+  padding: 0 12px 0 0;
+}
+.noSidebar .toolbar,
+.inset {
+  padding-left: 84px;
+}
+@container mail (max-width: 720px) {
+  :global(.ui-sidebar).sidebar {
+    display: none;
+  }
+  .toolbar {
+    padding-left: 84px;
+  }
+}
+
+.titleBlock {
+  flex: 0 1 290px;
+  min-width: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 40px;
+  padding: 0 0 0 16px;
+  margin-right: 2px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  text-align: left;
+  cursor: default;
+  overflow: hidden;
+}
+.noSidebar .titleBlock {
+  flex-basis: 206px;
+  padding-left: 0;
+}
+@container mail (max-width: 720px) {
+  .titleBlock {
+    flex-basis: 206px;
+    padding-left: 0;
+  }
+}
+.title,
+.subtitle {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.title {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.subtitle {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.toolbarSpacer {
+  flex: 1;
+  min-width: 8px;
+  align-self: stretch;
+}
+.search {
+  flex: 0 1 170px;
+  min-width: 90px;
+}
+/* Narrow windows keep the essential actions only. */
+@container mail (max-width: 700px) {
+  .toolbar .optional {
+    display: none;
+  }
+}
+.spinning svg {
+  animation: spinIcon 0.9s var(--ease-out);
+}
+@keyframes spinIcon {
+  50% {
+    transform: translateY(-3px) scale(0.92);
+  }
+}
+
+.split {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+/* ───────── Message list ───────── */
+
+.list {
+  flex: none;
+  width: 312px;
+  overflow-y: auto;
+  padding: 4px 0 8px;
+  border-right: 0.5px solid var(--separator);
+  outline: none;
+}
+.list:focus-visible {
+  box-shadow: none;
+}
+
+.row {
+  position: relative;
+  display: flex;
+  gap: 2px;
+  margin: 0 8px;
+  padding: 10px 12px 11px 4px;
+  border-radius: 10px;
+  cursor: default;
+  transition: background-color 0.12s ease;
+}
+/* Hairline between rows, hidden next to the selection. */
+.row + .row::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 22px;
+  right: 12px;
+  height: 0.5px;
+  background: var(--separator);
+}
+.rowSelected::before,
+.rowSelected + .row::before {
+  display: none;
+}
+.rowSelected {
+  background: var(--selection-inactive);
+}
+.listFocused .rowSelected {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.rowGutter {
+  flex: none;
+  width: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding-top: 5px;
+}
+.unread {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.listFocused .rowSelected .unread {
+  background: var(--accent-contrast);
+}
+.rowFlag {
+  color: var(--orange);
+}
+.listFocused .rowSelected .rowFlag {
+  color: var(--accent-contrast);
+}
+
+.rowMain {
+  flex: 1;
+  min-width: 0;
+}
+.rowTop {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.sender {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.senderUnread {
+  font-weight: 700;
+}
+.rowDate {
+  flex: none;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.rowSubject {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 1px;
+  font-size: 12.5px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.rowSubject span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rowSubject svg {
+  flex: none;
+  color: var(--text-secondary);
+}
+.rowPreview {
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.listFocused .rowSelected .rowDate,
+.listFocused .rowSelected .rowPreview,
+.listFocused .rowSelected .rowSubject svg {
+  color: color-mix(in srgb, var(--accent-contrast) 78%, transparent);
+}
+
+/* ───────── Reading pane ───────── */
+
+.reader {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+/* The back button only exists in the stacked layout below. */
+.toolbar .backButton {
+  display: none;
+}
+
+/* Phone-width windows: a stacked list → message layout (like Mail on iPhone) instead of a
+   reading pane squeezed next to the fixed-width list. The list view keeps search; the message
+   view swaps it for a back button and the message actions. */
+@container mail (max-width: 560px) {
+  .toolbar {
+    gap: 6px;
+    padding-right: 8px;
+  }
+  .main .titleBlock {
+    flex: 0 1 auto;
+    min-width: 0;
+    margin-right: 2px;
+  }
+  .search {
+    min-width: 72px;
+  }
+  .main:not(.showReader) .messageAction {
+    display: none;
+  }
+  .list {
+    flex: 1;
+    width: auto;
+    border-right: none;
+  }
+  .reader {
+    display: none;
+  }
+  .showReader .list,
+  .showReader .search {
+    display: none;
+  }
+  .showReader .reader {
+    display: block;
+  }
+  .showReader .toolbar .backButton {
+    display: inline-flex;
+  }
+}
+.readerScroll {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  animation: fadeIn 0.18s ease-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+.messageWindow {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--content-bg);
+}
+.messageWindow .readerScroll {
+  position: relative;
+  flex: 1;
+  inset: auto;
+}
+
+.message {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 22px 28px 40px;
+}
+
+.msgHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 0.5px solid var(--separator);
+}
+.avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.12);
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.msgMeta {
+  flex: 1;
+  min-width: 0;
+}
+.msgFromRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.msgFrom {
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  cursor: default;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.msgFrom:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--text-tertiary);
+}
+.msgDate {
+  margin-left: auto;
+  flex: none;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.msgSubject {
+  margin-top: 2px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.msgTo {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.msgFlag {
+  flex: none;
+  margin-top: 2px;
+  color: var(--orange);
+}
+
+/* "This message is a draft." — an info capsule. */
+.draftBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 5px 5px 5px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--window-bg-secondary);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge);
+}
+
+.msgBody {
+  padding-top: 18px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+/* Project cards in "My featured projects" */
+.projectCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+.projectCard {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border: none;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--window-bg-secondary);
+  box-shadow:
+    inset 0 0 0 0.5px var(--separator),
+    var(--lg-shadow-control);
+  color: var(--text);
+  text-align: left;
+  cursor: default;
+  transition:
+    transform 0.32s var(--lg-spring),
+    box-shadow 0.25s var(--ease-out);
+}
+.projectCard:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 0 0 0.5px var(--separator),
+    0 10px 24px color-mix(in srgb, var(--c) 22%, transparent);
+}
+.projectCard:active {
+  transform: scale(0.97);
+  transition-duration: 0.1s;
+}
+.projectCard:focus-visible {
+  box-shadow:
+    inset 0 0 0 0.5px var(--separator),
+    var(--focus-ring);
+}
+.projectCover {
+  display: block;
+  aspect-ratio: 16 / 9;
+  background: color-mix(in srgb, var(--c) 20%, var(--window-bg-secondary));
+  overflow: hidden;
+}
+.projectCover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.projectInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px 14px;
+}
+.projectName {
+  font-size: 13px;
+  font-weight: 700;
+}
+.projectYear {
+  margin-left: 4px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+}
+.projectTagline {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+/* Attachments */
+.attachments {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 0.5px solid var(--separator);
+}
+.attachmentsLabel {
+  width: 100%;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+/* Attachment chips: glass capsules. */
+.attachment {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 18px 4px 10px;
+  border: none;
+  border-radius: 999px;
+  background: var(--lg-control);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-control);
+  color: var(--text);
+  text-align: left;
+  cursor: default;
+  transition:
+    transform 0.32s var(--lg-spring),
+    background-color 0.15s ease;
+}
+.attachment:hover {
+  background: var(--lg-control-hover);
+}
+.attachment:active {
+  background: var(--lg-control-press);
+  transform: scale(0.95);
+  transition-duration: 0.1s;
+}
+/* The glass rim replaces the global focus ring's box-shadow, so add the ring back. */
+.attachment:focus-visible {
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    0 0 0 0.5px var(--lg-edge),
+    var(--focus-ring);
+}
+.attachmentIcon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 32px;
+  color: var(--text-secondary);
+}
+.attachmentIcon span {
+  position: absolute;
+  bottom: 2px;
+  font-size: 7px;
+  font-weight: 800;
+  color: var(--accent);
+}
+.attachmentText {
+  display: flex;
+  flex-direction: column;
+}
+.attachmentName {
+  font-size: 13px;
+  font-weight: 600;
+}
+.attachmentSize {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* ───────── Compose ───────── */
+
+.compose {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--content-bg);
+}
+.composeToolbar {
+  gap: 8px;
+  padding-left: 84px;
+  padding-right: 12px;
+}
+/* Send: a prominent capsule (.ui-btn.primary.large); grey while the window is inactive. */
+:global(.ui-btn).sendBtn {
+  flex: none;
+  gap: 6px;
+  padding: 0 16px 0 13px;
+  font-weight: 600;
+}
+/* Keep the accent fill while hovered / pressed: the shared `.ui-btn:hover` / `:active` glass
+   backgrounds outrank `.ui-btn.primary` and would leave white text on white glass. */
+.compose:not(.inactive) :global(.ui-btn.primary).sendBtn:hover:not(:disabled),
+.compose:not(.inactive) :global(.ui-btn.primary).sendBtn:active:not(:disabled) {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 55%),
+    var(--accent);
+}
+:global(.ui-btn).sendBtn:focus-visible {
+  box-shadow:
+    inset 0.5px 0.5px 0 0 rgba(255, 255, 255, 0.45),
+    var(--focus-ring);
+}
+.inactive :global(.ui-btn).sendBtn,
+.inactive :global(.ui-btn).sendBtn:hover:not(:disabled) {
+  background: var(--lg-control);
+  color: var(--text-secondary);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-control);
+  filter: none;
+}
+.composeTitle {
+  flex: 1;
+  min-width: 0;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Header fields on a rounded card, rows split by hairlines (inset grouped). */
+.fields {
+  flex: none;
+  margin: 2px 12px 0;
+  padding: 0 14px;
+  border-radius: 16px;
+  background: var(--window-bg-secondary);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge);
+}
+.fieldRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  font-size: 13px;
+}
+.fieldRow + .fieldRow {
+  border-top: 0.5px solid var(--separator);
+}
+.fieldRow span {
+  flex: none;
+  color: var(--text-secondary);
+}
+.fieldRow input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: max(13px, var(--input-font-min));
+  color: var(--text);
+}
+.fieldRow input:focus-visible {
+  box-shadow: none;
+}
+.fieldRow:focus-within span {
+  color: var(--text);
+}
+
+.composeBody {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  padding: 16px 26px;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  font-size: max(14px, var(--input-font-min));
+  line-height: 1.55;
+  color: var(--text);
+}
+.composeBody:focus-visible {
+  box-shadow: none;
+}
+.composeBody::placeholder {
+  color: var(--text-tertiary);
+}
+.composeHint {
+  flex: none;
+  margin: 0 12px 12px;
+  padding: 8px 14px;
+  border-radius: 14px;
+  background: var(--window-bg-secondary);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  user-select: text;
+  -webkit-user-select: text;
+}

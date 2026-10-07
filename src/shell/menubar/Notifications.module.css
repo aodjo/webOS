@@ -1,0 +1,310 @@
+/* macOS 26 look: every card, pill and close button is thick Liquid Glass (`lg lg-thick`, see
+   styles/glass.css) with the rim light of the material; cards are 20px-radius, widgets 22px. */
+
+/* ───────── Notification card (banner + Notification Center) ───────── */
+
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  margin: 0;
+  padding: 12px 15px 13px 12px;
+  border: none;
+  border-radius: 20px;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.3;
+  text-align: left;
+  cursor: default;
+  transition:
+    transform 0.34s var(--lg-spring),
+    opacity 0.2s ease;
+}
+.card:active {
+  transform: scale(0.97);
+  transition-duration: 0.12s;
+}
+
+.appIcon {
+  flex: none;
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  margin-top: 1px;
+}
+
+.genericIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 23%;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--gray) 70%, white), var(--gray));
+  color: var(--text-on-accent);
+}
+
+.noteText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.noteMeta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.noteApp {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.noteTime {
+  flex: none;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.noteTitle {
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.noteBody {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+/* Clear / close button: a small glass circle on the top-left corner, shown on hover. */
+.close {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  z-index: 3;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    0 2px 6px rgba(0, 0, 0, 0.18);
+  color: var(--text-secondary);
+  opacity: 0;
+  transform: scale(0.7);
+  transition:
+    opacity 0.15s ease,
+    transform 0.3s var(--lg-spring);
+  cursor: default;
+}
+.close:hover {
+  color: var(--text);
+}
+.banner:hover .close,
+.cardWrap:hover > .close,
+.close:focus-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (hover: none) {
+  .close {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ───────── Banners ───────── */
+
+/* Fades are applied to the glass cards themselves, never to a wrapper: an ancestor with
+   opacity < 1 becomes the backdrop root, cutting the cards' blur off from the desktop mid-fade. */
+.banners {
+  position: fixed;
+  right: 10px;
+  width: min(344px, calc(100vw - 20px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+.bannersHidden .banner {
+  pointer-events: none;
+}
+
+.banner {
+  position: relative;
+  pointer-events: auto;
+  animation: bannerIn 0.55s var(--ease-out) both;
+}
+.leaving {
+  animation: bannerOut 0.32s ease-in forwards;
+  pointer-events: none;
+}
+.leaving > * {
+  animation: bannerFade 0.32s ease-in forwards;
+}
+/* While Notification Center is open the banners fade out; declared after `.banner:hover .close`
+   so it wins at equal specificity. */
+.bannersHidden .banner > .card,
+.bannersHidden .banner > .close {
+  opacity: 0;
+}
+@keyframes bannerIn {
+  from {
+    transform: translateX(calc(100% + 24px));
+  }
+}
+@keyframes bannerOut {
+  to {
+    transform: translateX(calc(100% + 24px));
+  }
+}
+@keyframes bannerFade {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ───────── Notification Center ───────── */
+
+.center {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: min(360px, 100vw);
+  padding: 8px 12px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  color: var(--text);
+  animation: ncIn 0.4s var(--ease-out);
+}
+.center::-webkit-scrollbar {
+  display: none;
+}
+.centerClosing {
+  animation: ncOut 0.3s ease-in forwards;
+  pointer-events: none;
+}
+@keyframes ncIn {
+  from {
+    transform: translateX(105%);
+  }
+}
+@keyframes ncOut {
+  to {
+    transform: translateX(105%);
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.empty {
+  padding: 14px;
+  border-radius: 20px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-align: center;
+}
+
+.cardWrap {
+  position: relative;
+}
+
+/* Collapsed app stack: the newest card with one or two glass layers peeking out below. */
+.stack {
+  position: relative;
+  margin-bottom: 7px;
+}
+.stackDeep {
+  margin-bottom: 13px;
+}
+.stack > .cardWrap {
+  position: relative;
+  z-index: 2;
+}
+.layer {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: -7px;
+  height: 30px;
+  z-index: 1;
+  border-radius: 0 0 17px 17px;
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    0 4px 12px rgba(0, 0, 0, 0.1);
+  opacity: 0.85;
+}
+.layer2 {
+  left: 20px;
+  right: 20px;
+  bottom: -13px;
+  z-index: 0;
+  border-radius: 0 0 14px 14px;
+  opacity: 0.6;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.groupHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0 0 4px;
+}
+.groupTitle {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* Sits right on the desktop: a halo in the window color keeps it legible on any wallpaper. */
+  text-shadow:
+    0 0 2px color-mix(in srgb, var(--window-bg) 80%, transparent),
+    0 0 10px var(--window-bg);
+}
+.pillBtn {
+  flex: none;
+  height: 24px;
+  padding: 0 11px;
+  border: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: default;
+  transition: transform 0.32s var(--lg-spring);
+}
+.pillBtn:active {
+  transform: scale(0.94);
+  transition-duration: 0.12s;
+}

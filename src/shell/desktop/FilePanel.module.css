@@ -1,0 +1,403 @@
+/* ───────────────────────── Panels ─────────────────────────
+   Thick Liquid Glass panels (the material comes from PanelShell), 22px corners. Inside: a
+   transparent toolbar whose controls float in glass capsules, an inset glass sidebar and an inset
+   rounded file list. */
+
+.openPanel {
+  --panel-radius: 22px;
+  width: 660px;
+  height: 420px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.savePanel {
+  --panel-radius: 22px;
+  width: 480px;
+  display: flex;
+  flex-direction: column;
+}
+.saveExpanded {
+  width: 720px;
+  height: 490px;
+}
+
+.panelTitle {
+  flex: none;
+  padding: 14px 16px 0;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spacer {
+  flex: 1;
+}
+
+/* ───────────────────────── Save form ───────────────────────── */
+
+.saveForm {
+  flex: none;
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px 8px;
+  padding: 22px 28px 6px 16px;
+}
+
+.formLabel {
+  justify-self: end;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.saveForm .nameField {
+  flex: 1;
+  height: 26px;
+  border-radius: 9px;
+}
+
+.saveForm .tagsField {
+  height: 26px;
+  margin-right: 34px;
+  border-radius: 9px;
+}
+
+/* Small glass circle that expands the panel into a browser. */
+.expandBtn {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: var(--lg-control);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-control);
+  color: var(--text);
+  cursor: default;
+  transition:
+    transform 0.3s var(--lg-spring),
+    background-color 0.15s ease;
+}
+.expandBtn:hover {
+  background: var(--lg-control-hover);
+}
+.expandBtn:active {
+  background: var(--lg-control-press);
+  transform: scale(0.9);
+  transition-duration: 0.1s;
+}
+.expandBtn:focus-visible,
+.popup:focus-visible {
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    var(--focus-ring);
+}
+
+/* Popup button (folder / "Where"): a glass capsule. */
+.popup {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  max-width: 220px;
+  padding: 0 9px 0 8px;
+  border: none;
+  border-radius: 999px;
+  background: var(--lg-control);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-control);
+  font-size: 13px;
+  color: var(--text);
+  cursor: default;
+  transition:
+    transform 0.3s var(--lg-spring),
+    background-color 0.15s ease;
+}
+.popup:hover {
+  background: var(--lg-control-hover);
+}
+.popup:active {
+  background: var(--lg-control-press);
+  transform: scale(0.96);
+  transition-duration: 0.1s;
+}
+.popupWide {
+  width: 240px;
+  max-width: 100%;
+}
+.toolbar .popup {
+  height: 30px;
+  padding: 0 11px 0 9px;
+}
+.popupIcon {
+  display: inline-flex;
+  flex: none;
+  color: var(--accent);
+}
+.popupLabel {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.popupChevron {
+  flex: none;
+  color: var(--text-secondary);
+}
+
+/* ───────────────────────── Browser ───────────────────────── */
+
+.browser {
+  flex: 1;
+  min-height: 0;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: browserIn 0.32s var(--ease-out) both;
+}
+@keyframes browserIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* Transparent toolbar; back/forward share one glass capsule (lg lg-control lg-group). */
+.toolbar {
+  flex: none;
+  height: 48px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navGroup {
+  flex: none;
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  container-type: inline-size;
+}
+
+/* Inset glass pane (.ui-sidebar provides the material, inset and concentric radius). */
+.sidebar {
+  width: 168px;
+  flex: none;
+}
+
+/* ───────────────────────── List ───────────────────────── */
+
+/* Inset rounded content area beside the sidebar (concentric with it: same inset, same radius). */
+.list {
+  --cols: minmax(0, 1fr) 168px 70px;
+  flex: 1;
+  min-width: 0;
+  margin: var(--lg-inset);
+  overflow: auto;
+  position: relative;
+  border-radius: var(--lg-radius-inset);
+  background: var(--content-bg);
+  box-shadow:
+    0 0 0 0.5px var(--separator),
+    0 1px 4px rgba(0, 0, 0, 0.04);
+  outline: none;
+  font-size: 12px;
+  padding-bottom: 6px;
+}
+.list:focus-visible {
+  box-shadow:
+    0 0 0 0.5px var(--separator),
+    inset 0 0 0 2px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.listHeader {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: var(--cols);
+  height: 28px;
+  /* Same 6px side inset as the rows, so the columns line up with their headers. */
+  padding: 0 6px;
+  background: var(--content-bg);
+  border-bottom: 0.5px solid var(--separator);
+}
+
+.headerCell {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+  padding: 0 10px;
+  border: none;
+  border-left: 0.5px solid transparent;
+  background: transparent;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-align: left;
+  cursor: default;
+}
+.headerCell:first-child {
+  border-left: none;
+  /* Aligns the label with the file names: header padding 6 + 26 = row inset 6 + cell padding 4
+     + icon 16 + gap 6 = 32px. */
+  padding-left: 26px;
+}
+.headerCell:hover {
+  background: var(--hover);
+}
+.sorted {
+  color: var(--text);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: var(--cols);
+  align-items: center;
+  height: 26px;
+  margin: 0 6px;
+  border-radius: 8px;
+  color: var(--text);
+}
+.row:nth-child(odd) {
+  background: color-mix(in srgb, var(--text) 3.5%, transparent);
+}
+.row.selected {
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+.row.selectedInactive {
+  background: var(--selection-inactive);
+}
+.dimmed {
+  opacity: 0.42;
+}
+.row.selected.dimmed {
+  opacity: 0.7;
+}
+
+.cellName {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 0 8px 0 4px;
+  font-size: 13px;
+}
+
+.rowIcon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  display: inline-flex;
+}
+
+.cellMeta {
+  padding: 0 10px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.row.selected .cellMeta {
+  color: inherit;
+  opacity: 0.85;
+}
+.cellSize {
+  text-align: right;
+}
+
+.ellipsis {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty {
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: 13px;
+}
+
+/* ───────────────────────── Footer ───────────────────────── */
+
+/* No separator: capsule buttons float on the glass. */
+.footer {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 14px 14px 16px;
+}
+.openPanel .footer,
+.saveExpanded .footer {
+  padding-top: 4px;
+}
+
+.footer .footerBtn {
+  min-width: 84px;
+  height: 28px;
+}
+
+/* ───────────────────────── Nested alerts ───────────────────────── */
+
+.innerContent,
+.innerContent:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.innerContent .innerField {
+  width: 100%;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 10px;
+}
+
+/* Narrow panels (container query on .body): hide the date column and slim the sidebar. */
+@container (max-width: 540px) {
+  .list {
+    --cols: minmax(0, 1fr) 0 60px;
+  }
+  .list .cellMeta:nth-child(2),
+  .listHeader .headerCell:nth-child(2) {
+    visibility: hidden;
+    padding: 0;
+  }
+  .sidebar {
+    width: 132px;
+  }
+}

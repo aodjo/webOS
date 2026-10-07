@@ -1,0 +1,366 @@
+/* Liquid Glass: a soft wash of color behind the board so the glass tiles, capsules and the face
+   button read as glass. Geometry (padding, row heights) must match CHROME_H in index.tsx. */
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 10px 16px 12px;
+  color: var(--text);
+  background:
+    radial-gradient(70% 40% at 100% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 72%),
+    radial-gradient(70% 46% at 0% 100%, color-mix(in srgb, var(--purple) 14%, transparent), transparent 72%),
+    var(--window-bg);
+}
+
+/* ── Difficulty row ── */
+
+.topRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  flex: none;
+}
+
+.selectWrap {
+  display: inline-flex;
+  min-width: 0;
+}
+
+.bestLabel {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Counters + face ── */
+
+.status {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 40px;
+  margin-top: 8px;
+  flex: none;
+}
+
+/* Counters sit on the shared glass capsule (.lg-capsule); the clock, as the last child, aligns right. */
+.counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 12px 0 10px;
+  justify-self: start;
+}
+.counter:last-child {
+  justify-self: end;
+}
+
+.counterIcon {
+  display: inline-flex;
+  color: var(--text-secondary);
+}
+
+.digits {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  min-width: 3ch;
+}
+
+/* Glass circle with a jelly press (.lg-interactive). */
+.face {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: none;
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+  line-height: 1;
+  cursor: default;
+}
+.face:active:not(:disabled) {
+  transform: scale(0.9);
+}
+
+.faceGlyph {
+  display: block;
+  animation: facePop 0.32s var(--ease-spring);
+}
+
+@keyframes facePop {
+  from {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* ── Board ── */
+
+.boardScroll {
+  flex: 1;
+  min-height: 0;
+  margin-top: 10px;
+  overflow: auto;
+  display: flex;
+}
+
+/* A recessed, softly tinted well; corners concentric with the tiles (5 + 6 padding). */
+.board {
+  /* Tile materials. Covered tiles are accent-tinted glass, revealed ones a light flat recess, so the
+     two read apart by hue and brightness (not only by shadow) in light and dark mode. */
+  --ms-tile: color-mix(in srgb, var(--accent) 14%, var(--lg-control));
+  --ms-tile-hover: color-mix(in srgb, var(--accent) 24%, var(--lg-control-hover));
+  --ms-open: color-mix(in srgb, var(--window-bg) 55%, transparent);
+  margin: auto;
+  flex: none;
+  display: grid;
+  border-radius: 11px;
+  background:
+    radial-gradient(90% 70% at 0% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
+    radial-gradient(90% 70% at 100% 100%, color-mix(in srgb, var(--purple) 14%, transparent), transparent 70%),
+    color-mix(in srgb, var(--text) 9%, var(--window-bg));
+  box-shadow:
+    inset 0 1px 3px rgba(0, 0, 0, 0.14),
+    inset 0 0 0 0.5px var(--separator),
+    0 0.5px 0 var(--lg-rim-bottom);
+  touch-action: manipulation;
+  outline: none;
+}
+
+.row {
+  display: contents;
+}
+
+.cell {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  display: grid;
+  place-items: center;
+  font-family: ui-rounded, 'SF Pro Rounded', var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: default;
+  outline: none;
+  -webkit-touch-callout: none;
+}
+.cell:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent);
+  z-index: 1;
+}
+
+/* Covered tile: a little pane of glass (tokens only — no per-tile backdrop blur, the board can
+   have 480 of them): translucent tint, specular sheen, bright top-left rim, soft bottom-right
+   bounce and a tiny drop shadow. */
+.closed {
+  background: var(--lg-sheen), var(--ms-tile);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    0 1px 2px rgba(0, 0, 0, 0.12);
+  color: var(--text);
+  transition:
+    background-color 0.12s,
+    transform 0.3s var(--lg-spring);
+}
+.closed:hover {
+  background: var(--lg-sheen), var(--ms-tile-hover);
+}
+.closed:focus-visible {
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    0 0 0 2px var(--accent);
+}
+
+/* Pressed: the glass squishes and dims (jelly). */
+.pressed,
+.pressed:hover {
+  background: var(--lg-control-press);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.14),
+    0 0 0 0.5px var(--lg-edge);
+  transform: scale(0.9);
+  transition-duration: 0.08s;
+}
+
+html[data-reduce-transparency='true'] .closed {
+  background: color-mix(in srgb, var(--accent) 14%, var(--control-bg));
+}
+html[data-reduce-transparency='true'] .closed:hover {
+  background: color-mix(in srgb, var(--accent) 24%, var(--control-bg));
+}
+html[data-reduce-transparency='true'] .pressed,
+html[data-reduce-transparency='true'] .pressed:hover {
+  background: var(--control-bg-pressed);
+}
+
+/* Revealed: the glass is gone, leaving a shallow recess in the well. */
+.open {
+  background: var(--ms-open);
+  box-shadow:
+    inset 0 0.5px 1.5px rgba(0, 0, 0, 0.1),
+    inset 0 0 0 0.5px var(--separator);
+  animation: reveal 0.22s var(--lg-spring);
+}
+
+@keyframes reveal {
+  from {
+    transform: scale(0.88);
+    opacity: 0.4;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.question {
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+/* Number colors: mixing with --text darkens them in light mode and lightens them in dark mode. */
+.n1 {
+  color: color-mix(in srgb, var(--blue) 85%, var(--text));
+}
+.n2 {
+  color: color-mix(in srgb, var(--green) 68%, var(--text));
+}
+.n3 {
+  color: color-mix(in srgb, var(--red) 88%, var(--text));
+}
+.n4 {
+  color: color-mix(in srgb, var(--purple) 78%, var(--text));
+}
+.n5 {
+  color: color-mix(in srgb, var(--orange) 66%, var(--text));
+}
+.n6 {
+  color: color-mix(in srgb, color-mix(in srgb, var(--blue) 50%, var(--green)) 75%, var(--text));
+}
+.n7 {
+  color: var(--text);
+}
+.n8 {
+  color: var(--text-secondary);
+}
+
+.exploded {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 60%),
+    var(--red);
+  color: #fff;
+  box-shadow:
+    inset 0.5px 0.5px 0 0 rgba(255, 255, 255, 0.55),
+    0 0 10px color-mix(in srgb, var(--red) 55%, transparent);
+  animation: explode 0.42s var(--ease-spring);
+}
+
+@keyframes explode {
+  0% {
+    transform: scale(0.6);
+  }
+  60% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+.wrong {
+  opacity: 0.85;
+}
+.wrong::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  background:
+    linear-gradient(45deg, transparent calc(50% - 1px), var(--red) calc(50% - 1px), var(--red) calc(50% + 1px), transparent calc(50% + 1px)),
+    linear-gradient(-45deg, transparent calc(50% - 1px), var(--red) calc(50% - 1px), var(--red) calc(50% + 1px), transparent calc(50% + 1px));
+}
+
+/* ── End of game ── */
+
+.lost {
+  animation: shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateX(-1px);
+  }
+  20%,
+  80% {
+    transform: translateX(2px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-3px);
+  }
+  40%,
+  60% {
+    transform: translateX(3px);
+  }
+}
+
+.lost .animated {
+  animation: mineIn 0.34s var(--ease-spring) both;
+  animation-delay: var(--d, 0ms);
+}
+
+@keyframes mineIn {
+  from {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.won .animated {
+  animation: wave 0.5s var(--ease-out);
+  animation-delay: var(--d, 0ms);
+}
+
+@keyframes wave {
+  0%,
+  100% {
+    transform: none;
+  }
+  40% {
+    transform: translateY(-3px) scale(1.06);
+    box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--green) 60%, transparent);
+  }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

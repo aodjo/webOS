@@ -1,0 +1,148 @@
+/* A centered column drawn directly on the transparent window background, without inner panels;
+   the "More Info…" button uses the shared .ui-btn capsule style. */
+.root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 18px 14px;
+  overflow: auto;
+  background: transparent;
+  color: var(--text);
+  text-align: center;
+  cursor: default;
+}
+
+/* ───────── Laptop illustration ───────── */
+
+.device {
+  --alu-hi: #e3e4e8;
+  --alu-lo: #b4b5bb;
+  --bezel: #0d0d0f;
+  flex: none;
+  width: 164px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.18));
+}
+:global(html[data-theme='dark']) .device {
+  /* Dark mode switches the aluminium tones to space gray. */
+  --alu-hi: #6a6b70;
+  --alu-lo: #3c3d41;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5));
+}
+
+.lid {
+  width: 142px;
+  height: 92px;
+  padding: 4px 4px 6px;
+  border-radius: 8px 8px 3px 3px;
+  background: var(--bezel);
+  box-shadow: 0 0 0 1px var(--alu-lo);
+}
+
+.screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px 4px 1px 1px;
+  overflow: hidden;
+  background: #000;
+}
+.screen img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 20px;
+  height: 4px;
+  transform: translateX(-50%);
+  border-radius: 0 0 3px 3px;
+  background: var(--bezel);
+}
+
+.base {
+  position: relative;
+  width: 164px;
+  height: 7px;
+  margin-top: -1px;
+  border-radius: 1px 1px 9px 9px / 1px 1px 6px 6px;
+  background: linear-gradient(180deg, var(--alu-hi) 0%, var(--alu-lo) 100%);
+}
+.lip {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 26px;
+  height: 3px;
+  transform: translateX(-50%);
+  border-radius: 0 0 4px 4px;
+  background: color-mix(in srgb, var(--alu-lo) 70%, black);
+  opacity: 0.55;
+}
+
+/* ───────── Text ───────── */
+
+.name {
+  margin: 14px 0 0;
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.year {
+  margin-top: 1px;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+}
+
+.specs {
+  width: 100%;
+  margin: 14px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 11px;
+  line-height: 1.35;
+}
+.row {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  column-gap: 10px;
+  text-align: left;
+}
+.row dt {
+  text-align: right;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.row dd {
+  margin: 0;
+  min-width: 0;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+  cursor: text;
+}
+
+.more {
+  flex: none;
+  min-width: 116px;
+  margin-top: 16px;
+}
+
+.legal {
+  margin: auto 0 0;
+  padding-top: 12px;
+  font-size: 10px;
+  line-height: 1.35;
+  color: var(--text-tertiary);
+  white-space: pre-line;
+}

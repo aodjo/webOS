@@ -1,0 +1,126 @@
+/* Fades its tint, not its opacity: an ancestor with opacity < 1 would cut the sheet's glass off
+   from the window behind it (backdrop-filter only sees up to such an ancestor). */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.14);
+  animation: fade 0.2s ease;
+}
+
+/* Thick glass (lg lg-thick lg-float in the TSX): text-heavy, so the opaque variant. The panel
+   itself never scrolls (its rim and sheen are absolutely positioned pseudo-elements); .body does. */
+.sheet {
+  display: flex;
+  flex-direction: column;
+  width: min(420px, calc(100% - 32px));
+  max-height: calc(100% - 64px);
+  overflow: hidden;
+  margin-top: 52px;
+  border-radius: var(--lg-radius-window);
+  animation: sheetIn 0.3s var(--ease-out);
+}
+
+.body {
+  min-height: 0;
+  overflow-y: auto;
+  padding: 20px 22px 18px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.headerText {
+  min-width: 0;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.subtitle {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field {
+  display: grid;
+  grid-template-columns: minmax(96px, 42%) minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+
+.fieldLabel {
+  text-align: right;
+  font-size: 13px;
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.checkbox input {
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.error {
+  min-height: 18px;
+  margin-top: 8px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--red);
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.error + .buttons {
+  margin-top: 6px;
+}
+
+@keyframes fade {
+  from {
+    background-color: transparent;
+  }
+}
+
+@keyframes sheetIn {
+  from {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.98);
+  }
+}
+
+@media (max-width: 420px) {
+  .field {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .fieldLabel {
+    text-align: left;
+  }
+}

@@ -1,0 +1,287 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Liquid Glass (macOS 26 "Tahoe" design language)
+
+   A translucent material that blurs and saturates what's behind it, with a specular rim light
+   (bright top-left edge, softer bottom-right edge), a faint inner sheen and a soft floating
+   shadow. On Chromium the <Glass refraction> component adds real edge lensing through an SVG
+   displacement map (see components/Glass.tsx).
+
+   Use it through:
+     • <Glass> (components/Glass.tsx) — variants, shapes, refraction, interactive press.
+     • the classes below in CSS Modules: compose `class="lg lg-thick lg-capsule"` etc.
+     • the tokens (--lg-*) when a component builds its own surface.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Tints laid over the filtered backdrop. Regular glass is nearly clear; text-heavy surfaces
+     (thick, menu) are frosted enough to read. */
+  --lg-tint: rgba(255, 255, 255, 0.14);
+  --lg-tint-clear: rgba(255, 255, 255, 0.06);
+  --lg-tint-medium: rgba(246, 246, 248, 0.38);
+  --lg-tint-thick: rgba(250, 250, 252, 0.66);
+  --lg-tint-menu: rgba(250, 250, 252, 0.55);
+  --lg-filter-menu: blur(22px) saturate(2) brightness(1.04);
+  /* Solid fallback for Reduce Transparency (a surface may override it, e.g. the dark lock screen). */
+  --lg-solid: var(--window-bg-secondary);
+  /* Small controls (buttons, segmented tracks) sitting on window content. */
+  --lg-control: rgba(255, 255, 255, 0.62);
+  --lg-control-hover: rgba(255, 255, 255, 0.78);
+  --lg-control-press: rgba(235, 235, 240, 0.82);
+
+  --lg-filter: blur(10px) saturate(1.8) brightness(1.08);
+  --lg-filter-clear: blur(4px) saturate(1.6) brightness(1.1);
+  --lg-filter-thick: blur(24px) saturate(1.8);
+
+  /* Rim light: a crisp line around the shape, brightest on the top-left and bottom-right arcs
+     where the key light and its bounce hit the curved edge. */
+  --lg-rim-hi: rgba(255, 255, 255, 0.95);
+  --lg-rim-lo: rgba(255, 255, 255, 0.3);
+  --lg-rim-top: rgba(255, 255, 255, 0.85);
+  --lg-rim-bottom: rgba(255, 255, 255, 0.4);
+  --lg-rim-side: rgba(255, 255, 255, 0.22);
+  /* Light caught inside the glass edge and bleeding inward. */
+  --lg-glow: rgba(255, 255, 255, 0.3);
+  --lg-glow-size: 14px;
+  --lg-lip: rgba(255, 255, 255, 0.45);
+  --lg-edge: rgba(0, 0, 0, 0.06);
+  --lg-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 45%);
+
+  --lg-shadow: 0 4px 18px rgba(0, 0, 0, 0.1), 0 0 1px rgba(0, 0, 0, 0.1);
+  --lg-shadow-float: 0 12px 36px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.08);
+  --lg-shadow-control: 0 1px 2px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
+
+  /* Inner light stack shared by every glass surface: edge glow, top lip and a hairline rim. */
+  --lg-inner:
+    inset 0 0 var(--lg-glow-size) var(--lg-glow),
+    inset 0 0.5px 0 var(--lg-lip),
+    inset 0 0 0 0.5px var(--lg-rim-side);
+
+  /* Concentric radii: inner radius = outer radius − inset. */
+  --lg-radius-window: 22px;
+  --lg-radius-panel: 18px;
+  --lg-radius-inset: 14px;
+  --lg-inset: 8px;
+
+  --lg-spring: cubic-bezier(0.32, 1.5, 0.5, 1);
+}
+
+html[data-theme='dark'] {
+  --lg-tint: rgba(28, 28, 32, 0.24);
+  --lg-tint-clear: rgba(20, 20, 24, 0.08);
+  --lg-tint-medium: rgba(28, 28, 32, 0.56);
+  --lg-tint-menu: rgba(34, 34, 38, 0.55);
+  --lg-filter-menu: blur(22px) saturate(1.8) brightness(0.86);
+  --lg-tint-thick: rgba(34, 34, 38, 0.66);
+  --lg-control: rgba(255, 255, 255, 0.12);
+  --lg-control-hover: rgba(255, 255, 255, 0.18);
+  --lg-control-press: rgba(255, 255, 255, 0.08);
+
+  --lg-filter: blur(10px) saturate(1.6) brightness(0.9);
+  --lg-filter-clear: blur(4px) saturate(1.5) brightness(0.95);
+  --lg-filter-thick: blur(24px) saturate(1.6) brightness(0.9);
+
+  --lg-rim-hi: rgba(255, 255, 255, 0.6);
+  --lg-rim-lo: rgba(255, 255, 255, 0.14);
+  --lg-rim-top: rgba(255, 255, 255, 0.45);
+  --lg-rim-bottom: rgba(255, 255, 255, 0.2);
+  --lg-rim-side: rgba(255, 255, 255, 0.1);
+  --lg-glow: rgba(255, 255, 255, 0.1);
+  --lg-lip: rgba(255, 255, 255, 0.25);
+  --lg-edge: rgba(0, 0, 0, 0.3);
+  --lg-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0) 45%);
+
+  --lg-shadow: 0 6px 22px rgba(0, 0, 0, 0.32), 0 0 1px rgba(0, 0, 0, 0.4);
+  --lg-shadow-float: 0 14px 40px rgba(0, 0, 0, 0.45), 0 1px 4px rgba(0, 0, 0, 0.3);
+  --lg-shadow-control: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Pressing interactive glass lights it up from inside, starting where the pointer went down
+   (--lg-px / --lg-py are set by components/Glass.tsx; the centre is used otherwise). */
+@property --lg-press {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+/* ───────────────────────── Material ───────────────────────── */
+
+/* Zero specificity via :where(), so a component's own position/radius always wins. */
+:where(.lg) {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--lg-radius-panel);
+}
+
+.lg {
+  background: var(--lg-tint);
+  -webkit-backdrop-filter: var(--lg-filter);
+  backdrop-filter: var(--lg-filter);
+  box-shadow:
+    var(--lg-inner),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow);
+  transition: --lg-press 0.45s ease-out;
+}
+
+/* Sheen, plus the inner illumination of a press. */
+.lg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(circle at var(--lg-px, 50%) var(--lg-py, 50%), rgb(255 255 255 / calc(var(--lg-press) * 0.45)) 0, rgb(255 255 255 / calc(var(--lg-press) * 0.12)) 45%, transparent 75%),
+    var(--lg-sheen);
+}
+
+/* The crisp rim: a 1px ring masked out of a diagonal gradient, so the top-left and bottom-right
+   arcs are bright and the sides between them dimmer. */
+.lg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--lg-rim-hi) 0%, var(--lg-rim-lo) 30%, var(--lg-rim-lo) 70%, var(--lg-rim-hi) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+.lg-clear {
+  background: var(--lg-tint-clear);
+  -webkit-backdrop-filter: var(--lg-filter-clear);
+  backdrop-filter: var(--lg-filter-clear);
+}
+.lg-thick {
+  background: var(--lg-tint-thick);
+  -webkit-backdrop-filter: var(--lg-filter-thick);
+  backdrop-filter: var(--lg-filter-thick);
+}
+.lg-menu {
+  background: var(--lg-tint-menu);
+  -webkit-backdrop-filter: var(--lg-filter-menu);
+  backdrop-filter: var(--lg-filter-menu);
+}
+.lg-control {
+  background: var(--lg-control);
+  --lg-glow-size: 8px;
+  box-shadow:
+    var(--lg-inner),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-control);
+}
+.lg-tinted {
+  background: color-mix(in srgb, var(--accent) 72%, transparent);
+  color: var(--accent-contrast);
+}
+
+.lg-float {
+  box-shadow:
+    var(--lg-inner),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-float);
+}
+.lg-flat {
+  box-shadow:
+    var(--lg-inner),
+    0 0 0 0.5px var(--lg-edge);
+}
+
+.lg-capsule {
+  border-radius: 999px;
+}
+.lg-circle {
+  border-radius: 50%;
+}
+
+/* Pressable glass: brightens on hover; on press it squishes like gel and lights up inside. */
+.lg-interactive {
+  transition:
+    transform 0.32s var(--lg-spring),
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    --lg-press 0.5s ease-out;
+}
+.lg-interactive:hover:not(:disabled) {
+  background-color: var(--lg-control-hover);
+}
+.lg-interactive:active:not(:disabled) {
+  transform: scale(0.95);
+  background-color: var(--lg-control-press);
+  --lg-press: 1;
+  transition:
+    transform 0.12s ease,
+    background-color 0.12s ease,
+    --lg-press 0.08s ease-out;
+}
+
+/* Accent glass keeps its tint while hovered/pressed. */
+.lg-interactive.lg-tinted:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--accent) 84%, transparent);
+}
+.lg-interactive.lg-tinted:active:not(:disabled) {
+  background-color: color-mix(in srgb, var(--accent) 92%, black);
+}
+
+/* Glass box-shadows would otherwise hide the global keyboard focus ring. */
+.lg:focus-visible {
+  box-shadow:
+    var(--lg-inner),
+    0 0 0 0.5px var(--lg-edge),
+    var(--focus-ring),
+    var(--lg-shadow-control);
+}
+
+/* Chromium: the whole optics (lens refraction, frost, edge light bleed, specular rim) come from
+   the per-element SVG filter set up by components/Glass.tsx, so it replaces the CSS blur. */
+html[data-lg-refraction='true'] .lg[data-refract] {
+  -webkit-backdrop-filter: var(--lg-refraction);
+  backdrop-filter: var(--lg-refraction);
+}
+
+/* Toolbar items grouped into one floating capsule (Tahoe toolbars). */
+.lg-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  height: 32px;
+  padding: 0 3px;
+  border-radius: 999px;
+}
+
+.lg-group-sm {
+  height: 28px;
+  padding: 0 2px;
+}
+
+/* Soft fade where content scrolls under a toolbar ("scroll edge effect").
+   A mask (like opacity < 1, filter or backdrop-filter) makes the element a backdrop root, so
+   .lg surfaces inside it cannot blur what is behind it. */
+.lg-scroll-edge {
+  -webkit-mask: linear-gradient(to bottom, transparent 0, #000 18px);
+  mask: linear-gradient(to bottom, transparent 0, #000 18px);
+}
+
+/* ───────────────────────── Accessibility ───────────────────────── */
+
+html[data-reduce-transparency='true'] .lg,
+html[data-reduce-transparency='true'] .lg-clear,
+html[data-reduce-transparency='true'] .lg-thick,
+html[data-reduce-transparency='true'] .lg-menu {
+  background: var(--lg-solid);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+html[data-reduce-transparency='true'] .lg::before {
+  display: none;
+}
+html[data-reduce-transparency='true'] .lg.lg-control {
+  background: var(--control-bg);
+}
+html[data-reduce-transparency='true'] .lg.lg-tinted {
+  background: var(--accent);
+}

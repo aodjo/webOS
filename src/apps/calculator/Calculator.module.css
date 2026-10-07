@@ -1,0 +1,232 @@
+/* The calculator is a dark slab of glass in both light and dark mode: the window is vibrant
+   (blurred), .calc tints it dark, and every key is a small glass lens with a specular rim. */
+.calc {
+  --calc-bg: rgba(22, 22, 24, 0.76);
+  /* Key tints (the glass itself); the sheen and rim are shared by every key. */
+  --key-num: rgba(255, 255, 255, 0.14);
+  --key-num-pressed: rgba(255, 255, 255, 0.3);
+  --key-fn: rgba(255, 255, 255, 0.3);
+  --key-fn-pressed: rgba(255, 255, 255, 0.48);
+  --key-sci: rgba(255, 255, 255, 0.07);
+  --key-sci-pressed: rgba(255, 255, 255, 0.22);
+  --key-op: rgba(255, 159, 10, 0.92);
+  --key-op-pressed: rgba(255, 193, 99, 0.95);
+  --key-sheen: linear-gradient(160deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.04) 38%, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 0.07) 100%);
+  --key-rim:
+    inset 0.75px 0.75px 0 0 rgba(255, 255, 255, 0.4),
+    inset -0.5px -0.5px 0 0 rgba(255, 255, 255, 0.14),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.06);
+  --key-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.18);
+  --gap: 9px;
+
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 12px 12px;
+  /* Dark tint over the blurred window, with a faint top-left sheen so the slab reads as glass. */
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 42%),
+    var(--calc-bg);
+  color: #fff;
+  font-family: var(--font-display);
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+}
+
+/* Reduce Transparency: an opaque fill replaces the translucent tint. */
+:global(html[data-reduce-transparency='true']) .calc {
+  --calc-bg: #262628;
+}
+
+/* ───────── Display ───────── */
+
+.display {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 92px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 26px 6px 5px;
+}
+
+.indicators {
+  position: absolute;
+  top: 9px;
+  right: 6px;
+  display: flex;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Long expressions are clipped on the left so the newest part stays visible. */
+.expr {
+  display: flex;
+  justify-content: flex-end;
+  overflow: hidden;
+  min-height: 18px;
+  font-size: 15px;
+  line-height: 18px;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+}
+.expr span {
+  flex: none;
+}
+
+.resultBox {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  overflow: hidden;
+  height: 56px;
+}
+
+.result {
+  flex: none;
+  white-space: nowrap;
+  font-size: 48px;
+  font-weight: 200;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ───────── Keypad ───────── */
+
+.pad {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: 45px;
+  gap: var(--gap);
+}
+.isSci .pad {
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+
+/* Maximized or tiled (phones, Fill Screen): the keypad rows grow with the window. */
+.max .display {
+  flex: 1 1 0;
+}
+.max .pad {
+  flex: 3 1 0;
+  grid-auto-rows: minmax(40px, 1fr);
+}
+
+/* A glass key: translucent tint + sheen (background-image) + specular rim, springy "jelly" press. */
+.key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--key-num);
+  background-image: var(--key-sheen);
+  box-shadow: var(--key-rim), var(--key-shadow);
+  color: #fff;
+  font: inherit;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
+  cursor: default;
+  transition:
+    transform 0.34s var(--lg-spring),
+    background-color 0.22s ease-out,
+    color 0.22s ease-out,
+    box-shadow 0.22s ease-out;
+  -webkit-tap-highlight-color: transparent;
+}
+.key:focus-visible {
+  box-shadow: var(--key-rim), var(--focus-ring);
+}
+.key span {
+  display: inline-flex;
+  align-items: baseline;
+  pointer-events: none;
+}
+.key sup,
+.key sub {
+  font-size: 0.62em;
+  line-height: 0;
+}
+.key sup {
+  vertical-align: 0.55em;
+}
+.key sub {
+  vertical-align: -0.25em;
+}
+
+/* Pressed keys squish quickly (short durations); on release the base spring transition scales them back. */
+.key:active,
+.key.pressed {
+  transform: scale(0.9);
+  box-shadow: var(--key-rim), 0 1px 2px rgba(0, 0, 0, 0.3);
+  transition-duration: 0.08s, 0s, 0s, 0.08s;
+}
+
+.num {
+  background-color: var(--key-num);
+}
+.num:active,
+.num.pressed {
+  background-color: var(--key-num-pressed);
+}
+
+/* Top row (AC, ±, %): a lighter glass. */
+.fn {
+  background-color: var(--key-fn);
+  font-size: 19px;
+  font-weight: 500;
+}
+.fn:active,
+.fn.pressed {
+  background-color: var(--key-fn-pressed);
+}
+
+/* Operators: orange glass with a brighter sheen. */
+.op {
+  background-color: var(--key-op);
+  background-image: linear-gradient(160deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.08) 40%, rgba(255, 255, 255, 0) 62%, rgba(255, 255, 255, 0.12) 100%);
+  box-shadow:
+    inset 0.75px 0.75px 0 0 rgba(255, 255, 255, 0.6),
+    inset -0.5px -0.5px 0 0 rgba(255, 255, 255, 0.22),
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 4px 14px rgba(255, 149, 0, 0.28);
+  font-size: 27px;
+}
+.op:active,
+.op.pressed {
+  background-color: var(--key-op-pressed);
+}
+.op.selected {
+  background-color: rgba(255, 255, 255, 0.94);
+  color: #ff9500;
+}
+
+.sci {
+  background-color: var(--key-sci);
+  font-size: 15px;
+}
+.sci:active,
+.sci.pressed {
+  background-color: var(--key-sci-pressed);
+}
+.sci.on,
+.sci.selected {
+  background-color: rgba(255, 255, 255, 0.32);
+}
+
+.wide {
+  grid-column: span 2;
+  justify-content: flex-start;
+  padding-left: 17px;
+}

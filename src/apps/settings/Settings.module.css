@@ -1,0 +1,276 @@
+.root {
+  position: relative;
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+  /* Transparent: the sidebar pane lets the window's own glass (vibrancy) show through. The content
+     column and the sidebar's surround paint the opaque window color themselves. */
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+}
+
+/* ───────── Sidebar ─────────
+   The global .ui-sidebar material (set in the TSX): a Liquid Glass pane inset from the window
+   edges with concentric corners. Here it runs the full window height and the traffic lights sit
+   inside its top band, above the search capsule.
+
+   The window behind Settings is vibrant (thick glass over the desktop), so the pane is a window
+   onto it, like Finder's sidebar: it paints the window color around itself (a spread shadow,
+   clipped by .root) and needs no backdrop-filter of its own — the window already blurs. */
+
+.sidebar {
+  flex: none;
+  width: 222px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    inset 0 0 0 0.5px var(--lg-rim-side),
+    0 0 0 0.5px var(--lg-edge),
+    0 2px 10px rgba(0, 0, 0, 0.07),
+    0 0 0 40px var(--window-bg);
+}
+
+/* Title-bar band of the pane (traffic lights). The pane starts --lg-inset below the window top,
+   so the band ends exactly where the 52px toolbar of the content area does. */
+.sidebarTop {
+  flex: none;
+  height: calc(52px - var(--lg-inset));
+}
+
+.search {
+  flex: none;
+  padding: 0 8px 7px;
+}
+
+.search > label {
+  width: 100%;
+}
+
+/* 3px of top padding so the first row's focus ring isn't clipped by the scroller. */
+.list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 3px 8px 10px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.group + .group {
+  margin-top: 14px;
+}
+
+.item,
+.userCard {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  font: inherit;
+  cursor: default;
+  outline: none;
+  transition: background-color 0.12s ease;
+}
+
+/* Concentric with the pane: --lg-radius-inset (14px) − the 8px list inset ≈ a soft 8px. */
+.item {
+  gap: 8px;
+  height: 30px;
+  padding: 0 7px 0 4px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.item:hover:not(.selected) {
+  background: var(--hover);
+}
+
+.item:focus-visible,
+.userCard:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.itemLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item.selected {
+  background: var(--selection-inactive);
+}
+
+.focused .item.selected {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.userCard {
+  gap: 10px;
+  padding: 6px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+}
+
+.userCard:hover {
+  background: var(--hover);
+}
+
+.userText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.userName {
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.userSub {
+  font-size: 11px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.noResults {
+  padding: 28px 8px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+
+/* ───────── Content ───────── */
+
+.main {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--window-bg);
+}
+
+/* Transparent toolbar: the back/forward capsule floats in glass next to the pane title. */
+.toolbar {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 18px 0 14px;
+}
+
+/* Scroll edge effect: once the pane scrolls, content softly fades out under the toolbar. */
+.toolbar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 18px;
+  background: linear-gradient(to bottom, var(--window-bg), transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.toolbarScrolled::after {
+  opacity: 1;
+}
+
+.navGroup {
+  flex: none;
+}
+
+.navGroup button {
+  width: 32px;
+  min-width: 32px;
+  padding: 0;
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.contentInner {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 4px 22px 0;
+  animation: paneIn 0.2s var(--ease-out) backwards;
+}
+
+@keyframes paneIn {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+}
+
+/* ───────── Narrow windows (phones): one column at a time ───────── */
+
+.narrow .sidebar {
+  flex: 1;
+  width: auto;
+  margin-right: var(--lg-inset);
+}
+
+.narrow .toolbar {
+  padding-left: 84px;
+}
+
+.narrow .contentInner {
+  padding: 4px 14px 0;
+}
+
+/* ───────── In-window sheets (portal target) ───────── */
+
+.sheetHost {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.sheetHost > * {
+  pointer-events: auto;
+}

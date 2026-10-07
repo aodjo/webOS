@@ -1,0 +1,376 @@
+/* macOS 26 Control Center: no enclosing panel — each module is its own Liquid Glass tile floating
+   over the desktop (radius 18px, 10px apart). Toggles are glass circles that fill with the accent
+   color when on; sliders are 28px capsules with a white fill and a glass knob. */
+
+.panel {
+  /* Tile tint: mostly clear so the desktop shows through, dense enough for the tile's text. */
+  --cc-tile: rgba(255, 255, 255, 0.24);
+  /* Inset glass inside the tiles (off toggles, pills, slider tracks). */
+  --cc-well: rgba(0, 0, 0, 0.07);
+  --cc-well-strong: rgba(0, 0, 0, 0.11);
+
+  position: fixed;
+  right: 8px;
+  width: min(328px, calc(100vw - 16px));
+  /* Short screens (phones in landscape): scroll instead of running off the bottom. */
+  max-height: calc(100dvh - 40px);
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  background: transparent;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.25;
+  transform-origin: top right;
+  animation: ccIn 0.34s var(--lg-spring);
+  user-select: none;
+  -webkit-user-select: none;
+}
+:global(html[data-theme='dark']) .panel {
+  /* Denser than in light mode: white text must hold up over a bright desktop picture. */
+  --cc-tile: rgba(28, 28, 32, 0.42);
+  --cc-well: rgba(255, 255, 255, 0.1);
+  --cc-well-strong: rgba(255, 255, 255, 0.16);
+}
+
+.content {
+  flex: 0 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+.content::-webkit-scrollbar {
+  display: none;
+}
+.content > * {
+  flex: none;
+}
+
+.closing {
+  animation: ccOut 0.17s ease-in forwards;
+  pointer-events: none;
+}
+@keyframes ccIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.94);
+  }
+}
+@keyframes ccOut {
+  to {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+  }
+}
+
+/* Zero-specificity reset so module classes below win. */
+:where(.panel) button {
+  font: inherit;
+  color: inherit;
+  border: none;
+  margin: 0;
+  cursor: default;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 10px;
+}
+
+/* A glass tile: blurs and lights the desktop behind it on its own. */
+.module {
+  border-radius: 18px;
+  padding: 10px 12px;
+  background: var(--cc-tile);
+  -webkit-backdrop-filter: var(--lg-filter);
+  backdrop-filter: var(--lg-filter);
+}
+:global(html[data-reduce-transparency='true']) .module {
+  background: var(--control-bg);
+}
+
+.moduleTitle {
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0 0 8px 2px;
+}
+
+/* Pressable tiles squish like jelly. */
+.focus,
+.small {
+  transition:
+    transform 0.34s var(--lg-spring),
+    background-color 0.18s ease;
+}
+.focus:active,
+.small:active {
+  transform: scale(0.96);
+  transition-duration: 0.12s;
+}
+
+/* ───────── Connectivity / Focus rows ───────── */
+
+.connectivity {
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 4px;
+  padding: 8px 6px;
+}
+
+.toggleRow,
+.focus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  text-align: left;
+}
+.toggleRow {
+  background: transparent;
+  border-radius: 999px;
+  padding: 3px 4px;
+}
+.focus {
+  padding: 10px 12px;
+}
+
+/* Round toggles: glass circles, accent-filled when on. */
+.circle,
+.pillCircle {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lg-sheen), var(--cc-well-strong);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge);
+  color: var(--text);
+  transition:
+    transform 0.34s var(--lg-spring),
+    background-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.pillCircle {
+  width: 24px;
+  height: 24px;
+}
+.toggleRow:active .circle,
+.focus:active .circle,
+.pill:active .pillCircle {
+  transform: scale(0.88);
+  transition-duration: 0.12s;
+}
+.circleOn,
+.circleFocus {
+  --cc-on: var(--accent);
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0) 55%),
+    var(--cc-on);
+  color: var(--accent-contrast);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 rgba(255, 255, 255, 0.5),
+    inset -0.5px -0.5px 0 0 rgba(255, 255, 255, 0.2),
+    0 2px 8px color-mix(in srgb, var(--cc-on) 38%, transparent);
+}
+.circleFocus {
+  --cc-on: var(--purple);
+  color: var(--text-on-accent);
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.rowLabel {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rowSub {
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ───────── Stage Manager / Screen Mirroring ───────── */
+
+.smalls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.small {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 66px;
+  padding: 8px 4px;
+  color: var(--text);
+}
+.smallOn {
+  color: var(--accent);
+}
+.smallLabel {
+  font-size: 10px;
+  line-height: 1.15;
+  text-align: center;
+  color: var(--text);
+}
+
+/* ───────── Sliders: thick capsule track, white fill, glass knob ───────── */
+
+.slider {
+  --knob: 28px;
+  position: relative;
+  height: var(--knob);
+  border-radius: calc(var(--knob) / 2);
+  background: var(--cc-well-strong);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.1),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom);
+  touch-action: none;
+  outline: none;
+}
+.slider:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+/* Never narrower than the knob, so its rounded ends always fit the track (no clipping needed). */
+.sliderFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--knob) + (100% - var(--knob)) * var(--frac));
+  border-radius: inherit;
+  background: #fff;
+  box-shadow: inset 0 -0.5px 0 rgba(0, 0, 0, 0.05);
+}
+.sliderKnob {
+  position: absolute;
+  top: 0;
+  left: calc((100% - var(--knob)) * var(--frac));
+  width: var(--knob);
+  height: var(--knob);
+  border-radius: 50%;
+  background: linear-gradient(180deg, #fff 0%, #f3f3f5 100%);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 rgba(255, 255, 255, 0.95),
+    inset -0.5px -0.5px 0 0 rgba(0, 0, 0, 0.04),
+    0 0 0 0.5px rgba(0, 0, 0, 0.1),
+    0 1px 4px rgba(0, 0, 0, 0.26);
+  transition: transform 0.34s var(--lg-spring);
+}
+/* Dragging: the knob swells like a drop of glass. */
+.slider:active .sliderKnob {
+  transform: scale(1.14);
+  transition-duration: 0.18s;
+}
+.sliderIcon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--knob);
+  height: var(--knob);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Always drawn on the white fill. */
+  color: rgba(0, 0, 0, 0.55);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.pills {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.pill {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 10px 3px 3px;
+  border-radius: 999px;
+  background: var(--cc-well);
+  box-shadow: inset -0.5px -0.5px 0 0 var(--lg-rim-bottom);
+  text-align: left;
+  transition: transform 0.34s var(--lg-spring);
+}
+.pill:active {
+  transform: scale(0.96);
+  transition-duration: 0.12s;
+}
+.pillLabel {
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ───────── Now Playing ───────── */
+
+.nowPlaying {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.art {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lg-sheen), var(--cc-well-strong);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    0 0 0 0.5px var(--lg-edge);
+  color: var(--text-tertiary);
+}
+.npText {
+  flex: 1;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.npBtn {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border-radius: 50%;
+  color: var(--text);
+}
+.npBtn:hover:not(:disabled) {
+  background: var(--cc-well);
+}
+.npBtn:disabled {
+  color: var(--text-tertiary);
+}

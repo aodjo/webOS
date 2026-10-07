@@ -1,0 +1,525 @@
+/*
+ * Dock layout variables (set inline by Dock.tsx):
+ *   --base  rest icon size        --max   magnified icon size (icons render at this size)
+ *   --kb    rest scale (base/max) --pad   padding inside the panel
+ *   --gap   space between slots   --radius panel corner radius (concentric with the icons)
+ * Per slot, the magnification loop writes --s (current size) and --k (current icon scale).
+ *
+ * Liquid Glass: the shelf (.bg) and the labels carry the shared `lg` material classes (added in
+ * Dock.tsx), so their tint, blur, rim light, shadow and Reduce Transparency fallback come from
+ * styles/glass.css. Rules here only shape them.
+ */
+
+.root {
+  position: fixed;
+  display: flex;
+  pointer-events: none;
+  transition: transform 0.32s var(--ease-out);
+}
+.root.bottom {
+  left: 0;
+  right: 0;
+  bottom: var(--margin);
+  justify-content: center;
+  align-items: flex-end;
+}
+.root.left,
+.root.right {
+  top: var(--menubar);
+  bottom: 0;
+  flex-direction: column;
+  justify-content: center;
+}
+.root.left {
+  left: var(--margin);
+  align-items: flex-start;
+}
+.root.right {
+  right: var(--margin);
+  align-items: flex-end;
+}
+
+.root.hidden.bottom {
+  transform: translateY(calc(100% + var(--margin) + 4px));
+}
+.root.hidden.left {
+  transform: translateX(calc(-100% - var(--margin) - 4px));
+}
+.root.hidden.right {
+  transform: translateX(calc(100% + var(--margin) + 4px));
+}
+
+/* Edge strip that reveals an auto-hidden Dock. */
+.sensor {
+  position: fixed;
+}
+
+/* ───────── Panel ───────── */
+
+.panel {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--gap);
+  padding: var(--pad);
+  pointer-events: auto;
+}
+.vertical .panel {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/*
+ * Last resort when even the smallest icons don't fit (Dock.tsx sets it): cap the panel to the
+ * screen and let it scroll, so the end tiles (Finder, Trash) stay reachable instead of being
+ * pushed off both edges by the centered layout. Magnification is off in this state.
+ */
+.panel.overflow {
+  max-width: calc(100% - var(--margin) * 2);
+  /* The scroll clip follows the shelf's corners, so the visible part of the glass stays rounded. */
+  border-radius: var(--radius);
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+.vertical .panel.overflow {
+  max-width: none;
+  max-height: calc(100% - var(--margin) * 2);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.panel.overflow::-webkit-scrollbar {
+  display: none;
+}
+/* Let a swipe along the Dock scroll it (a swipe across it still drags an icon out). */
+.overflow .slot {
+  touch-action: pan-x;
+}
+.vertical .overflow .slot {
+  touch-action: pan-y;
+}
+
+/* The magnified band above the panel and the gap to the screen edge count as "over the Dock". */
+.panel::before,
+.panel::after {
+  content: '';
+  position: absolute;
+}
+.bottom .panel::before {
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: var(--band, 0px);
+}
+.bottom .panel::after {
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: calc(var(--margin) + 1px);
+}
+.left .panel::before {
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  width: var(--band, 0px);
+}
+.left .panel::after {
+  top: 0;
+  bottom: 0;
+  right: 100%;
+  width: calc(var(--margin) + 1px);
+}
+.right .panel::before {
+  top: 0;
+  bottom: 0;
+  right: 100%;
+  width: var(--band, 0px);
+}
+.right .panel::after {
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  width: calc(var(--margin) + 1px);
+}
+
+/* The glass shelf (`lg lg-float`, with edge refraction): no border colour of its own, the rim light is the material's. */
+.bg {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+}
+
+/* ───────── Separator ───────── */
+
+.sep {
+  position: relative;
+  flex: none;
+  align-self: center;
+  width: 13px;
+  height: calc(var(--base) * 0.82);
+  cursor: ns-resize;
+  touch-action: none;
+}
+/* A soft hairline etched into the glass: fades out toward both ends. */
+.sep::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 6px;
+  width: 1px;
+  border-radius: 1px;
+  background: linear-gradient(to bottom, transparent, var(--separator-strong) 22%, var(--separator-strong) 78%, transparent);
+}
+.vertical .sep {
+  width: calc(var(--base) * 0.82);
+  height: 13px;
+  cursor: ew-resize;
+}
+.vertical .sep::after {
+  top: 6px;
+  bottom: auto;
+  left: 0;
+  right: 0;
+  width: auto;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--separator-strong) 22%, var(--separator-strong) 78%, transparent);
+}
+
+/* ───────── Items ───────── */
+
+.slot {
+  position: relative;
+  flex: none;
+  width: var(--s, var(--base));
+  height: var(--base);
+  touch-action: none;
+}
+.vertical .slot {
+  width: var(--base);
+  height: var(--s, var(--base));
+}
+
+.bouncer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.icon {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  display: block;
+  width: var(--max);
+  height: var(--max);
+  margin: 0 0 0 calc(var(--max) / -2);
+  padding: 0;
+  border: none;
+  border-radius: 22%;
+  background: none;
+  color: inherit;
+  transform: scale(var(--k, var(--kb)));
+  transform-origin: 50% 100%;
+  pointer-events: auto;
+  cursor: default;
+  -webkit-touch-callout: none;
+}
+.icon > :first-child {
+  display: block;
+}
+.left .icon,
+.right .icon {
+  top: 50%;
+  bottom: auto;
+  margin: calc(var(--max) / -2) 0 0 0;
+}
+.left .icon {
+  left: 0;
+  transform-origin: 0 50%;
+}
+.right .icon {
+  left: auto;
+  right: 0;
+  transform-origin: 100% 50%;
+}
+
+.icon:active,
+.icon[data-pressed],
+.menuOpen .icon {
+  filter: brightness(0.7);
+}
+.dropTarget .icon {
+  filter: brightness(0.55);
+}
+.icon:focus-visible {
+  box-shadow: none;
+}
+/* Keyboard focus ring around the icon body (app icons carry ~10% transparent padding). */
+.icon:focus-visible::after {
+  content: '';
+  position: absolute;
+  inset: 9%;
+  border-radius: 24%;
+  box-shadow: 0 0 0 calc(3px / var(--k, var(--kb))) color-mix(in srgb, var(--accent) 75%, transparent);
+  pointer-events: none;
+}
+
+.dot {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--pad) / -2 - 2px);
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: var(--text);
+  opacity: 0.7;
+  pointer-events: none;
+  animation: fadeIn 0.3s ease-out;
+}
+.left .dot,
+.right .dot {
+  top: 50%;
+  bottom: auto;
+  margin: -2px 0 0 0;
+}
+.left .dot {
+  left: calc(var(--pad) / -2 - 2px);
+}
+.right .dot {
+  left: auto;
+  right: calc(var(--pad) / -2 - 2px);
+}
+
+/* Sized relative to the (unscaled) icon so it scales with magnification like macOS. */
+.badge {
+  position: absolute;
+  top: calc(var(--max) * -0.02);
+  right: calc(var(--max) * -0.03);
+  min-width: calc(var(--max) * 0.36);
+  height: calc(var(--max) * 0.36);
+  padding: 0 calc(var(--max) * 0.1);
+  border-radius: 999px;
+  background: var(--red);
+  color: var(--text-on-accent);
+  font-size: calc(var(--max) * 0.235);
+  font-weight: 600;
+  line-height: calc(var(--max) * 0.36);
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+/* ───────── Label (tooltip) ───────── */
+
+/* A small thick-glass capsule floating above the icon (`lg lg-thick lg-capsule`; no arrow). */
+.tip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--s, var(--base)) + 16px);
+  /* Above neighbouring icons even while one of them bounces up into the label. */
+  z-index: 1;
+  transform: translateX(-50%);
+  padding: 4px 12px 5px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 17px;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: fadeIn 0.12s ease-out;
+}
+.left .tip,
+.right .tip {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.left .tip {
+  left: calc(var(--s, var(--base)) + 18px);
+}
+.right .tip {
+  left: auto;
+  right: calc(var(--s, var(--base)) + 18px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ───────── Reorder drag ───────── */
+
+.dragMode .slot {
+  transition:
+    width 0.22s var(--ease-out),
+    height 0.22s var(--ease-out),
+    margin 0.22s var(--ease-out),
+    opacity 0.22s;
+}
+.placeholder .bouncer,
+.placeholder .dot {
+  opacity: 0;
+}
+.collapsed {
+  width: 0 !important;
+  margin-right: calc(var(--gap) * -1);
+  opacity: 0;
+}
+.vertical .collapsed {
+  width: var(--base) !important;
+  height: 0 !important;
+  margin-right: 0;
+  margin-bottom: calc(var(--gap) * -1);
+}
+
+.ghost {
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+.ghostIcon {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.28));
+  transition: opacity 0.18s;
+}
+.ghostIcon > :first-child {
+  display: block;
+}
+.ghostOut {
+  opacity: 0.8;
+}
+/* Same glass capsule as the labels (`lg lg-thick lg-capsule`). */
+.removeTip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%);
+  padding: 3px 11px 4px;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  animation: fadeIn 0.12s ease-out;
+}
+
+/* "Poof" when an icon is dragged out of the Dock. */
+.poof {
+  position: fixed;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.poof i {
+  position: absolute;
+  left: -15px;
+  top: -15px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, var(--window-bg), color-mix(in srgb, var(--window-bg) 70%, var(--gray)));
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  animation: puff 0.5s ease-out forwards;
+}
+@keyframes puff {
+  0% {
+    opacity: 0.95;
+    transform: rotate(var(--a)) translateX(2px) scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--a)) translateX(28px) scale(1.1);
+  }
+}
+
+/* ───────── Minimized window tile ───────── */
+
+.mini {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.miniWin {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--window-bg);
+  box-shadow: 0 0 0 0.5px var(--lg-edge), 0 2px 8px rgba(0, 0, 0, 0.26);
+}
+/* Rim light over the thumbnail (drawn above the snapshot, which would cover an inset shadow). */
+.miniWin::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    inset 0 0 0 0.5px var(--lg-rim-side);
+}
+.miniBar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 5%;
+  padding-left: 6%;
+  background: var(--titlebar-bg);
+  border-bottom: 0.5px solid var(--separator);
+}
+.miniBar i {
+  width: 6%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--traffic-close);
+}
+.miniBar i:nth-child(2) {
+  background: var(--traffic-min);
+}
+.miniBar i:nth-child(3) {
+  background: var(--traffic-max);
+}
+.miniBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8%;
+  padding: 10% 9%;
+}
+.miniBody i {
+  display: block;
+  height: 7%;
+  min-height: 2px;
+  border-radius: 2px;
+  background: var(--active);
+}
+.snapHost {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--window-bg);
+}
+.snapHost * {
+  animation: none !important;
+  transition: none !important;
+}
+.miniBadge {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}

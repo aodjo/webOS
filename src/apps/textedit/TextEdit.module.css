@@ -1,0 +1,405 @@
+.root {
+  position: relative;
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  background: var(--content-bg);
+  color: var(--text);
+}
+
+.dropping::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: calc(var(--radius-window) - 4px);
+  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--accent) 70%, transparent);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ───────── Find bar ─────────
+   A floating Liquid Glass bar (`lg lg-thick` in FindBar.tsx) inset from the window edges. Its
+   corners are concentric with the 28px capsule fields inside: 14px + 6px padding = 20px. */
+
+.findBar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: var(--lg-inset) var(--lg-inset) 0;
+  padding: 6px;
+  border-radius: 20px;
+  flex: none;
+  z-index: 2;
+  transform-origin: top center;
+  animation: findIn 0.34s var(--lg-spring);
+}
+
+@keyframes findIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.findRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  min-height: 28px;
+}
+
+.replaceToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: 82px;
+  padding-left: 8px;
+  flex: none;
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.replaceToggle input {
+  margin: 0;
+  accent-color: var(--accent);
+}
+.replaceSpacer {
+  width: 82px;
+  flex: none;
+}
+
+/* Capsule field recessed into the glass. */
+.findField {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  height: 28px;
+  padding: 0 4px 0 11px;
+  gap: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+  box-shadow:
+    inset 0 0 0 0.5px var(--separator),
+    inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  color: var(--text-tertiary);
+  transition:
+    box-shadow 0.15s ease,
+    background-color 0.15s ease;
+}
+.findField:focus-within {
+  background: var(--input-bg);
+  box-shadow:
+    var(--focus-ring),
+    inset 0 0 0 0.5px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+.findField input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-size: max(13px, var(--input-font-min));
+  padding: 0;
+}
+.findField input:focus-visible {
+  box-shadow: none;
+}
+.findMiss,
+.findMiss:focus-within {
+  background: color-mix(in srgb, var(--red) 12%, transparent);
+}
+.findCount {
+  flex: none;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.caseBtn {
+  flex: none;
+  height: 20px;
+  padding: 0 7px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-tertiary);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: default;
+}
+.caseBtn:hover {
+  background: var(--hover);
+  color: var(--text-secondary);
+}
+.caseOn,
+.caseOn:hover {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* ‹ › in one glass capsule (concentric: 12px inner buttons + 2px padding). */
+.navGroup {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  height: 28px;
+  padding: 2px;
+  border-radius: 999px;
+  background: var(--lg-control);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-control);
+}
+.navGroup button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 24px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  cursor: default;
+  transition:
+    transform 0.3s var(--lg-spring),
+    background-color 0.15s ease;
+}
+.navGroup button:hover:not(:disabled) {
+  background: var(--hover);
+}
+.navGroup button:active:not(:disabled) {
+  background: var(--active);
+  transform: scale(0.9);
+  transition-duration: 0.1s;
+}
+.navGroup button:disabled {
+  color: var(--text-tertiary);
+}
+
+/* Find-bar buttons match the 28px fields. */
+.barBtn {
+  height: 28px;
+  padding: 0 14px;
+  flex: none;
+}
+
+/* ───────── Banners (inset rounded cards) ───────── */
+
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: var(--lg-inset) var(--lg-inset) 0;
+  padding: 8px 8px 8px 14px;
+  flex: none;
+  font-size: 12px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--yellow) 16%, var(--window-bg));
+  box-shadow:
+    inset 0.5px 0.5px 0 0 color-mix(in srgb, var(--lg-rim-top) 60%, transparent),
+    0 0 0 0.5px var(--separator),
+    0 2px 10px rgba(0, 0, 0, 0.06);
+  animation: slideDown 0.2s var(--ease-out);
+}
+.bannerQuiet {
+  background: var(--window-bg-secondary);
+}
+.bannerText {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.35;
+}
+.bannerText span {
+  color: var(--text-secondary);
+}
+
+/* ───────── Editor ───────── */
+
+.body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.editorPane {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  --te-font-size: 14px;
+}
+
+/* The textarea and the find-highlight layer behind it must lay text out identically. */
+.surface {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 20px 26px 28px;
+  border: none;
+  /* Sized on .surface (not the textarea) so the find-highlight mirror keeps the same metrics. */
+  font-size: max(var(--te-font-size), var(--input-font-min));
+  line-height: 1.55;
+  letter-spacing: normal;
+  tab-size: 4;
+  scrollbar-gutter: stable;
+  text-align: start;
+  box-sizing: border-box;
+}
+.proportional .surface {
+  font-family: var(--font);
+}
+.mono .surface {
+  font-family: var(--font-mono);
+  font-size: max(calc(var(--te-font-size) * 0.93), var(--input-font-min));
+}
+.wrap .surface {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+.nowrap .surface {
+  white-space: pre;
+  overflow-wrap: normal;
+}
+
+.textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  caret-color: var(--text);
+  overflow: auto;
+}
+.textarea:focus-visible {
+  box-shadow: none;
+}
+.textarea::selection {
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.mirror {
+  overflow: hidden;
+  color: transparent;
+  pointer-events: none;
+  user-select: none;
+}
+.mirror mark {
+  color: transparent;
+  background: color-mix(in srgb, var(--yellow) 38%, transparent);
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--yellow) 38%, transparent);
+}
+.mirror mark.current {
+  background: var(--yellow);
+  box-shadow: 0 0 0 1.5px var(--yellow), 0 1px 4px 1.5px rgba(0, 0, 0, 0.25);
+  animation: findPulse 0.3s var(--ease-spring);
+}
+/* The textarea draws the (light) text over the highlight in dark mode: keep the current match dimmer
+   so the text stays readable. */
+:global(html[data-theme='dark']) .mirror mark.current {
+  background: color-mix(in srgb, var(--yellow) 62%, transparent);
+  box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--yellow) 62%, transparent), 0 1px 4px 1.5px rgba(0, 0, 0, 0.4);
+}
+@keyframes findPulse {
+  0% {
+    box-shadow: 0 0 0 6px var(--yellow), 0 1px 8px 6px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* ───────── Markdown preview ───────── */
+
+/* An inset pane next to the editor, concentric with the window corner (window radius − inset;
+   --win-radius is inherited from the window frame). */
+.previewPane {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  margin: var(--lg-inset) var(--lg-inset) var(--lg-inset) 0;
+  padding: 22px 28px 40px;
+  border-radius: max(6px, calc(var(--win-radius, var(--radius-window)) - var(--lg-inset)));
+  background: var(--window-bg);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    0 0 0 0.5px var(--separator),
+    0 2px 12px rgba(0, 0, 0, 0.06);
+}
+.previewDoc {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ───────── Status bar ───────── */
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 16px;
+  flex: none;
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: var(--window-bg-secondary);
+  border-top: 0.5px solid var(--separator);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.statusSel {
+  color: var(--accent);
+}
+.statusSpacer {
+  flex: 1;
+}
+.statusDot {
+  color: var(--text-tertiary);
+}
+
+/* ───────── Empty / error state ───────── */
+
+.emptyActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.emptyButtons {
+  display: flex;
+  gap: 8px;
+}
+
+/* Narrow windows (not the viewport): a window can be small on a big screen. */
+@container (max-width: 520px) {
+  .surface {
+    padding: 14px 16px 22px;
+  }
+  .replaceToggle,
+  .replaceSpacer {
+    width: auto;
+  }
+  .replaceSpacer {
+    display: none;
+  }
+}

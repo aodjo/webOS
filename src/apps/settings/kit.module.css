@@ -1,0 +1,323 @@
+/* ───────── Pane layout ───────── */
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 6px 0 30px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 4px 8px;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Inset-grouped card: 14px corners with the glass rim light — bright top-left, soft bottom-right. */
+.group {
+  background: var(--window-bg-secondary);
+  border-radius: 14px;
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    inset 0 0 0 0.5px var(--separator),
+    0 1px 2px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+}
+
+.footer {
+  margin: 8px 4px 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.buttonBar {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: -14px;
+}
+
+/* ───────── Hero ───────── */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  padding: 22px 28px;
+}
+
+.heroTitle {
+  margin-top: 8px;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.heroText {
+  max-width: 440px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+/* ───────── Rows ───────── */
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 38px;
+  padding: 7px 14px;
+  color: var(--text);
+}
+
+/* 0.5px hairline, inset from both edges (and past the icon when rows have one). */
+.row + .row::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 14px;
+  right: 14px;
+  height: 0.5px;
+  background: var(--separator);
+}
+
+.row.hasLeading + .row.hasLeading::before {
+  left: 44px;
+}
+
+.stacked {
+  flex-wrap: wrap;
+}
+
+.stacked .control {
+  flex: 1 1 100%;
+  justify-content: stretch;
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.labelText {
+  font-size: 13px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.sublabel {
+  font-size: 11px;
+  line-height: 1.38;
+  color: var(--text-secondary);
+}
+
+.control {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 62%;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.disabled .labelText {
+  color: var(--text-tertiary);
+}
+
+.navRow {
+  border: none;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  cursor: default;
+  outline: none;
+  transition: background-color 0.12s ease;
+}
+
+.navRow:hover {
+  background: var(--hover);
+}
+
+.navRow:active {
+  background: var(--active);
+}
+
+.navRow:focus-visible {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 60%, transparent);
+  border-radius: 14px;
+}
+
+.chevron {
+  color: var(--text-tertiary);
+  flex: none;
+}
+
+.check {
+  display: inline-flex;
+  color: var(--accent);
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity 0.15s,
+    transform 0.2s var(--ease-spring);
+}
+
+.check[data-on] {
+  opacity: 1;
+  transform: none;
+}
+
+/* ───────── Icons ───────── */
+
+.paneIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  box-shadow:
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.45),
+    inset 0 0 0 0.5px rgba(0, 0, 0, 0.07),
+    0 0.5px 1.5px rgba(0, 0, 0, 0.16);
+}
+
+.spinner {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  animation: spin 0.9s steps(12) infinite;
+}
+
+.spinner span {
+  position: absolute;
+  left: calc(50% - 0.75px);
+  top: 0;
+  width: 1.5px;
+  height: 28%;
+  border-radius: 1px;
+  background: var(--text-secondary);
+  transform-origin: 50% 178%;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ───────── Usage bar ───────── */
+
+.usageBar {
+  display: flex;
+  gap: 1.5px;
+  width: 100%;
+  border-radius: 7px;
+  overflow: hidden;
+  background: var(--active);
+}
+
+.usageBar span {
+  flex-basis: 0;
+  min-width: 3px;
+  transition: flex-grow 0.4s var(--ease-out);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legendItem i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* ───────── Avatar ───────── */
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(180deg, #b4b4b9, #7c7c82);
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 0 0 0.5px var(--separator);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ───────── Labeled slider ───────── */
+
+.slider {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-width: 100%;
+  padding-top: 4px;
+  transition: opacity 0.2s;
+}
+
+.sliderInline {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding-top: 0;
+  color: var(--text-secondary);
+}
+
+.sliderInline svg {
+  flex: none;
+}
+
+.sliderDisabled {
+  opacity: 0.4;
+}
+
+.sliderCaptions {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-secondary);
+}

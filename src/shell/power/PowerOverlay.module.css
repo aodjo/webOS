@@ -1,0 +1,107 @@
+.root {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.black {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  animation-name: fadeIn;
+  animation-timing-function: ease-in;
+  animation-fill-mode: both;
+}
+
+/* ───────── Off ───────── */
+
+.off {
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  animation: fadeIn 0.6s ease both;
+}
+
+.offContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  animation: fadeIn 1.2s 0.4s ease both;
+}
+
+.powerGlyph {
+  color: rgba(255, 255, 255, 0.26);
+  animation: breathe 3.2s ease-in-out infinite;
+}
+
+.offText {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.36);
+  letter-spacing: 0.2px;
+}
+
+/* ───────── Sleep ───────── */
+
+.sleep {
+  cursor: none;
+}
+
+/* ───────── Shut down / restart / log out ───────── */
+
+.busy {
+  cursor: wait;
+}
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+  opacity: 0;
+  animation:
+    fadeIn 0.3s 0.55s ease forwards,
+    spin 0.9s steps(12) infinite;
+}
+
+.spinner span {
+  position: absolute;
+  top: 0;
+  left: 13.5px;
+  width: 3px;
+  height: 8.5px;
+  border-radius: 1.5px;
+  background: #d8d8d8;
+  transform-origin: 1.5px 15px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "webos",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A macOS-style operating system in the browser, built as a developer portfolio.",
+  "license": "MIT",
+  "author": "aod_jo",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aodjo/webOS.git"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit --pretty false",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "idb-keyval": "^6.3.0",
+    "lucide-react": "^1.49.0",
+    "marked": "^18.0.14",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "jsdom": "^30.1.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3"
+  }
+}

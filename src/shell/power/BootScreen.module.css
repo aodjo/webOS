@@ -1,0 +1,75 @@
+.root {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: none;
+}
+
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+
+.content.fading {
+  opacity: 0;
+}
+
+.logo {
+  display: flex;
+  animation: logoIn 0.7s var(--ease-out) both;
+  filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.08));
+}
+
+.track {
+  position: absolute;
+  top: calc(100% + 64px);
+  width: 200px;
+  height: 5px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #3a3a3c;
+  animation: trackIn 0.5s 0.2s ease both;
+}
+
+.fill {
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  background: #fff;
+  transform: translateX(-100%);
+  will-change: transform;
+}
+
+@keyframes logoIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes trackIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px), (max-height: 420px) {
+  .track {
+    top: calc(100% + 44px);
+    width: 160px;
+  }
+}

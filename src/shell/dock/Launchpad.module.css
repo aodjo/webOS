@@ -1,0 +1,290 @@
+/*
+ * Launchpad always sits on a darkened, blurred wallpaper, so (like macOS) its text is white in
+ * both light and dark mode. Its Liquid Glass (search capsule, page dots) is therefore always the
+ * dark material: .root pins the --lg-* tokens to dark values for everything inside it.
+ *
+ * The blur is a filtered copy of the wallpaper rather than a backdrop-filter: macOS hides the
+ * windows behind Launchpad anyway, and a static filtered layer costs nothing per frame while a
+ * full-screen 40px backdrop blur would be recomputed during the fade.
+ */
+.root {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  color: #fff;
+  touch-action: none;
+  animation: fadeIn 0.26s var(--ease-out);
+
+  /* Dark glass in both appearances (white text on it). */
+  --lg-tint: rgba(255, 255, 255, 0.1);
+  --lg-tint-clear: rgba(255, 255, 255, 0.06);
+  --lg-filter: blur(14px) saturate(1.6) brightness(1.04);
+  --lg-filter-clear: blur(6px) saturate(1.5) brightness(1.06);
+  --lg-rim-top: rgba(255, 255, 255, 0.5);
+  --lg-rim-bottom: rgba(255, 255, 255, 0.2);
+  --lg-rim-side: rgba(255, 255, 255, 0.14);
+  --lg-edge: rgba(0, 0, 0, 0.25);
+  --lg-sheen: linear-gradient(160deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.04) 32%, rgba(255, 255, 255, 0) 55%, rgba(255, 255, 255, 0.06) 100%);
+  --lg-shadow: 0 6px 20px rgba(0, 0, 0, 0.22), 0 1px 3px rgba(0, 0, 0, 0.16);
+}
+.root.closing {
+  animation: fadeOut 0.26s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: rgba(20, 20, 24, 0.55);
+}
+.backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.wallpaper {
+  position: absolute;
+  inset: -80px;
+  width: calc(100% + 160px);
+  height: calc(100% + 160px);
+  object-fit: cover;
+  filter: blur(40px) saturate(1.35) brightness(0.82);
+}
+
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  animation: zoomIn 0.32s var(--ease-out);
+}
+.closing .content {
+  animation: zoomOut 0.26s ease forwards;
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+@keyframes zoomOut {
+  to {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+
+/* ───────── Search ───────── */
+
+.searchWrap {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* A glass capsule (`lg lg-capsule`, tinted dark by .root). */
+.search {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 260px;
+  max-width: 70vw;
+  height: 34px;
+  padding: 0 14px;
+  color: rgba(255, 255, 255, 0.72);
+  transition: background-color 0.15s;
+}
+.root .search:focus-within {
+  background-color: rgba(255, 255, 255, 0.17);
+}
+.search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #fff;
+  font-size: max(13px, var(--input-font-min));
+  caret-color: #fff;
+}
+.search input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+.search input:focus-visible {
+  box-shadow: none;
+}
+
+/* ───────── Pages ───────── */
+
+.viewport {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.strip {
+  display: flex;
+  height: 100%;
+  transition: transform 0.45s cubic-bezier(0.22, 0.9, 0.3, 1);
+  will-change: transform;
+}
+
+.page {
+  flex: 0 0 100%;
+  display: grid;
+  height: 100%;
+  min-width: 0;
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 14px;
+  background: none;
+  color: inherit;
+  cursor: default;
+  animation: iconIn 0.36s var(--ease-out) backwards;
+}
+.app:focus-visible {
+  box-shadow: none;
+  background: rgba(255, 255, 255, 0.16);
+}
+.app:active .icon {
+  filter: brightness(0.65) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.25));
+}
+
+@keyframes iconIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+.icon {
+  display: flex;
+  width: var(--icon);
+  height: var(--icon);
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.25));
+}
+
+.label {
+  max-width: calc(var(--icon) + 44px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 500;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ───────── Page dots ───────── */
+
+.dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+}
+
+.dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: default;
+}
+/* Tiny glass beads (`lg lg-clear lg-circle lg-flat`); the current page's is filled white. */
+.dotGlass {
+  display: block;
+  width: 8px;
+  height: 8px;
+}
+.dot .dotGlass {
+  background-color: rgba(255, 255, 255, 0.26);
+  transition:
+    background-color 0.2s,
+    transform 0.32s var(--lg-spring);
+}
+.dot:active .dotGlass {
+  transform: scale(0.85);
+}
+.dotActive .dotGlass {
+  background-color: rgba(255, 255, 255, 0.95);
+}
+.dot:focus-visible {
+  box-shadow: none;
+}
+.dot:focus-visible .dotGlass {
+  outline: 3px solid rgba(255, 255, 255, 0.4);
+  outline-offset: 1px;
+}
+
+/*
+ * Reduce Transparency: solid dark fills that still read on the dark backdrop, overriding the
+ * shared fallback, which is a light grey in light mode.
+ */
+:global(html[data-reduce-transparency='true']) .root .search {
+  background: #3a3a3c;
+}
+:global(html[data-reduce-transparency='true']) .root .dot .dotGlass {
+  background: #6e6e73;
+}
+:global(html[data-reduce-transparency='true']) .root .dotActive .dotGlass {
+  background: #fff;
+}
+
+@media (max-width: 767px) {
+  .label {
+    font-size: 11px;
+  }
+  .app {
+    gap: 6px;
+    padding: 4px;
+  }
+}

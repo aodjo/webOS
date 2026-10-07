@@ -1,0 +1,157 @@
+.scroll {
+  min-width: 0;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  outline: none;
+  background: var(--content-bg);
+}
+
+.column {
+  position: relative;
+  flex: none;
+  width: 230px;
+  height: 100%;
+  overflow-y: auto;
+  padding: 6px 0 12px;
+  /* Adjacent columns are separated only by this right-edge hairline. */
+  border-right: 0.5px solid var(--separator);
+  transition: box-shadow 0.12s;
+}
+
+.dropping {
+  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  margin: 0 8px 1px;
+  padding: 0 6px 0 8px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.icon {
+  display: flex;
+  flex: none;
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tag {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.chevron {
+  flex: none;
+  margin-left: auto;
+  color: var(--text-tertiary);
+}
+
+.selected {
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+
+.selected .chevron {
+  color: var(--text-on-accent);
+}
+
+.path,
+.inactive .selected {
+  background: var(--selection-inactive);
+  color: var(--text);
+}
+
+.inactive .selected .chevron {
+  color: var(--text-tertiary);
+}
+
+.drop {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+/* ── Preview column ── */
+
+.preview {
+  flex: none;
+  width: 280px;
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 20px 20px;
+}
+
+.previewArt {
+  width: 200px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.previewName {
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.previewMeta {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.infoTitle {
+  align-self: stretch;
+  margin-top: 18px;
+  padding: 0 4px 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Item details: a label/value grid inside a soft rounded card. */
+.info {
+  align-self: stretch;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 12px;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--hover);
+  font-size: 11px;
+}
+
+.info dt {
+  color: var(--text-secondary);
+}
+
+.info dd {
+  margin: 0;
+  text-align: right;
+}
+
+.more {
+  margin-top: 16px;
+}

@@ -1,0 +1,626 @@
+/* ───────── Shared bits ───────── */
+
+.muted {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.ellipsis {
+  display: block;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.emptyNote {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 30px 20px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.emptyTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.statusLine {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dotGreen {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+/* ───────── Wi-Fi / Bluetooth ───────── */
+
+.signal {
+  flex: none;
+}
+
+.rowGlyph {
+  display: inline-flex;
+  justify-content: center;
+  flex: none;
+  width: 20px;
+  color: var(--text);
+}
+
+.deviceGlyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--active);
+  color: var(--text);
+}
+
+.appIcon {
+  display: inline-flex;
+  flex: none;
+  width: 24px;
+  height: 24px;
+}
+
+/* ───────── About / Displays header ───────── */
+
+.machineHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 0 0;
+}
+
+.machineName {
+  margin-top: 14px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.machineSub {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ───────── Software Update ───────── */
+
+.updateBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 160px;
+  padding: 22px;
+  text-align: center;
+}
+
+.updateLogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 15px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0) 58%),
+    linear-gradient(180deg, color-mix(in srgb, var(--accent) 78%, white), var(--accent));
+  box-shadow:
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.5),
+    0 2px 8px rgba(0, 0, 0, 0.18);
+  animation: pop 0.4s var(--ease-spring) backwards;
+}
+
+.updateTitle {
+  max-width: 380px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.updateText {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+}
+
+/* ───────── Storage ───────── */
+
+.storageBar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 2px 0 4px;
+}
+
+/* ───────── Appearance tiles ───────── */
+
+/* Tiles shrink (keeping their aspect ratio) when the row is narrow: at the minimum window width
+   and in compact (phone) windows the control column is narrower than three 70px tiles. */
+.tiles {
+  display: flex;
+  gap: 14px;
+  min-width: 0;
+  padding: 5px 5px 0;
+}
+
+.tileBtn {
+  width: 70px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  outline: none;
+  cursor: default;
+}
+
+.tileBtn:focus-visible {
+  box-shadow: none;
+}
+
+/* Rounded 12px previews; the selection is a concentric accent ring around them (box-shadow spread
+   grows the radius with it, so the ring stays a soft, capsule-like outline). */
+.tile {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 70 / 46;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 0.5px var(--separator-strong),
+    0 1px 4px rgba(0, 0, 0, 0.12);
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.3s var(--lg-spring);
+}
+
+.tileBtn:active .tile {
+  transform: scale(0.96);
+  transition-duration: 0.12s;
+}
+
+.tileBtn[aria-checked='true'] .tile {
+  box-shadow:
+    0 0 0 2.5px var(--window-bg-secondary),
+    0 0 0 5px var(--accent),
+    0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.tileBtn:focus-visible .tile {
+  box-shadow:
+    0 0 0 0.5px var(--separator-strong),
+    var(--focus-ring);
+}
+
+/* Arrow keys focus and select at once: keep the selection ring and add a focus halo around it. */
+.tileBtn[aria-checked='true']:focus-visible .tile {
+  box-shadow:
+    0 0 0 2.5px var(--window-bg-secondary),
+    0 0 0 5px var(--accent),
+    0 0 0 8px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.tileLabel {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.tileBtn[aria-checked='true'] .tileLabel {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.tileScene {
+  position: absolute;
+  inset: 0;
+  padding: 10px 0 0 15px;
+}
+
+.tileScene[data-mode='light'] {
+  background: linear-gradient(135deg, #8fb8ff, #f4b6d8);
+  --tw-bg: #ffffff;
+  --tw-bar: #e9e9ec;
+  --tw-side: #ececf0;
+  --tw-line: #d9d9de;
+}
+
+.tileScene[data-mode='dark'] {
+  background: linear-gradient(135deg, #1b2c55, #4a2350);
+  --tw-bg: #232325;
+  --tw-bar: #38383b;
+  --tw-side: #2e2e31;
+  --tw-line: #4a4a4d;
+}
+
+.tileHalf {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+}
+
+.tileWindow {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px 0 0 0;
+  overflow: hidden;
+  background: var(--tw-bg);
+  box-shadow: -1px -1px 4px rgba(0, 0, 0, 0.18);
+}
+
+.tileBar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 8px;
+  padding: 0 4px;
+  background: var(--tw-bar);
+}
+
+.tileBar i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #ff5f57;
+}
+
+.tileBar i:nth-child(2) {
+  background: #febc2e;
+}
+
+.tileBar i:nth-child(3) {
+  background: #28c840;
+}
+
+.tileBody {
+  flex: 1;
+  display: flex;
+}
+
+.tileSidebar {
+  width: 32%;
+  background: var(--tw-side);
+}
+
+.tileContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 4px;
+}
+
+.tileContent span {
+  width: 80%;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--tw-line);
+}
+
+.tileContent .tileAccent {
+  width: 50%;
+  background: var(--accent);
+}
+
+/* ───────── Accent colors ───────── */
+
+.accentWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.accents {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Glassy color drops: a soft top highlight over the color. */
+.accentDot {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(0, 0, 0, 0.16),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.4),
+    0 0.5px 1.5px rgba(0, 0, 0, 0.14);
+  outline: none;
+  cursor: default;
+  transition: transform 0.3s var(--lg-spring);
+}
+
+.accentDot:hover {
+  transform: scale(1.12);
+}
+
+.accentDot:active {
+  transform: scale(0.9);
+  transition-duration: 0.12s;
+}
+
+.accentDot[aria-checked='true']::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.2);
+}
+
+.accentDot:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.accentName {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.clockPreview {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* ───────── Wallpaper ───────── */
+
+.wpCurrent {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px;
+}
+
+.wpPreview {
+  flex: none;
+  width: 168px;
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--active);
+  box-shadow:
+    0 0 0 0.5px var(--separator-strong),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.wpPreview img,
+.thumbImg img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wpInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.wpName {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.wpSub {
+  font-size: 11px;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.wpButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.thumbGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: 16px 14px;
+  /* Room for the selection ring, which is drawn outside the thumbnails. */
+  padding: 6px 6px 0;
+}
+
+.thumb {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  outline: none;
+  cursor: default;
+}
+
+.thumb:focus-visible {
+  box-shadow: none;
+}
+
+.thumbImg {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--active);
+  box-shadow:
+    0 0 0 0.5px var(--separator-strong),
+    0 1px 4px rgba(0, 0, 0, 0.1);
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.3s var(--lg-spring);
+}
+
+.thumb:hover .thumbImg {
+  transform: scale(1.025);
+}
+
+.thumb:active .thumbImg {
+  transform: scale(0.97);
+  transition-duration: 0.12s;
+}
+
+/* 3px accent ring, concentric with the 12px corners (a 2.5px gap keeps it off the picture). */
+.thumb[aria-checked='true'] .thumbImg {
+  box-shadow:
+    0 0 0 2.5px var(--window-bg),
+    0 0 0 5.5px var(--accent),
+    0 2px 10px rgba(0, 0, 0, 0.14);
+}
+
+.thumb:focus-visible .thumbImg {
+  box-shadow:
+    0 0 0 0.5px var(--separator-strong),
+    var(--focus-ring);
+}
+
+.thumb[aria-checked='true']:focus-visible .thumbImg {
+  box-shadow:
+    0 0 0 2.5px var(--window-bg),
+    0 0 0 5.5px var(--accent),
+    0 0 0 8.5px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.thumbCheck {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  box-shadow:
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.45),
+    0 0 0 1.5px rgba(255, 255, 255, 0.9),
+    0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.thumbName {
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.thumb[aria-checked='true'] .thumbName {
+  color: var(--text);
+}
+
+/* ───────── Users ───────── */
+
+.userHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+}
+
+.userName {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.userSub {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.avatarGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px;
+}
+
+.avatarOption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  padding: 4px;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: var(--text-secondary);
+  outline: none;
+  cursor: default;
+  transition:
+    box-shadow 0.15s,
+    transform 0.2s var(--ease-out);
+}
+
+.avatarOption:hover {
+  transform: scale(1.05);
+}
+
+.avatarOption:active {
+  transform: scale(0.94);
+}
+
+.avatarOption[aria-checked='true'] {
+  box-shadow: inset 0 0 0 2.5px var(--accent);
+}
+
+.avatarOption:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.avatarChoose {
+  gap: 1px;
+  padding: 0;
+  background: var(--active);
+  font-size: 9px;
+  line-height: 1.1;
+}

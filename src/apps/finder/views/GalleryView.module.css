@@ -1,0 +1,127 @@
+.root {
+  min-width: 0;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  outline: none;
+  background: var(--content-bg);
+  transition: box-shadow 0.12s;
+}
+
+.dropping {
+  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px 24px 12px;
+}
+
+.art {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: appear 0.18s var(--ease-out);
+}
+
+/* Gallery shows bigger document thumbnails than the column preview. */
+.art {
+  --page-w: 210px;
+  --page-scale: 0.9;
+}
+
+.caption {
+  width: min(360px, 100%);
+  text-align: center;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.placeholder {
+  color: var(--text-tertiary);
+}
+
+/* Concentric: shelf radius = thumb radius (10) + strip padding (8). */
+.shelf {
+  flex: none;
+  margin: 0 12px 12px;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.strip {
+  display: flex;
+  gap: 6px;
+  padding: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
+.strip::-webkit-scrollbar {
+  height: 8px;
+}
+
+.strip::-webkit-scrollbar-thumb {
+  border-width: 2px;
+}
+
+.thumb {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 58px;
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 0 transparent;
+  transition:
+    box-shadow 0.12s,
+    background-color 0.12s,
+    transform 0.3s var(--lg-spring);
+}
+
+.thumb:active {
+  transform: scale(0.94);
+  transition-duration: 0.1s;
+}
+
+.selected {
+  box-shadow: inset 0 0 0 2.5px var(--accent);
+  background: var(--selection-inactive);
+}
+
+.inactive .selected {
+  box-shadow: inset 0 0 0 2.5px var(--text-tertiary);
+}
+
+.drop {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}

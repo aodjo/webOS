@@ -1,0 +1,438 @@
+<!-- webOS project cover · webOS -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',Roboto,Helvetica,Arial,sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3aa0ff"/>
+      <stop offset="0.45" stop-color="#0a84ff"/>
+      <stop offset="1" stop-color="#4b3fd8"/>
+    </linearGradient>
+    <radialGradient id="bgGlow" cx="260" cy="120" r="900" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bgGlow2" cx="1450" cy="980" r="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#bf5af2" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#bf5af2" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sky" x1="0" y1="96" x2="0" y2="656" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7a9ce6"/>
+      <stop offset="0.45" stop-color="#b4bdf0"/>
+      <stop offset="0.75" stop-color="#efc4dc"/>
+      <stop offset="1" stop-color="#ffdcc8"/>
+    </linearGradient>
+    <linearGradient id="mtn" x1="0" y1="396" x2="0" y2="656" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8f96dd"/>
+      <stop offset="1" stop-color="#e7c9e0"/>
+    </linearGradient>
+    <linearGradient id="l3" x1="0" y1="696" x2="0" y2="796" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#666cc0"/>
+      <stop offset="1" stop-color="#a99cd4"/>
+    </linearGradient>
+    <linearGradient id="l4" x1="0" y1="736" x2="0" y2="884" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4d51a6"/>
+      <stop offset="1" stop-color="#3a3a86"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="1096" cy="496" r="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff7e8"/>
+      <stop offset="0.15" stop-color="#ffe6cf" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#ffc8cf" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="folderG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7cc4ff"/>
+      <stop offset="1" stop-color="#4ba3f2"/>
+    </linearGradient>
+    <linearGradient id="iFinder" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6cc6ff"/>
+      <stop offset="1" stop-color="#1a6ff0"/>
+    </linearGradient>
+    <linearGradient id="iBrowser" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5ac8fa"/>
+      <stop offset="1" stop-color="#007aff"/>
+    </linearGradient>
+    <linearGradient id="iTerm" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a3a3c"/>
+      <stop offset="1" stop-color="#111113"/>
+    </linearGradient>
+    <linearGradient id="iMail" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#62b6ff"/>
+      <stop offset="1" stop-color="#1b7cf2"/>
+    </linearGradient>
+    <linearGradient id="iSettings" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d8d8de"/>
+      <stop offset="1" stop-color="#9a9aa2"/>
+    </linearGradient>
+    <linearGradient id="iProjects" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#bf5af2"/>
+      <stop offset="1" stop-color="#5e5ce6"/>
+    </linearGradient>
+    <linearGradient id="iApp" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5ac8fa"/>
+      <stop offset="1" stop-color="#5e5ce6"/>
+    </linearGradient>
+    <radialGradient id="mist">
+      <stop offset="0" stop-color="#fff4f2"/>
+      <stop offset=".4" stop-color="#fff4f2" stop-opacity=".7"/>
+      <stop offset=".72" stop-color="#fff4f2" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#fff4f2" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="screen">
+      <rect x="166" y="96" width="1268" height="788" rx="18"/>
+    </clipPath>
+    <clipPath id="finderWin">
+      <rect x="250" y="168" width="640" height="420" rx="12"/>
+    </clipPath>
+    <filter id="lbl" x="-20%" y="-60%" width="140%" height="220%">
+      <feDropShadow dx="0" dy="1" stdDeviation="1.2" flood-color="#000" flood-opacity=".55"/>
+    </filter>
+    <filter id="s0" x="48" y="8" width="1504" height="1024" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="34"/>
+    </filter>
+    <filter id="s1" x="184" y="126" width="772" height="552" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+    <filter id="s2" x="241" y="163" width="658" height="438" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="s3" x="658" y="345.6" width="704" height="458" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+    <filter id="s4" x="715" y="379" width="590" height="344" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="s5" x="1038" y="88.4" width="444" height="204" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+    <filter id="s6" x="1095" y="135" width="330" height="90" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <rect width="1600" height="1000" fill="url(#bgGlow)"/>
+  <rect width="1600" height="1000" fill="url(#bgGlow2)"/>
+  <g fill="#fff" fill-opacity=".09">
+    <circle cx="40" cy="880" r="2"/>
+    <circle cx="40" cy="898" r="2"/>
+    <circle cx="40" cy="916" r="2"/>
+    <circle cx="40" cy="934" r="2"/>
+    <circle cx="40" cy="952" r="2"/>
+    <circle cx="40" cy="970" r="2"/>
+    <circle cx="58" cy="880" r="2"/>
+    <circle cx="58" cy="898" r="2"/>
+    <circle cx="58" cy="916" r="2"/>
+    <circle cx="58" cy="934" r="2"/>
+    <circle cx="58" cy="952" r="2"/>
+    <circle cx="58" cy="970" r="2"/>
+    <circle cx="76" cy="880" r="2"/>
+    <circle cx="76" cy="898" r="2"/>
+    <circle cx="76" cy="916" r="2"/>
+    <circle cx="76" cy="934" r="2"/>
+    <circle cx="76" cy="952" r="2"/>
+    <circle cx="76" cy="970" r="2"/>
+    <circle cx="94" cy="880" r="2"/>
+    <circle cx="94" cy="898" r="2"/>
+    <circle cx="94" cy="916" r="2"/>
+    <circle cx="94" cy="934" r="2"/>
+    <circle cx="94" cy="952" r="2"/>
+    <circle cx="94" cy="970" r="2"/>
+    <circle cx="112" cy="880" r="2"/>
+    <circle cx="112" cy="898" r="2"/>
+    <circle cx="112" cy="916" r="2"/>
+    <circle cx="112" cy="934" r="2"/>
+    <circle cx="112" cy="952" r="2"/>
+    <circle cx="112" cy="970" r="2"/>
+    <circle cx="130" cy="880" r="2"/>
+    <circle cx="130" cy="898" r="2"/>
+    <circle cx="130" cy="916" r="2"/>
+    <circle cx="130" cy="934" r="2"/>
+    <circle cx="130" cy="952" r="2"/>
+    <circle cx="130" cy="970" r="2"/>
+    <circle cx="148" cy="880" r="2"/>
+    <circle cx="148" cy="898" r="2"/>
+    <circle cx="148" cy="916" r="2"/>
+    <circle cx="148" cy="934" r="2"/>
+    <circle cx="148" cy="952" r="2"/>
+    <circle cx="148" cy="970" r="2"/>
+    <circle cx="166" cy="880" r="2"/>
+    <circle cx="166" cy="898" r="2"/>
+    <circle cx="166" cy="916" r="2"/>
+    <circle cx="166" cy="934" r="2"/>
+    <circle cx="166" cy="952" r="2"/>
+    <circle cx="166" cy="970" r="2"/>
+    <circle cx="184" cy="880" r="2"/>
+    <circle cx="184" cy="898" r="2"/>
+    <circle cx="184" cy="916" r="2"/>
+    <circle cx="184" cy="934" r="2"/>
+    <circle cx="184" cy="952" r="2"/>
+    <circle cx="184" cy="970" r="2"/>
+    <circle cx="202" cy="880" r="2"/>
+    <circle cx="202" cy="898" r="2"/>
+    <circle cx="202" cy="916" r="2"/>
+    <circle cx="202" cy="934" r="2"/>
+    <circle cx="202" cy="952" r="2"/>
+    <circle cx="202" cy="970" r="2"/>
+    <circle cx="220" cy="880" r="2"/>
+    <circle cx="220" cy="898" r="2"/>
+    <circle cx="220" cy="916" r="2"/>
+    <circle cx="220" cy="934" r="2"/>
+    <circle cx="220" cy="952" r="2"/>
+    <circle cx="220" cy="970" r="2"/>
+    <circle cx="238" cy="880" r="2"/>
+    <circle cx="238" cy="898" r="2"/>
+    <circle cx="238" cy="916" r="2"/>
+    <circle cx="238" cy="934" r="2"/>
+    <circle cx="238" cy="952" r="2"/>
+    <circle cx="238" cy="970" r="2"/>
+  </g>
+  <rect x="150" y="110" width="1300" height="820" rx="34" fill="#000" fill-opacity=".35" filter="url(#s0)"/>
+  <rect x="150" y="80" width="1300" height="820" rx="34" fill="#0d0f14"/>
+  <rect x="151" y="81" width="1298" height="818" rx="33" fill="none" stroke="#fff" stroke-opacity=".14"/>
+  <g clip-path="url(#screen)">
+    <rect x="166" y="96" width="1268" height="788" fill="url(#sky)"/>
+    <rect x="166" y="96" width="1268" height="788" fill="url(#sun)"/>
+    <circle cx="1096" cy="496" r="34" fill="#fffaf0"/>
+    <path d="M122 637.1C144 632.7 208.6 621.2 254.1 610.8C299.6 600.5 349.4 588.2 394.9 574.9C440.4 561.6 487.4 545.3 527 531.2C566.7 517 604.8 501.5 632.7 490C660.6 478.5 676.7 470.2 694.3 462C711.9 453.8 725.9 446.7 738.4 441C750.8 435.3 761 431 769.2 427.8C777.4 424.6 782.5 422.3 787.7 421.7C792.8 421.1 795.5 423.6 800 424.3C804.5 425.1 809.7 426.4 815 426.1C820.3 425.8 825.4 423.7 831.7 422.6C838 421.4 844.2 418.6 852.8 419.1C861.5 419.5 870.4 421.1 883.7 425.2C896.9 429.3 911.5 435.4 932.1 443.6C952.6 451.8 976.8 462.6 1006.9 474.2C1037 485.9 1075.2 500.4 1112.6 513.6C1150 526.9 1191.1 541.4 1231.5 553.9C1271.8 566.5 1313.7 578.9 1354.8 588.9C1395.8 599 1457.5 610.1 1478 614.3L1484 894L116 894Z" fill="url(#mtn)"/>
+    <g fill="url(#mist)" fill-opacity=".75">
+      <ellipse cx="466" cy="636" rx="330" ry="44"/>
+      <ellipse cx="986" cy="626" rx="410" ry="46"/>
+    </g>
+    <path d="M122 666C151.3 660.9 256.3 642.8 298.1 635.3C339.9 627.9 342.1 617 372.9 621.3C403.8 625.7 438.2 655.3 483 661.6C527.8 667.9 602.6 662.8 641.5 659C680.4 655.2 685.5 637.5 716.3 638.8C747.2 640.2 775.1 664.2 826.4 666.9C877.8 669.5 979 662.3 1024.5 654.6C1070 646.9 1075.2 623.4 1099.4 620.5C1123.6 617.5 1131.7 629.4 1169.8 637.1C1208 644.8 1277 662.8 1328.3 666.9C1379.7 670.9 1453.1 662.5 1478 661.6L1484 894L116 894Z" fill="#a9a3dc"/>
+    <path d="M122 722C160.1 717.8 277.5 695.9 350.9 696.6C424.3 697.4 488.9 724.8 562.3 726.4C635.6 728 711.9 705.4 791.2 706.3C870.4 707.1 957 733.7 1037.8 731.7C1118.5 729.6 1202.1 696.3 1275.5 694C1348.9 691.7 1444.3 713.7 1478 717.6L1484 894L116 894Z" fill="url(#l3)"/>
+    <path d="M122 752.7C164.5 757.2 296.6 779.5 377.3 779.8C458.1 780.1 524.1 753.5 606.3 754.4C688.5 755.3 786.8 784.5 870.4 785.1C954.1 785.6 1027.5 757.5 1108.2 757.9C1188.9 758.4 1293.1 786.4 1354.8 787.7C1416.4 789 1457.5 769.4 1478 765.8L1484 894L116 894Z" fill="url(#l4)"/>
+    <rect x="166" y="96" width="1268" height="28" fill="#fff" fill-opacity=".55"/>
+    <rect x="166" y="124" width="1268" height=".6" fill="#000" fill-opacity=".1"/>
+    <g transform="translate(183 101) scale(.75)" fill="#1d1d1f" stroke="#1d1d1f">
+      <circle cx="12" cy="12" r="10.1" fill="none" stroke-width="1.9"/>
+      <path d="M2.14 14.2C6 13.6 8.7 10.4 10.2 7.3C11 7.75 13 7.75 13.8 7.3C15.3 10.4 18 13.6 21.86 14.2A10.1 10.1 0 0 1 2.14 14.2Z" stroke="none"/>
+    </g>
+    <g font-size="13" fill="#1d1d1f">
+      <text x="214" y="115" font-weight="700">Finder</text>
+      <text x="276" y="115" >File</text>
+      <text x="314" y="115" >Edit</text>
+      <text x="352" y="115" >View</text>
+      <text x="396" y="115" >Go</text>
+      <text x="428" y="115" >Window</text>
+      <text x="490" y="115" >Help</text>
+      <text x="1418" y="115" text-anchor="end" xml:space="preserve">Fri Oct 2  9:41 AM</text>
+    </g>
+    <g fill="none" stroke="#1d1d1f" stroke-width="1.6" stroke-linecap="round">
+      <path d="M1200 112a8 8 0 0 1 12 0M1197 108.5a12.5 12.5 0 0 1 18 0"/>
+      <circle cx="1244" cy="109" r="4.5"/>
+      <path d="M1247.4 112.4l3.4 3.4"/>
+    </g>
+    <circle cx="1206" cy="115" r="1.6" fill="#1d1d1f"/>
+    <rect x="1156" y="104.5" width="24" height="11" rx="3" fill="none" stroke="#1d1d1f" stroke-opacity=".5"/>
+    <rect x="1158" y="106.5" width="16" height="7" rx="1.5" fill="#1d1d1f"/>
+    <rect x="1181" y="108" width="2" height="4" rx="1" fill="#1d1d1f" fill-opacity=".5"/>
+    <g font-size="12" fill="#fff" text-anchor="middle" font-weight="600">
+      <path d="M1330 278q0-8 8-8h18l8 8h30q8 0 8 8v34q0 8-8 8h-56q-8 0-8-8z" fill="#4c9be6"/>
+      <rect x="1330" y="284" width="72" height="44" rx="7" fill="url(#folderG)"/>
+      <rect x="1330" y="284" width="72" height="1.5" fill="#fff" fill-opacity=".5"/>
+      <text x="1366" y="350" filter="url(#lbl)">Projects</text>
+      <path d="M1346 380h34l16 16v42q0 4-4 4h-46q-4 0-4-4v-54q0-4 4-4z" fill="#fff" stroke="#d1d1d6"/>
+      <path d="M1380 380v12q0 4 4 4h12" fill="#e5e5ea"/>
+      <rect x="1350" y="402" width="22" height="2.5" rx="1.25" fill="#8e8e93" fill-opacity="0.5"/>
+      <rect x="1350" y="409" width="28" height="2.5" rx="1.25" fill="#8e8e93" fill-opacity="0.5"/>
+      <rect x="1350" y="416" width="36" height="2.5" rx="1.25" fill="#8e8e93" fill-opacity="0.5"/>
+      <rect x="1350" y="423" width="28" height="2.5" rx="1.25" fill="#8e8e93" fill-opacity="0.5"/>
+      <rect x="1350" y="430" width="36" height="2.5" rx="1.25" fill="#8e8e93" fill-opacity="0.5"/>
+      <text x="1366" y="460" filter="url(#lbl)">Resume.md</text>
+    </g>
+    <rect x="250" y="192" width="640" height="420" rx="12" fill="#000" fill-opacity="0.28" filter="url(#s1)"/>
+    <rect x="250" y="172" width="640" height="420" rx="12" fill="#000" fill-opacity="0.18" filter="url(#s2)"/>
+    <g clip-path="url(#finderWin)">
+      <rect x="250" y="168" width="640" height="420" fill="#fff"/>
+      <rect x="250" y="168" width="176" height="420" fill="#efeef3"/>
+      <rect x="426" y="168" width=".8" height="420" fill="#000" fill-opacity=".1"/>
+    </g>
+    <rect x="250.5" y="168.5" width="639" height="419" rx="11.5" fill="none" stroke="#000" stroke-opacity=".12"/>
+    <circle cx="272" cy="190" r="6" fill="#ff5f57"/>
+    <circle cx="292" cy="190" r="6" fill="#febc2e"/>
+    <circle cx="312" cy="190" r="6" fill="#28c840"/>
+    <g font-size="12" fill="#1d1d1f">
+      <text x="268" y="232" font-size="11" font-weight="700" fill="#8e8e93">Favorites</text>
+      <rect x="258" y="318" width="160" height="24" rx="6" fill="#000" fill-opacity=".08"/>
+      <rect x="270" y="245" width="13" height="11" rx="2.5" fill="none" stroke="#0a84ff" stroke-width="1.5"/>
+      <text x="292" y="256" >Desktop</text>
+      <rect x="270" y="271" width="13" height="11" rx="2.5" fill="none" stroke="#0a84ff" stroke-width="1.5"/>
+      <text x="292" y="282" >Documents</text>
+      <rect x="270" y="297" width="13" height="11" rx="2.5" fill="none" stroke="#0a84ff" stroke-width="1.5"/>
+      <text x="292" y="308" >Downloads</text>
+      <rect x="270" y="323" width="13" height="11" rx="2.5" fill="none" stroke="#0a84ff" stroke-width="1.5"/>
+      <text x="292" y="334" >Projects</text>
+      <rect x="270" y="349" width="13" height="11" rx="2.5" fill="none" stroke="#0a84ff" stroke-width="1.5"/>
+      <text x="292" y="360" >Applications</text>
+      <text x="268" y="398" font-size="11" font-weight="700" fill="#8e8e93">Tags</text>
+      <circle cx="276" cy="418" r="5" fill="#ff453a"/>
+      <text x="292" y="422" >Work</text>
+      <circle cx="276" cy="444" r="5" fill="#ff9f0a"/>
+      <text x="292" y="448" >Ideas</text>
+      <circle cx="276" cy="470" r="5" fill="#0a84ff"/>
+      <text x="292" y="474" >Portfolio</text>
+    </g>
+    <g fill="none" stroke="#8e8e93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M450 186l-6 6 6 6M472 186l6 6-6 6"/>
+    </g>
+    <text x="496" y="197" font-size="14" font-weight="700" fill="#1d1d1f">Projects</text>
+    <g fill="#8e8e93">
+      <rect x="780" y="185" width="5" height="5" rx="1"/>
+      <rect x="787" y="185" width="5" height="5" rx="1"/>
+      <rect x="780" y="192" width="5" height="5" rx="1"/>
+      <rect x="787" y="192" width="5" height="5" rx="1"/>
+      <rect x="808" y="185" width="14" height="2" rx="1"/>
+      <rect x="808" y="190" width="14" height="2" rx="1"/>
+      <rect x="808" y="195" width="14" height="2" rx="1"/>
+    </g>
+    <rect x="840" y="181" width="36" height="22" rx="6" fill="#000" fill-opacity=".05"/>
+    <circle cx="855" cy="191" r="4.5" fill="none" stroke="#8e8e93" stroke-width="1.6"/>
+    <path d="M858.5 194.5l3.5 3.5" stroke="#8e8e93" stroke-width="1.6" stroke-linecap="round"/>
+    <rect x="426" y="218" width="464" height=".8" fill="#000" fill-opacity=".09"/>
+    <rect x="442" y="236" width="92" height="76" rx="8" fill="#000" fill-opacity=".07"/>
+    <path d="M452 252q0-8 8-8h18l8 8h30q8 0 8 8v34q0 8-8 8h-56q-8 0-8-8z" fill="#4c9be6"/>
+    <rect x="452" y="258" width="72" height="44" rx="7" fill="url(#folderG)"/>
+    <rect x="452" y="258" width="72" height="1.5" fill="#fff" fill-opacity=".5"/>
+    <rect x="458" y="314" width="60" height="19" rx="5" fill="#0a84ff"/>
+    <text x="488" y="328" font-size="12" fill="#fff" text-anchor="middle" font-weight="500">webos</text>
+    <path d="M562 252q0-8 8-8h18l8 8h30q8 0 8 8v34q0 8-8 8h-56q-8 0-8-8z" fill="#4c9be6"/>
+    <rect x="562" y="258" width="72" height="44" rx="7" fill="url(#folderG)"/>
+    <rect x="562" y="258" width="72" height="1.5" fill="#fff" fill-opacity=".5"/>
+    <text x="598" y="328" font-size="12" fill="#1d1d1f" text-anchor="middle">pixel-board</text>
+    <path d="M672 252q0-8 8-8h18l8 8h30q8 0 8 8v34q0 8-8 8h-56q-8 0-8-8z" fill="#4c9be6"/>
+    <rect x="672" y="258" width="72" height="44" rx="7" fill="url(#folderG)"/>
+    <rect x="672" y="258" width="72" height="1.5" fill="#fff" fill-opacity=".5"/>
+    <text x="708" y="328" font-size="12" fill="#1d1d1f" text-anchor="middle">budget-buddy</text>
+    <path d="M782 252q0-8 8-8h18l8 8h30q8 0 8 8v34q0 8-8 8h-56q-8 0-8-8z" fill="#4c9be6"/>
+    <rect x="782" y="258" width="72" height="44" rx="7" fill="url(#folderG)"/>
+    <rect x="782" y="258" width="72" height="1.5" fill="#fff" fill-opacity=".5"/>
+    <text x="818" y="328" font-size="12" fill="#1d1d1f" text-anchor="middle">type-racer</text>
+    <path d="M464 382h34l16 16v42q0 4-4 4h-46q-4 0-4-4v-54q0-4 4-4z" fill="#fff" stroke="#d1d1d6"/>
+    <path d="M498 382v12q0 4 4 4h12" fill="#e5e5ea"/>
+    <rect x="468" y="404" width="22" height="2.5" rx="1.25" fill="#8e8e93" fill-opacity="0.5"/>
+    <rect x="468" y="411" width="28" height="2.5" rx="1.25" fill="#8e8e93" fill-opacity="0.5"/>
+    <rect x="468" y="418" width="36" height="2.5" rx="1.25" fill="#8e8e93" fill-opacity="0.5"/>
+    <rect x="468" y="425" width="28" height="2.5" rx="1.25" fill="#8e8e93" fill-opacity="0.5"/>
+    <rect x="468" y="432" width="36" height="2.5" rx="1.25" fill="#8e8e93" fill-opacity="0.5"/>
+    <text x="488" y="468" font-size="12" fill="#1d1d1f" text-anchor="middle">README.md</text>
+    <path d="M562 392q0-8 8-8h18l8 8h30q8 0 8 8v34q0 8-8 8h-56q-8 0-8-8z" fill="#4c9be6"/>
+    <rect x="562" y="398" width="72" height="44" rx="7" fill="url(#folderG)"/>
+    <rect x="562" y="398" width="72" height="1.5" fill="#fff" fill-opacity=".5"/>
+    <text x="598" y="468" font-size="12" fill="#1d1d1f" text-anchor="middle">notes</text>
+    <path d="M684 382h34l16 16v42q0 4-4 4h-46q-4 0-4-4v-54q0-4 4-4z" fill="#fff" stroke="#d1d1d6"/>
+    <path d="M718 382v12q0 4 4 4h12" fill="#e5e5ea"/>
+    <rect x="688" y="404" width="22" height="2.5" rx="1.25" fill="#8e8e93" fill-opacity="0.5"/>
+    <rect x="688" y="411" width="28" height="2.5" rx="1.25" fill="#8e8e93" fill-opacity="0.5"/>
+    <rect x="688" y="418" width="36" height="2.5" rx="1.25" fill="#8e8e93" fill-opacity="0.5"/>
+    <rect x="688" y="425" width="28" height="2.5" rx="1.25" fill="#8e8e93" fill-opacity="0.5"/>
+    <rect x="688" y="432" width="36" height="2.5" rx="1.25" fill="#8e8e93" fill-opacity="0.5"/>
+    <text x="708" y="468" font-size="12" fill="#1d1d1f" text-anchor="middle">resume.md</text>
+    <path d="M782 392q0-8 8-8h18l8 8h30q8 0 8 8v34q0 8-8 8h-56q-8 0-8-8z" fill="#4c9be6"/>
+    <rect x="782" y="398" width="72" height="44" rx="7" fill="url(#folderG)"/>
+    <rect x="782" y="398" width="72" height="1.5" fill="#fff" fill-opacity=".5"/>
+    <text x="818" y="468" font-size="12" fill="#1d1d1f" text-anchor="middle">wallpapers</text>
+    <text x="658" y="572" font-size="11" fill="#8e8e93" text-anchor="middle">8 items, 41.2 GB available</text>
+    <rect x="724" y="411.6" width="572" height="326" rx="12" fill="#000" fill-opacity="0.322" filter="url(#s3)"/>
+    <rect x="724" y="388" width="572" height="326" rx="12" fill="#000" fill-opacity="0.207" filter="url(#s4)"/>
+    <rect x="724" y="384" width="572" height="326" rx="12" fill="#1c1d22"/>
+    <path d="M724 396a12 12 0 0 1 12-12h548a12 12 0 0 1 12 12v22h-572z" fill="#2a2b31"/>
+    <rect x="724.5" y="384.5" width="571" height="325" rx="11.5" fill="none" stroke="#fff" stroke-opacity=".12"/>
+    <circle cx="744" cy="401" r="6" fill="#ff5f57"/>
+    <circle cx="764" cy="401" r="6" fill="#febc2e"/>
+    <circle cx="784" cy="401" r="6" fill="#28c840"/>
+    <text x="1010" y="406" font-size="12" fill="#98989f" text-anchor="middle" font-weight="600">aodjo — -zsh — 80×24</text>
+    <g font-family="'SF Mono',ui-monospace,Menlo,Consolas,'D2Coding','Noto Sans Mono',monospace" font-size="14">
+      <text x="744" y="450" xml:space="preserve"><tspan fill="#30d158">aodjo</tspan><tspan fill="#8e8e93">@</tspan><tspan fill="#64d2ff">webOS</tspan><tspan fill="#e5e5ea"> ~ % whoami</tspan></text>
+      <text x="744" y="476" xml:space="preserve"><tspan fill="#d1d1d6">aodjo · Frontend Engineer · Seoul</tspan></text>
+      <text x="744" y="502" xml:space="preserve"><tspan fill="#30d158">aodjo</tspan><tspan fill="#8e8e93">@</tspan><tspan fill="#64d2ff">webOS</tspan><tspan fill="#e5e5ea"> ~ % ls ~/Projects</tspan></text>
+      <text x="744" y="528" xml:space="preserve"><tspan fill="#64d2ff">webos/  pixel-board/  budget-buddy/  type-racer/</tspan></text>
+      <text x="744" y="554" xml:space="preserve"><tspan fill="#30d158">aodjo</tspan><tspan fill="#8e8e93">@</tspan><tspan fill="#64d2ff">webOS</tspan><tspan fill="#e5e5ea"> ~ % cat ~/Projects/webos/README.md | head -1</tspan></text>
+      <text x="744" y="580" xml:space="preserve"><tspan fill="#ffd60a"># webOS</tspan><tspan fill="#d1d1d6"> — a macOS-like OS in your browser</tspan></text>
+      <text x="744" y="606" xml:space="preserve"><tspan fill="#30d158">aodjo</tspan><tspan fill="#8e8e93">@</tspan><tspan fill="#64d2ff">webOS</tspan><tspan fill="#e5e5ea"> ~ % </tspan><tspan fill="#e5e5ea" fill-opacity=".85">█</tspan></text>
+    </g>
+    <rect x="1104" y="154.4" width="312" height="72" rx="16" fill="#000" fill-opacity="0.168" filter="url(#s5)"/>
+    <rect x="1104" y="144" width="312" height="72" rx="16" fill="#000" fill-opacity="0.108" filter="url(#s6)"/>
+    <rect x="1104" y="140" width="312" height="72" rx="16" fill="#f6f6f8" fill-opacity=".94"/>
+    <rect x="1104.5" y="140.5" width="311" height="71" rx="15.5" fill="none" stroke="#fff" stroke-opacity=".9"/>
+    <g transform="translate(1118 156)">
+      <rect width="40" height="40" rx="10" fill="url(#iApp)"/>
+      <g transform="translate(8 8)" fill="#fff" stroke="#fff">
+        <circle cx="12" cy="12" r="10.1" fill="none" stroke-width="1.9"/>
+        <path d="M2.14 14.2C6 13.6 8.7 10.4 10.2 7.3C11 7.75 13 7.75 13.8 7.3C15.3 10.4 18 13.6 21.86 14.2A10.1 10.1 0 0 1 2.14 14.2Z" stroke="none"/>
+      </g>
+    </g>
+    <text x="1170" y="171" font-size="13" font-weight="700" fill="#1d1d1f">webOS</text>
+    <text x="1402" y="171" font-size="11" fill="#8e8e93" text-anchor="end">now</text>
+    <text x="1170" y="192" font-size="12" fill="#3a3a3c">Welcome! Open Finder to look around.</text>
+    <rect x="527" y="808" width="546" height="66" rx="20" fill="#fff" fill-opacity=".32"/>
+    <rect x="527.5" y="808.5" width="545" height="65" rx="19.5" fill="none" stroke="#fff" stroke-opacity=".5"/>
+    <g>
+      <rect x="537" y="815" width="48" height="48" rx="11.040000000000001" fill="url(#iFinder)"/>
+      <path d="M547 832q0-3 3-3h8l3 3h12q3 0 3 3v14q0 3-3 3h-23q-3 0-3-3z" fill="#fff" fill-opacity=".55"/>
+      <rect x="547" y="835" width="28" height="17" rx="3" fill="#fff"/>
+    </g>
+    <circle cx="561" cy="869" r="2" fill="#1d1d1f" fill-opacity=".7"/>
+    <g>
+      <rect x="595" y="815" width="48" height="48" rx="11.040000000000001" fill="url(#iBrowser)"/>
+      <g fill="none" stroke="#fff" stroke-width="2.2">
+        <circle cx="619" cy="839" r="14.399999999999999"/>
+        <ellipse cx="619" cy="839" rx="6.24" ry="14.399999999999999"/>
+        <path d="M604.6 839h28.799999999999997M606.52 831.8h24.96M606.52 846.2h24.96"/>
+      </g>
+    </g>
+    <g>
+      <rect x="653" y="815" width="48" height="48" rx="11.040000000000001" fill="url(#iTerm)"/>
+      <path d="M665 832l8 7-8 7" fill="none" stroke="#30d158" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="676" y="845" width="12" height="3" rx="1.5" fill="#e5e5ea"/>
+    </g>
+    <circle cx="677" cy="869" r="2" fill="#1d1d1f" fill-opacity=".7"/>
+    <g>
+      <rect x="711" y="815" width="48" height="48" rx="11.040000000000001" fill="#fff"/>
+      <path d="M711 826.04a11.040000000000001 11.040000000000001 0 0 1 11.040000000000001-11.040000000000001h25.919999999999998a11.040000000000001 11.040000000000001 0 0 1 11.040000000000001 11.040000000000001v5.76h-48z" fill="#ffd60a"/>
+      <rect x="719" y="833" width="32" height="1.5" fill="#d1d1d6"/>
+      <rect x="719" y="840" width="32" height="1.5" fill="#d1d1d6"/>
+      <rect x="719" y="847" width="32" height="1.5" fill="#d1d1d6"/>
+      <rect x="719" y="854" width="32" height="1.5" fill="#d1d1d6"/>
+    </g>
+    <g>
+      <rect x="769" y="815" width="48" height="48" rx="11.040000000000001" fill="url(#iMail)"/>
+      <rect x="778" y="829" width="30" height="20" rx="3" fill="#fff"/>
+      <path d="M779 831l14 11 14-11" fill="none" stroke="#1b7cf2" stroke-width="2.2" stroke-linejoin="round"/>
+    </g>
+    <g>
+      <rect x="827" y="815" width="48" height="48" rx="11.040000000000001" fill="#2c2c2e"/>
+      <circle cx="840" cy="829" r="3.8" fill="#8e8e93"/>
+      <circle cx="851" cy="829" r="3.8" fill="#8e8e93"/>
+      <circle cx="862" cy="829" r="3.8" fill="#ff9f0a"/>
+      <circle cx="840" cy="839" r="3.8" fill="#8e8e93"/>
+      <circle cx="851" cy="839" r="3.8" fill="#8e8e93"/>
+      <circle cx="862" cy="839" r="3.8" fill="#ff9f0a"/>
+      <circle cx="840" cy="849" r="3.8" fill="#8e8e93"/>
+      <circle cx="851" cy="849" r="3.8" fill="#8e8e93"/>
+      <circle cx="862" cy="849" r="3.8" fill="#ff9f0a"/>
+      <rect x="836" y="852" width="20" height="7" rx="3.5" fill="#8e8e93"/>
+      <circle cx="862" cy="855.5" r="3.8" fill="#ff9f0a"/>
+    </g>
+    <g>
+      <rect x="885" y="815" width="48" height="48" rx="11.040000000000001" fill="url(#iSettings)"/>
+      <circle cx="909" cy="839" r="12.96" fill="none" stroke="#3a3a3c" stroke-width="6" stroke-dasharray="3.4 3"/>
+      <circle cx="909" cy="839" r="10.08" fill="#8e8e93"/>
+      <circle cx="909" cy="839" r="4.32" fill="#d1d1d6"/>
+    </g>
+    <g>
+      <rect x="943" y="815" width="48" height="48" rx="11.040000000000001" fill="url(#iProjects)"/>
+      <rect x="957" y="825" width="20" height="10" rx="3" fill="#fff" fill-opacity=".55"/>
+      <rect x="954" y="830" width="26" height="12" rx="3" fill="#fff" fill-opacity=".75"/>
+      <rect x="951" y="836" width="32" height="18" rx="4" fill="#fff"/>
+    </g>
+    <circle cx="967" cy="869" r="2" fill="#1d1d1f" fill-opacity=".7"/>
+    <rect x="1002" y="820" width="1" height="42" fill="#000" fill-opacity=".18"/>
+    <g>
+      <rect x="1005" y="815" width="48" height="48" rx="11.040000000000001" fill="#fff" fill-opacity=".001"/>
+      <path d="M1017 827h24l-3 30h-18z" fill="#e5e5ea" fill-opacity=".85" stroke="#fff" stroke-width="1"/>
+      <path d="M1022 831v22" stroke="#aeaeb2" stroke-width="1"/>
+      <path d="M1026.7 831v22" stroke="#aeaeb2" stroke-width="1"/>
+      <path d="M1031.4 831v22" stroke="#aeaeb2" stroke-width="1"/>
+      <path d="M1036.1 831v22" stroke="#aeaeb2" stroke-width="1"/>
+      <rect x="1015" y="824" width="28" height="4" rx="2" fill="#f2f2f7"/>
+    </g>
+  </g>
+  <path d="M166 96h520L366 884H166z" fill="#fff" fill-opacity=".03" clip-path="url(#screen)"/>
+</svg>

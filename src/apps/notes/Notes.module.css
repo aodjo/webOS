@@ -1,0 +1,551 @@
+/* Notes uses its own yellow accent instead of the system accent. */
+.root {
+  --notes-yellow: #e5b50f;
+  --notes-sel: #f6d65e;
+  --notes-sel-text: #1d1d1f;
+  --notes-sel-secondary: rgba(0, 0, 0, 0.58);
+  --notes-sel-inactive: rgba(229, 181, 15, 0.2);
+  /* Darker yellow for text on light glass, where the bright yellow is too faint (≈ 4.9:1 on white). */
+  --notes-ink: #8a6d00;
+  --accent: var(--notes-yellow);
+  --accent-contrast: #1d1d1f;
+  --accent-soft: color-mix(in srgb, var(--notes-yellow) 32%, transparent);
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--notes-yellow) 45%, transparent);
+
+  position: relative;
+  container-type: inline-size;
+  display: flex;
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--window-bg);
+  color: var(--text);
+}
+:global(html[data-theme='dark']) .root {
+  --notes-yellow: #f5c400;
+  --notes-sel: #806700;
+  --notes-sel-text: #ffffff;
+  --notes-sel-secondary: rgba(255, 255, 255, 0.72);
+  --notes-sel-inactive: rgba(245, 196, 0, 0.17);
+  --notes-ink: var(--notes-yellow);
+}
+
+/* ───────── Shared toolbar row (overlay title bar) ─────────
+   Liquid Glass: the row is transparent and its controls float in glass capsules (GlassGroup). */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 52px;
+  padding: 0 10px;
+  flex: none;
+}
+.toolbarSpacer {
+  flex: 1;
+  align-self: stretch;
+}
+.toolGroup {
+  flex: none;
+}
+/* 28px buttons inside the 32px capsule: concentric with a 2px inset. */
+.toolBtn {
+  width: 32px;
+  min-width: 32px;
+  height: 28px;
+  padding: 0;
+  flex: none;
+  color: var(--text-secondary);
+}
+.aaBtn {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+.search {
+  display: flex;
+  flex: 0 1 190px;
+  min-width: 72px;
+}
+.search > label {
+  width: 100%;
+}
+.searchRow {
+  display: flex;
+  padding: 2px 12px 8px;
+  flex: none;
+}
+.searchRow .search {
+  flex: 1;
+  margin: 0;
+}
+
+/* ───────── Sidebar ─────────
+   An inset Liquid Glass pane running the full window height; the traffic lights sit inside its
+   top. Corners are concentric with the window: window radius − --lg-inset (22 − 8 = 14 for this
+   overlay window; --win-radius is inherited from the window frame, 0 in compact mode). */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 212px;
+  flex: none;
+  min-height: 0;
+  margin: var(--lg-inset) 0 var(--lg-inset) var(--lg-inset);
+  overflow: hidden;
+  border-radius: max(6px, calc(var(--win-radius, var(--lg-radius-window)) - var(--lg-inset)));
+  background: var(--sidebar-bg);
+  -webkit-backdrop-filter: var(--lg-filter);
+  backdrop-filter: var(--lg-filter);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    0 2px 10px rgba(0, 0, 0, 0.06);
+}
+:global(html[data-reduce-transparency='true']) .sidebar {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+/* Ends at the same height as the 52px toolbars next to it; the toggle lines up with the traffic lights. */
+.sidebarTop {
+  display: flex;
+  align-items: flex-start;
+  height: calc(52px - var(--lg-inset));
+  flex: none;
+  padding-top: 4px;
+  padding-left: calc(80px - var(--lg-inset));
+}
+.sidebarScroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 8px 8px;
+}
+.sidebarSection {
+  padding: 4px 10px 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+.folder {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  height: 30px;
+  margin-bottom: 1px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+  text-align: left;
+  cursor: default;
+  transition: background-color 0.15s ease;
+}
+.folder:hover {
+  background: var(--hover);
+}
+.folderSelected,
+.folderSelected:hover {
+  background: color-mix(in srgb, var(--notes-yellow) 26%, transparent);
+}
+.folderDrop {
+  box-shadow: inset 0 0 0 2px var(--notes-yellow);
+}
+.folderIcon {
+  flex: none;
+  color: var(--notes-yellow);
+}
+.folderName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.folderCount {
+  flex: none;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+.sidebarFooter {
+  flex: none;
+  padding: 6px 8px 8px;
+}
+.newFolder {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px 0 10px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: default;
+}
+.newFolder:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+/* ───────── Note list ───────── */
+
+.listPane {
+  display: flex;
+  flex-direction: column;
+  width: 284px;
+  flex: none;
+  min-height: 0;
+  background: var(--window-bg);
+  border-right: 0.5px solid var(--separator);
+}
+.listTitle {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  padding: 0 4px;
+  line-height: 1.25;
+}
+.listTitle strong {
+  font-size: 13px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.listTitle span {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 10px 12px;
+  outline: none;
+}
+.list:focus-visible {
+  box-shadow: none;
+}
+.listEmpty {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+.listHeader {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 14px 10px 6px;
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--window-bg);
+}
+
+.row {
+  position: relative;
+  padding: 9px 12px 10px;
+  border-radius: 10px;
+  cursor: default;
+}
+.row::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 0;
+  border-bottom: 0.5px solid var(--separator);
+}
+.row:last-child::after,
+.rowSelected::after,
+.row:has(+ .rowSelected)::after,
+.row:has(+ .listHeader)::after {
+  display: none;
+}
+.rowSelected {
+  background: var(--notes-sel-inactive);
+}
+.list:focus .rowSelected {
+  background: var(--notes-sel);
+  color: var(--notes-sel-text);
+}
+.list:focus .rowSelected .rowSnippet,
+.list:focus .rowSelected .rowFolder,
+.list:focus .rowSelected .rowPin {
+  color: var(--notes-sel-secondary);
+}
+
+.rowTitle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.rowTitle span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rowPin {
+  flex: none;
+  color: var(--notes-yellow);
+}
+.rowMeta {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.rowDate {
+  flex: none;
+}
+.rowSnippet {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-secondary);
+}
+.rowFolder {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 3px;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.row mark {
+  color: inherit;
+  background: color-mix(in srgb, var(--notes-yellow) 55%, transparent);
+  border-radius: 2px;
+}
+
+/* ───────── Editor ───────── */
+
+.editorPane {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  background: var(--content-bg);
+}
+.editorEmpty {
+  flex: 1;
+}
+/* An inset rounded card (concentric with its capsule button: 12px + 6px padding). */
+.deletedBanner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 12px 6px;
+  padding: 6px 6px 6px 14px;
+  flex: none;
+  font-size: 12px;
+  color: var(--text-secondary);
+  border-radius: 18px;
+  background: var(--window-bg-secondary);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    0 0 0 0.5px var(--separator);
+}
+.deletedBanner span {
+  flex: 1;
+}
+
+.editorScroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+.editorPage {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 6px 30px 0;
+}
+.editorDate {
+  padding: 6px 0 14px;
+  text-align: center;
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+}
+.titleField,
+.bodyField {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  background: transparent;
+  color: var(--text);
+  caret-color: var(--notes-yellow);
+  font-family: var(--font);
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+.titleField:focus-visible,
+.bodyField:focus-visible {
+  box-shadow: none;
+}
+.titleField {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  margin-bottom: 10px;
+}
+.titleField::placeholder {
+  color: var(--text-tertiary);
+}
+.bodyField {
+  font-size: max(14px, var(--input-font-min));
+  line-height: 1.62;
+  tab-size: 4;
+}
+.titleField[readonly],
+.bodyField[readonly] {
+  caret-color: transparent;
+}
+.editorFiller {
+  flex: 1;
+  min-height: 48px;
+  cursor: text;
+}
+
+/* ───────── Narrow (phone) layout ───────── */
+
+.narrow .listPane {
+  flex: 1;
+  width: auto;
+  border-right: none;
+}
+/* Narrow windows: the sidebar floats over the list as a thick glass pane. */
+.sidebar.drawer {
+  position: absolute;
+  top: var(--lg-inset);
+  bottom: var(--lg-inset);
+  left: var(--lg-inset);
+  margin: 0;
+  z-index: 10;
+  width: min(270px, 82%);
+  background: var(--lg-tint-thick);
+  -webkit-backdrop-filter: var(--lg-filter-thick);
+  backdrop-filter: var(--lg-filter-thick);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-float);
+  animation: drawerIn 0.3s var(--ease-out);
+}
+:global(html[data-reduce-transparency='true']) .sidebar.drawer {
+  background: var(--window-bg-secondary);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+@keyframes drawerIn {
+  from {
+    transform: translateX(calc(-100% - 2 * var(--lg-inset)));
+  }
+}
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  background: rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+.backGroup {
+  max-width: 45%;
+  min-width: 0;
+}
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  max-width: 100%;
+  min-width: 0;
+  height: 28px;
+  padding: 0 12px 0 4px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--notes-ink);
+  font-size: 14px;
+  cursor: default;
+  transition:
+    transform 0.3s var(--lg-spring),
+    background-color 0.15s ease;
+}
+.backBtn:hover {
+  background: var(--hover);
+}
+.backBtn:active {
+  background: var(--active);
+  transform: scale(0.96);
+  transition-duration: 0.1s;
+}
+.backBtn span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.narrow .editorPage {
+  padding: 4px 18px 0;
+}
+
+/* Container queries on the window width (not the viewport). With the sidebar shown, the list and
+   sidebar shrink so the editor toolbar capsules (compose, Aa + checklist, share, search) stay
+   inside the pane down to the single-pane breakpoint (640px). Without the sidebar there is room
+   enough, so the list keeps its width. */
+@container (max-width: 820px) {
+  .withSidebar .listPane {
+    width: 232px;
+  }
+  .sidebar {
+    width: 184px;
+  }
+}
+@container (max-width: 760px) {
+  .withSidebar .listPane {
+    width: 216px;
+  }
+  .sidebar {
+    width: 176px;
+  }
+  .toolbar {
+    gap: 4px;
+  }
+  .toolBtn {
+    width: 30px;
+    min-width: 30px;
+  }
+  .search {
+    min-width: 64px;
+  }
+}

@@ -1,0 +1,43 @@
+/* Finder-style image thumbnails: the picture itself inside a thin white mat with a soft shadow. */
+
+.box {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Generic image-document icon shown until the picture has loaded; it is swapped out without a fade. */
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* White mat around the picture: the border width is set inline from the icon size. */
+.frame {
+  display: block;
+  overflow: hidden;
+  background: #fff;
+  border: 0 solid #fff;
+  box-shadow:
+    0 0.5px 1.5px rgba(0, 0, 0, 0.3),
+    0 1px 4px rgba(0, 0, 0, 0.12),
+    0 0 0 0.5px rgba(0, 0, 0, 0.12);
+}
+
+/* Invisible but still laid out (not display: none), so the lazy image passes its viewport check and loads. */
+.pending {
+  opacity: 0;
+}
+
+.frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  -webkit-user-drag: none;
+}

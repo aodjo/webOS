@@ -1,0 +1,339 @@
+.am {
+  container-type: inline-size;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--content-bg);
+  overflow: hidden;
+}
+
+/* ───────── Toolbar ───────── */
+
+/* Transparent toolbar: buttons in a glass capsule (GlassGroup), the view switcher a glass
+   segmented capsule. */
+.toolbar {
+  gap: 8px;
+}
+.titleBlock {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  margin-right: 8px;
+}
+.title {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.subtitle {
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.spacer {
+  flex: 1;
+  min-width: 6px;
+  align-self: stretch;
+}
+.search {
+  flex: 0 1 160px;
+  min-width: 84px;
+}
+.toolbar :global(.ui-segmented) {
+  flex: none;
+  height: 32px;
+  padding: 3px;
+  gap: 1px;
+  background: var(--lg-control);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-control);
+}
+.toolbar :global(.ui-segmented button) {
+  height: 26px;
+  padding: 0 13px;
+}
+.toolbar :global(.ui-segmented button[aria-pressed='true']) {
+  background: var(--active);
+  font-weight: 600;
+  box-shadow: none;
+}
+/* Narrow windows: drop the title block so the tabs and search keep fitting. */
+@container (max-width: 760px) {
+  .titleBlock {
+    display: none;
+  }
+}
+.searchRow {
+  display: none;
+}
+/* Phone-width windows: the five tabs alone overflow the toolbar, so they scroll sideways and
+   search moves to its own row underneath (keeping the 84px traffic-light inset). 620px: the
+   glass capsules (32px segmented track, grouped buttons) need ~610px in one row. */
+@container (max-width: 620px) {
+  .toolbar {
+    gap: 6px;
+    padding-right: 8px;
+  }
+  .spacer {
+    min-width: 2px;
+  }
+  .toolbar :global(.ui-segmented) {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  .toolbar :global(.ui-segmented)::-webkit-scrollbar {
+    display: none;
+  }
+  .toolbar :global(.ui-segmented button) {
+    flex: none;
+    padding: 0 6px;
+    white-space: nowrap;
+  }
+  .toolbar .search {
+    display: none;
+  }
+  .searchRow {
+    display: block;
+    flex: none;
+    padding: 0 12px 8px;
+  }
+}
+
+/* ───────── Table ───────── */
+
+.table {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 0 6px;
+  outline: none;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.table:focus-visible {
+  box-shadow: none;
+}
+
+/* Same 8px inset as the rows so the columns line up. */
+.thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: grid;
+  min-width: max-content;
+  height: 28px;
+  margin-bottom: 2px;
+  padding: 0 8px;
+  background: color-mix(in srgb, var(--content-bg) 86%, transparent);
+  backdrop-filter: blur(12px) saturate(1.6);
+  -webkit-backdrop-filter: blur(12px) saturate(1.6);
+  border-bottom: 0.5px solid var(--separator);
+}
+:global(html[data-reduce-transparency='true']) .thead {
+  background: var(--content-bg);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.th {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+  height: 100%;
+  padding: 0 8px;
+  border: none;
+  background: transparent;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  cursor: default;
+}
+.th + .th {
+  box-shadow: inset 0.5px 0 0 var(--separator);
+}
+.th:focus-visible {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+.th span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.th:hover {
+  background: var(--hover);
+}
+.th.num {
+  justify-content: flex-end;
+}
+.thActive {
+  color: var(--text);
+  font-weight: 600;
+}
+.th svg {
+  flex: none;
+  color: var(--text-secondary);
+}
+
+/* Rounded, inset rows (stripes and selection alike). */
+.tr {
+  display: grid;
+  min-width: max-content;
+  align-items: center;
+  height: 24px;
+  margin: 0 8px;
+  border-radius: 8px;
+  cursor: default;
+}
+.tr:nth-of-type(odd) {
+  background: color-mix(in srgb, var(--text) 3.5%, transparent);
+}
+.trSelected,
+.tr.trSelected:nth-of-type(odd) {
+  background: var(--selection-inactive);
+}
+.table:focus .trSelected,
+.table:focus .tr.trSelected:nth-of-type(odd) {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.nameCell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 0 8px;
+}
+.procIcon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+}
+.procName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.numCell,
+.textCell {
+  min-width: 0;
+  padding: 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.numCell {
+  text-align: right;
+}
+
+/* ───────── Bottom panel ───────── */
+
+/* Bottom stats: a rounded card inset from the window edges, with a glass rim. */
+.panel {
+  flex: none;
+  display: grid;
+  grid-template-columns: minmax(170px, 1fr) minmax(200px, 1.5fr) minmax(170px, 1fr);
+  gap: 18px;
+  height: 132px;
+  margin: 0 var(--lg-inset) var(--lg-inset);
+  padding: 12px 18px;
+  border-radius: 16px;
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 45%),
+    var(--window-bg-secondary);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    inset 0 0 0 0.5px var(--lg-rim-side),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-control);
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  min-width: 0;
+}
+.stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.stat span {
+  color: var(--text-secondary);
+}
+.stat b {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.note {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.graph {
+  position: relative;
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.graphTitle {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  text-align: center;
+}
+.graphSvg {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--text) 6%, var(--content-bg));
+  box-shadow: inset 0 0 0 0.5px var(--separator-strong);
+}
+.gridLine {
+  stroke: var(--separator);
+  stroke-width: 0.5;
+}
+.graphArea {
+  fill: var(--series);
+  fill-opacity: 0.5;
+}
+.graphLine {
+  fill: none;
+  stroke: var(--series);
+  stroke-width: 1.25;
+  stroke-linejoin: round;
+}
+
+@container (max-width: 640px) {
+  .panel {
+    grid-template-columns: 1fr 1.4fr;
+  }
+  .panel > .stats:last-child {
+    display: none;
+  }
+}

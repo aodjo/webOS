@@ -1,0 +1,235 @@
+/* macOS 26 (Liquid Glass) menu: a glass menu panel (`lg lg-menu lg-float`, see styles/glass.css)
+   with a 14px radius and 6px of vertical padding, 24px rows whose 8px-radius accent highlight is
+   inset 2px from the content edge (concentric with the panel corners), and inset separators. The
+   rows scroll in `.scroll` so the glass rim drawn by the panel's pseudo-elements never moves. */
+
+.panel {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  max-width: min(440px, calc(100vw - 8px));
+  padding: 0;
+  border-radius: var(--radius-popover);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  line-height: 16px;
+  overflow: hidden;
+  outline: none;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.scroll {
+  flex: 0 1 auto;
+  min-height: 0;
+  padding: 6px 4px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* ───────── Rows ───────── */
+
+.item {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  margin: 0 2px;
+  padding: 0 10px 0 0;
+  border-radius: 8px;
+  white-space: nowrap;
+  color: var(--text);
+}
+
+.noState .item {
+  padding-left: 10px;
+}
+.noState .heading {
+  padding-left: 12px;
+}
+
+/* NSMenu's state column (checkmarks). */
+.state {
+  flex: none;
+  width: 16px;
+  margin-left: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  margin-right: 7px;
+  color: var(--text-secondary);
+}
+
+.leading {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trailing {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 18px;
+  color: var(--text-secondary);
+}
+
+.shortcut {
+  flex: none;
+  margin-left: 28px;
+  color: var(--text-secondary);
+  letter-spacing: 0.06em;
+  font-feature-settings: 'tnum';
+}
+
+.chevron {
+  flex: none;
+  margin-left: 22px;
+  margin-right: -3px;
+  color: var(--text-secondary);
+}
+
+.tall {
+  height: 32px;
+}
+
+/* Highlight (hover / keyboard): an accent capsule-ish row with a faint specular top. */
+.hl {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 70%),
+    var(--accent);
+  color: var(--accent-contrast);
+}
+.hl .icon,
+.hl .shortcut,
+.hl .chevron,
+.hl .trailing {
+  color: inherit;
+}
+
+.disabled,
+.disabled .shortcut,
+.disabled .icon,
+.disabled .chevron {
+  color: var(--text-tertiary);
+}
+
+/* Rows with a leading badge (Wi-Fi networks, Focus) get a neutral highlight, like macOS status
+   menus: an accent row would swallow the accent badge of the joined network / active Focus. */
+.tall.hl {
+  background: var(--selection-inactive);
+  color: var(--text);
+}
+.tall.hl .trailing {
+  color: var(--text-secondary);
+}
+.tall.blink {
+  animation-name: menuBlinkNeutral;
+}
+@keyframes menuBlinkNeutral {
+  0% {
+    background: transparent;
+  }
+  50% {
+    background: var(--selection-inactive);
+  }
+}
+
+.danger {
+  color: var(--red);
+}
+.danger.hl {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 70%),
+    var(--red);
+  color: var(--text-on-accent);
+}
+
+.info {
+  color: var(--text-secondary);
+}
+
+/* Off-then-on flash after choosing an item, like NSMenu. */
+.blink {
+  animation: menuBlink 130ms steps(1, end);
+}
+@keyframes menuBlink {
+  0% {
+    background: transparent;
+    color: var(--text);
+  }
+  50% {
+    background: var(--accent);
+    color: var(--accent-contrast);
+  }
+}
+
+/* Inset separator, aligned with the row text. */
+.sep {
+  height: 1px;
+  margin: 5px 12px;
+  background: var(--separator);
+}
+
+.heading {
+  padding: 7px 10px 3px 22px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 13px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.custom {
+  display: block;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 30px;
+  padding: 2px 12px;
+  white-space: nowrap;
+}
+.headerTitle {
+  font-weight: 700;
+}
+
+/* Live region announcing the highlighted row (the menu itself never takes focus). */
+.srOnly {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

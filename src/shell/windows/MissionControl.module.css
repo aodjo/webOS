@@ -1,0 +1,192 @@
+.root {
+  position: fixed;
+  inset: 0;
+  outline: none;
+  animation: mcIn 0.3s var(--ease-out) both;
+}
+
+/* Holds the keyboard while open; no focus ring around the whole screen. */
+.root:focus,
+.root:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.closing {
+  pointer-events: none;
+  animation: mcOut 0.34s var(--ease-out) both;
+}
+
+@keyframes mcIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes mcOut {
+  to {
+    opacity: 0;
+  }
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, black 30%, transparent);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+}
+
+:global(html[data-reduce-transparency='true']) .backdrop {
+  background: color-mix(in srgb, var(--window-bg-secondary) 35%, black);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* ───────────────────────── Spaces bar ───────────────────────── */
+
+.spaces {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* Glass capsule holding the desktop thumbnails (`lg lg-thick lg-capsule` draw the material; thick
+   so the label stays legible in light mode over a dark wallpaper). The side padding keeps the
+   thumbnail's corners clear of the capsule's round ends. */
+.strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 7px 30px;
+  pointer-events: auto;
+  animation: spaceIn 0.36s var(--ease-out) both;
+}
+
+@keyframes spaceIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.space {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  color: var(--text);
+  cursor: default;
+}
+
+.spaceThumb {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 4px 12px color-mix(in srgb, black 28%, transparent);
+  transition: transform 0.3s var(--lg-spring);
+}
+
+.space:hover .spaceThumb {
+  transform: scale(1.04);
+}
+
+.space:active .spaceThumb {
+  transform: scale(0.97);
+  transition-duration: 0.12s;
+}
+
+.spaceThumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mini {
+  position: absolute;
+  border-radius: 2px;
+  background: var(--window-bg);
+  box-shadow: 0 0.5px 2px color-mix(in srgb, black 35%, transparent);
+}
+
+.spaceLabel {
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 600;
+}
+
+/* ───────────────────────── Window labels ───────────────────────── */
+
+/* Small thick-glass capsule under each window (`lg lg-thick lg-capsule` draw the material). */
+.label {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 11px 0 5px;
+  border: none;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  translate: -50% 0;
+  cursor: default;
+  animation: labelIn 0.28s var(--ease-out) 0.16s both;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    scale 0.32s var(--lg-spring);
+}
+
+/* The glass material's box-shadow (rim + float) would hide the global :focus-visible ring, so the
+   ring is layered on top of the glass shadow here. */
+.label:focus-visible {
+  outline: none;
+  box-shadow:
+    var(--focus-ring),
+    var(--lg-shadow);
+}
+
+/* Jelly press: the label shrinks quickly while pressed and springs back on release. */
+.label:active {
+  scale: 0.95;
+  transition-duration: 0.12s;
+}
+
+@keyframes labelIn {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The glass material (and its Reduce Transparency fallback) sets a background: out-rank both. */
+.label.labelSelected,
+:global(html[data-reduce-transparency='true']) .label.labelSelected {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.labelIcon {
+  display: inline-flex;
+  flex: none;
+}
+
+.labelText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

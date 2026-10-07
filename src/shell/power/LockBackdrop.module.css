@@ -1,0 +1,42 @@
+.root {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.sharp,
+.blurred {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* The lock screen shows the desktop picture sharp (macOS 26), so the blurred layer stays hidden. */
+.blurred {
+  opacity: 0;
+  filter: blur(14px) saturate(1.15);
+  transform: scale(1.07);
+  transition:
+    opacity 0.36s ease,
+    transform 0.36s var(--ease-out);
+  will-change: opacity, transform;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0) 32%, rgba(0, 0, 0, 0) 58%, rgba(0, 0, 0, 0.3));
+  transition: opacity 0.36s ease;
+}
+
+.clear .blurred {
+  opacity: 0;
+  transform: scale(1);
+}
+
+.clear .scrim {
+  opacity: 0;
+}

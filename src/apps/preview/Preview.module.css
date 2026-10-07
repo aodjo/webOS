@@ -1,0 +1,443 @@
+.root {
+  position: relative;
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  background: var(--window-bg);
+  color: var(--text);
+}
+
+.dropping::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: calc(var(--radius-window) - 4px);
+  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--accent) 70%, transparent);
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* ───────── Toolbar (row under the title bar) ─────────
+   Liquid Glass: the row itself is transparent; its buttons float in glass capsules (GlassGroup). */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 46px;
+  padding: 0 10px;
+  flex: none;
+  background: transparent;
+  position: relative;
+  z-index: 2;
+}
+.toolbarSpacer {
+  flex: 1;
+}
+
+/* Icon buttons inside a 32px capsule: 28px tall, concentric with the capsule (2px inset). */
+.toolBtn {
+  width: 32px;
+  min-width: 32px;
+  height: 28px;
+  padding: 0;
+  flex: none;
+}
+
+/* ───────── Layout ───────── */
+
+.main {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  background: var(--window-bg);
+}
+.dark {
+  background: #000;
+}
+
+.emptyBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 300px;
+}
+
+/* ───────── Thumbnail sidebar ───────── */
+
+/* An inset glass pane floating inside the window. Its bottom-left corner is concentric with the
+   window's: window radius − inset (--win-radius is inherited from the window frame). */
+.sidebar {
+  width: 148px;
+  flex: none;
+  overflow-y: auto;
+  margin: 0 0 var(--lg-inset) var(--lg-inset);
+  padding: 8px 8px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-radius: max(6px, calc(var(--win-radius, var(--radius-window)) - var(--lg-inset)));
+  background: var(--sidebar-bg);
+  -webkit-backdrop-filter: var(--lg-filter);
+  backdrop-filter: var(--lg-filter);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    0 2px 10px rgba(0, 0, 0, 0.06);
+  animation: sidebarIn 0.26s var(--ease-out);
+}
+:global(html[data-reduce-transparency='true']) .sidebar {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+@keyframes sidebarIn {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+}
+
+.thumb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 6px 6px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  cursor: default;
+  min-width: 0;
+  transition: background-color 0.15s ease;
+}
+.thumb:hover {
+  background: var(--hover);
+}
+.thumbSelected,
+.thumbSelected:hover {
+  background: var(--active);
+}
+.thumbImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 86px;
+}
+.thumbImage img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22), 0 0 0 0.5px rgba(0, 0, 0, 0.12);
+  background: var(--content-bg);
+}
+.thumbSelected .thumbImage img {
+  box-shadow: 0 0 0 3px var(--accent), 0 1px 3px rgba(0, 0, 0, 0.22);
+}
+.thumbLabel {
+  max-width: 100%;
+  font-size: 11px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.thumbSelected .thumbLabel {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* ───────── Image ───────── */
+
+.imageScroll {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  touch-action: none;
+  overscroll-behavior: contain;
+}
+.stage {
+  position: relative;
+  overflow: hidden;
+}
+.image {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  max-width: none;
+  transform-origin: center;
+  transition: opacity 0.18s ease;
+  user-select: none;
+}
+.imageAnimate {
+  transition:
+    transform 0.32s var(--ease-out),
+    opacity 0.18s ease;
+}
+.imageError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 100%;
+  color: var(--text-tertiary);
+}
+
+/* ───────── PDF ───────── */
+
+.pdfWrap {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+.frameShield {
+  position: absolute;
+  inset: 0;
+}
+
+.pdf {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: var(--window-bg-secondary);
+}
+.pdfLoading {
+  flex: 1;
+  background: var(--window-bg-secondary);
+}
+
+/* ───────── Markdown / text on paper ───────── */
+
+.paperScroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 28px 24px 48px;
+  background: var(--window-bg-secondary);
+}
+.paper {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 56px 64px;
+  background: var(--content-bg);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 6px 24px rgba(0, 0, 0, 0.08), 0 0 0 0.5px var(--separator);
+  transition: font-size 0.15s ease;
+}
+.paper .paperMd {
+  font-size: inherit;
+}
+.plain {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--text);
+}
+
+/* ───────── Audio ───────── */
+
+.audio {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 24px;
+  background: radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--accent) 14%, var(--window-bg)) 0%, var(--window-bg) 70%);
+}
+.artwork {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(220px, 45vh);
+  aspect-ratio: 1;
+  border-radius: 26px;
+  color: rgba(255, 255, 255, 0.92);
+  background: linear-gradient(145deg, #ff6b8b 0%, #c43bd1 45%, #5856d6 100%);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28), inset 0 0 0 0.5px rgba(255, 255, 255, 0.25);
+}
+.audioMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  max-width: 90%;
+  text-align: center;
+}
+.audioMeta strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+.audioMeta span {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.audioControls {
+  width: min(360px, 90%);
+}
+
+/* ───────── Video ───────── */
+
+.video {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+.video video {
+  max-width: 100%;
+  max-height: 100%;
+  outline: none;
+}
+
+/* ───────── Inspector ─────────
+   Thick Liquid Glass popover; the `lg lg-thick lg-float` classes set in Inspector.tsx
+   supply the material. */
+
+.inspector {
+  position: absolute;
+  top: var(--lg-inset);
+  right: var(--lg-inset);
+  width: 264px;
+  max-height: calc(100% - 2 * var(--lg-inset));
+  display: flex;
+  flex-direction: column;
+  z-index: 5;
+  border-radius: 18px;
+  transform-origin: top right;
+  animation: popIn 0.32s var(--lg-spring);
+}
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.94);
+  }
+}
+.inspectorScroll {
+  min-height: 0;
+  overflow: auto;
+  border-radius: inherit;
+}
+.inspectorHead {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 12px 12px 14px;
+}
+/* Inset hairline (stays clear of the rounded corners). */
+.inspectorHead::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 0;
+  border-bottom: 0.5px solid var(--separator);
+}
+.inspectorName {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+.inspectorName strong {
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.inspectorName span {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.inspectorClose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex: none;
+  align-self: flex-start;
+  border: none;
+  border-radius: 50%;
+  background: var(--hover);
+  color: var(--text-secondary);
+  cursor: default;
+  transition:
+    transform 0.3s var(--lg-spring),
+    background-color 0.15s ease;
+}
+.inspectorClose:hover {
+  background: var(--active);
+  color: var(--text);
+}
+.inspectorClose:active {
+  transform: scale(0.9);
+  transition-duration: 0.1s;
+}
+.inspectorRows {
+  margin: 0;
+  padding: 10px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 11.5px;
+}
+.inspectorRow {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 8px;
+}
+.inspectorRow dt {
+  color: var(--text-secondary);
+  text-align: right;
+}
+.inspectorRow dd {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Compact layout for narrow windows: queries the .root container, not the viewport. */
+@container (max-width: 560px) {
+  .paper {
+    padding: 28px 22px 40px;
+  }
+  .paperScroll {
+    padding: 12px 8px 32px;
+  }
+  .sidebar {
+    width: 104px;
+  }
+  .thumbImage {
+    height: 64px;
+  }
+}

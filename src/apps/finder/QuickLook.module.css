@@ -1,0 +1,117 @@
+.layer {
+  position: absolute;
+  inset: 0;
+  /* Above the sidebar and list headers, below the window's sheets (20) and traffic lights (40). */
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  /* Non-modal: clicks outside the panel still reach Finder. */
+  pointer-events: none;
+}
+
+/* Material comes from the global glass classes (lg lg-thick lg-float); radius is Tahoe's 22px. */
+.panel {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  width: min(760px, 92%);
+  height: min(560px, 90%);
+  border-radius: 22px;
+  overflow: hidden;
+  animation: ql-in 0.42s var(--lg-spring);
+  transform-origin: center;
+}
+
+.header {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 10px 0 11px;
+  touch-action: none;
+}
+
+.close {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  color: var(--text-secondary);
+  cursor: default;
+}
+
+.close:hover {
+  color: var(--text);
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.counter {
+  flex: none;
+  font-weight: 400;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.openBtn {
+  flex: none;
+  height: 28px;
+}
+
+/* The preview sits on an inset card, concentric with the panel (22px − 8px inset). */
+.body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  margin: 0 8px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--content-bg) 55%, transparent);
+  animation: ql-fade 0.16s ease-out;
+}
+
+.footer {
+  flex: none;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+@keyframes ql-in {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+}
+
+@keyframes ql-fade {
+  from {
+    opacity: 0;
+  }
+}

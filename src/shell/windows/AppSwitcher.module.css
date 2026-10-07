@@ -1,0 +1,68 @@
+.root {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  /* The short delay lets a quick ⌥Tab tap switch apps without flashing the HUD. */
+  animation: hudIn 0.14s var(--ease-out) 0.09s both;
+}
+
+@keyframes hudIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+/* Floating Liquid Glass HUD (`lg lg-float` + refraction draw the material). Items sit 14px in,
+   so their highlight uses the concentric radius 28 − 14 = 14px. The bottom padding holds the
+   name capsule of the selected app. */
+.hud {
+  display: flex;
+  max-width: calc(100vw - 32px);
+  padding: 14px 14px 42px;
+  border-radius: 28px;
+  pointer-events: auto;
+}
+
+.item {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  border-radius: 14px;
+  cursor: default;
+}
+
+/* Selected: a rounded glass square (`lg lg-control`). Reduce Transparency flattens every glass
+   layer to the same solid color, so give the highlight its own tone there. */
+:global(html[data-reduce-transparency='true']) .item.selected {
+  background: var(--active);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+}
+
+/* App name in a small thick-glass capsule under the highlighted icon. */
+.name {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  translate: -50% 0;
+  height: 24px;
+  padding: 0 11px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 24px;
+  white-space: nowrap;
+  color: var(--text);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.selected .name {
+  opacity: 1;
+}

@@ -1,0 +1,1089 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   About Me — Liquid Glass.
+   A soft, colorful backdrop fills the window so the glass (sidebar, cards, controls) reads as
+   glass: it blurs + saturates the color behind it and catches a rim light on its edges.
+   Surfaces get the shared material through the `lg …` classes in index.tsx (styles/glass.css);
+   this file only shapes them. Elements with .lg must not get ::before/::after here, because
+   glass.css already uses both pseudo-elements to draw the material.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* The outer element is the size container; everything inside adapts with @container. */
+.container {
+  container-type: inline-size;
+  height: 100%;
+  color: var(--text);
+  background:
+    radial-gradient(52% 46% at 94% 4%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 72%),
+    radial-gradient(46% 42% at 52% 106%, color-mix(in srgb, var(--pink) 22%, transparent), transparent 72%),
+    radial-gradient(38% 58% at 0% 36%, color-mix(in srgb, var(--purple) 26%, transparent), transparent 72%),
+    radial-gradient(30% 34% at 72% 58%, color-mix(in srgb, var(--orange) 12%, transparent), transparent 72%),
+    var(--window-bg);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: calc(240px + var(--lg-inset)) minmax(0, 1fr);
+  height: 100%;
+}
+
+/* ───────────────────────── Sidebar (contact card) ───────────────────────── */
+
+/* Inset floating glass pane, full window height; the traffic lights sit inside its top.
+   Concentric with the window: inner radius = window radius − inset. */
+.sidebar {
+  margin: var(--lg-inset) 0 var(--lg-inset) var(--lg-inset);
+  min-height: 0;
+  border-radius: var(--lg-radius-inset);
+}
+
+.sidebarScroll {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  height: 100%;
+  overflow-y: auto;
+  padding: 44px 16px 16px;
+  border-radius: inherit;
+  scrollbar-width: thin;
+}
+
+.dragStrip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 38px;
+  z-index: 1;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.avatar {
+  width: 96px;
+  height: 96px;
+  flex: none;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  font: 700 36px/1 var(--font-display);
+  color: #fff;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--accent) 65%, white), var(--accent));
+  /* A specular glass ring around the photo. */
+  box-shadow:
+    0 0 0 3px var(--lg-rim-top),
+    0 0 0 3.5px var(--lg-edge),
+    0 12px 30px rgba(0, 0, 0, 0.2);
+  animation: avatarIn 0.6s var(--ease-spring) backwards;
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@keyframes avatarIn {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+.name {
+  margin: 0;
+  font: 700 20px/1.2 var(--font-display);
+  letter-spacing: -0.012em;
+}
+
+.role {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.location {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.pill {
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 24px;
+  padding: 0 11px 0 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--green) 58%, var(--text));
+  background: color-mix(in srgb, var(--green) 15%, transparent);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    inset 0 0 0 0.5px color-mix(in srgb, var(--green) 36%, transparent);
+}
+
+.pillDot {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+}
+.pillDot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--green);
+  animation: ping 2.2s var(--ease-out) infinite;
+}
+
+@keyframes ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  70%,
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+
+/* Round glass quick actions (Contacts style) */
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 46px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: default;
+}
+.action:focus-visible {
+  box-shadow: none;
+}
+.action:focus-visible .actionCircle {
+  box-shadow: var(--focus-ring);
+}
+
+.actionCircle {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+}
+/* The whole button (circle + label) drives hover and the "jelly" press. */
+.action:not(.actionActive):hover .actionCircle {
+  background-color: var(--lg-control-hover);
+}
+.action:not(.actionActive):active .actionCircle {
+  transform: scale(0.9);
+  background-color: var(--lg-control-press);
+  transition-duration: 0.12s;
+}
+/* Accent-tinted glass while "Copied" (.lg-control is declared after .lg-tinted, so pin the tint here). */
+.actionActive .actionCircle {
+  color: var(--accent-contrast);
+  background: color-mix(in srgb, var(--accent) 80%, transparent);
+  animation: pop 0.42s var(--lg-spring);
+}
+html[data-reduce-transparency='true'] .actionActive .actionCircle {
+  background: var(--accent);
+}
+
+@keyframes pop {
+  50% {
+    transform: scale(1.14);
+  }
+}
+
+.actionLabel {
+  max-width: 100%;
+  font-size: 10.5px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contacts {
+  margin: 0;
+  padding-top: 14px;
+  border-top: 0.5px solid var(--separator);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contactRow dt {
+  padding: 0 8px;
+  font-size: 10.5px;
+  color: var(--text-tertiary);
+}
+.contactRow dd {
+  margin: 0;
+}
+
+/* Contact links highlight as small capsules. */
+.contactValue {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  height: 24px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  color: var(--accent);
+  font-size: 12px;
+  text-align: left;
+  cursor: default;
+  transition:
+    background-color 0.15s ease,
+    transform 0.3s var(--lg-spring);
+}
+.contactValue svg {
+  flex: none;
+  color: var(--text-secondary);
+}
+.contactValue span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.contactValue:hover {
+  background: var(--hover);
+}
+.contactValue:active {
+  background: var(--active);
+  transform: scale(0.97);
+  transition-duration: 0.1s;
+}
+
+/* ───────────────────────── Main pane ───────────────────────── */
+
+.main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.toolbar {
+  justify-content: center;
+}
+
+/* Capsule segmented control: a glass track with a sliding glass knob. */
+.tabs {
+  display: inline-flex;
+  padding: 3px;
+}
+
+.tabIndicator {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--control-bg) 92%, transparent);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 3px 10px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.42s var(--lg-spring),
+    width 0.42s var(--lg-spring);
+}
+
+.tab {
+  position: relative;
+  z-index: 1;
+  height: 26px;
+  padding: 0 15px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  cursor: default;
+  transition:
+    color 0.2s,
+    transform 0.3s var(--lg-spring);
+}
+.tab:hover {
+  color: var(--text);
+}
+.tab:active {
+  transform: scale(0.95);
+  transition-duration: 0.1s;
+}
+.tab[aria-selected='true'] {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.panel {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 22px 28px 40px;
+  animation: fadeUp 0.34s var(--ease-out);
+}
+.panel[data-dir='1'] {
+  animation-name: fromRight;
+}
+.panel[data-dir='-1'] {
+  animation-name: fromLeft;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+@keyframes fromRight {
+  from {
+    opacity: 0;
+    transform: translateX(22px);
+  }
+}
+@keyframes fromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-22px);
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* Shared shape of the glass cards (stats, projects, skills, education, timeline). */
+.stat,
+.mini,
+.skillCard,
+.eduCard,
+.tlCard {
+  border-radius: 20px;
+}
+
+/* ───────────────────────── Overview ───────────────────────── */
+
+.display {
+  margin: 0 0 14px;
+  font: 700 28px/1.18 var(--font-display);
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+  color: var(--text);
+  background: linear-gradient(115deg, var(--text) 35%, color-mix(in srgb, var(--accent) 85%, var(--text)));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bio {
+  font-size: 13.5px;
+  line-height: 1.62;
+  color: var(--text-secondary);
+}
+
+.sectionTitle {
+  margin: 30px 0 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 30px 0 12px;
+}
+.sectionHead .sectionTitle {
+  margin: 0;
+}
+
+/* Small glass capsule ("All Projects →"). */
+.linkButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 10px 0 12px;
+  border: none;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: default;
+}
+.linkButton svg {
+  transition: transform 0.3s var(--lg-spring);
+}
+.linkButton:hover svg {
+  transform: translateX(2px);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 16px 15px;
+  overflow: hidden;
+  animation: rise 0.5s var(--ease-out) backwards;
+  animation-delay: calc(var(--i) * 70ms + 80ms);
+}
+
+/* Accent glow caught inside the glass (behind the content, above the tint). */
+.statGlow {
+  position: absolute;
+  z-index: -1;
+  top: -46px;
+  right: -40px;
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 22%, transparent), transparent);
+  pointer-events: none;
+}
+
+/* Glossy accent "bead". */
+.statIcon {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-bottom: 8px;
+  border-radius: 9px;
+  color: var(--accent);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 26%, transparent), color-mix(in srgb, var(--accent) 12%, transparent));
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    inset 0 0 0 0.5px color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+.statValue {
+  font: 700 30px/1.05 var(--font-display);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.miniGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.mini {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+  text-align: left;
+  color: var(--text);
+  cursor: default;
+  transition:
+    transform 0.4s var(--lg-spring),
+    box-shadow 0.28s var(--ease-out);
+  animation: rise 0.5s var(--ease-out) backwards;
+  animation-delay: calc(var(--i) * 80ms + 220ms);
+}
+.mini:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    inset 0 0 0 0.5px var(--lg-rim-side),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-float);
+}
+.mini:active {
+  transform: scale(0.98);
+  transition-duration: 0.12s;
+}
+.mini:focus-visible {
+  box-shadow:
+    var(--focus-ring),
+    var(--lg-shadow);
+}
+
+/* The cover sits inset in the glass card with concentric corners (20 − 6). */
+.mini .miniCover {
+  aspect-ratio: 2 / 1;
+  margin: 6px 6px 0;
+  border-radius: 14px;
+  box-shadow: 0 0 0 0.5px var(--lg-edge);
+}
+.miniCover img {
+  transition: transform 0.6s var(--ease-out);
+}
+.mini:hover .miniCover img {
+  transform: scale(1.045);
+}
+
+.miniBody {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 14px 14px;
+}
+
+.miniTitle {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.miniYear {
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.miniTagline {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ───────────────────────── Experience ───────────────────────── */
+
+.timeline {
+  position: relative;
+  margin: 2px 0 0;
+  padding: 0 0 0 28px;
+  list-style: none;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 22px;
+  bottom: 26px;
+  width: 2px;
+  border-radius: 1px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 60%, transparent), var(--separator-strong) 45%, var(--separator));
+}
+
+.tlItem {
+  position: relative;
+  padding-bottom: 14px;
+  animation: rise 0.45s var(--ease-out) backwards;
+  animation-delay: calc(var(--i) * 90ms + 40ms);
+}
+.tlItem:last-child {
+  padding-bottom: 4px;
+}
+
+/* A small glass bead on the rail, level with the card's first line. */
+.tlDot {
+  position: absolute;
+  left: -28px;
+  top: 16px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  /* Glass tint over an opaque base, so the rail behind doesn't show through the bead (dark mode). */
+  background: linear-gradient(var(--lg-control), var(--lg-control)), var(--window-bg);
+  box-shadow:
+    inset 0 0 0 2px var(--separator-strong),
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    var(--lg-shadow-control);
+}
+
+.tlDotCurrent {
+  background: var(--accent-contrast);
+  box-shadow:
+    inset 0 0 0 4px var(--accent),
+    0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+.tlDotCurrent::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: ping 2.4s var(--ease-out) infinite;
+}
+
+.tlCard {
+  padding: 14px 18px 16px;
+}
+
+.tlPeriod {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.nowBadge {
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  letter-spacing: 0;
+  color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: inset 0.5px 0.5px 0 0 var(--lg-rim-top);
+}
+
+.tlRole {
+  margin: 5px 0 2px;
+  font-size: 16px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.tlCompany {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.tlDesc {
+  margin: 4px 0 10px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+.tlCard > .tlDesc:last-child {
+  margin-bottom: 0;
+}
+
+.tlHighlights {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tlHighlights li {
+  position: relative;
+  padding-left: 16px;
+  line-height: 1.5;
+}
+.tlHighlights li::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 0.6em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.75;
+}
+
+/* ───────────────────────── Skills ───────────────────────── */
+
+.legend {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.legendScale {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.skillGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+
+.skillCard {
+  padding: 14px 14px 8px;
+  animation: rise 0.45s var(--ease-out) backwards;
+  animation-delay: calc(var(--i) * 70ms + 40ms);
+}
+
+.skillHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 2px 6px;
+}
+.skillHead h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: var(--hover);
+  box-shadow: inset 0.5px 0.5px 0 0 var(--lg-rim-top);
+  font-variant-numeric: tabular-nums;
+}
+
+.skillList {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Rows highlight as capsules inside the card (concentric with its corners). */
+.skillRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  margin: 0 -6px;
+  padding: 0 8px 0 6px;
+  border-radius: 999px;
+  outline: none;
+  transition: background 0.15s;
+}
+.skillRow:hover,
+.skillRow:focus-visible {
+  background: var(--hover);
+}
+
+/* Glass control capsule (tokens only: many of them, no backdrop blur needed on a glass card). */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  background: var(--lg-control);
+  box-shadow:
+    inset 0.5px 0.5px 0 0 var(--lg-rim-top),
+    inset -0.5px -0.5px 0 0 var(--lg-rim-bottom),
+    0 0 0 0.5px var(--lg-edge),
+    var(--lg-shadow-control);
+}
+
+.levelLabel {
+  margin-left: auto;
+  font-size: 11px;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  opacity: 0;
+  transform: translateX(4px);
+  transition:
+    opacity 0.18s,
+    transform 0.18s var(--ease-out);
+}
+.skillRow:hover .levelLabel,
+.skillRow:focus-visible .levelLabel {
+  opacity: 1;
+  transform: none;
+}
+
+/* Capsule level bar: a recessed glass track that fills segment by segment. */
+.meter {
+  display: inline-flex;
+  flex: none;
+  width: 66px;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--active);
+  box-shadow:
+    inset 0 1px 1.5px rgba(0, 0, 0, 0.12),
+    inset 0 0 0 0.5px var(--separator),
+    0 0.5px 0 var(--lg-rim-bottom);
+}
+
+.seg {
+  flex: 1;
+  height: 100%;
+}
+
+.segOn {
+  /* The gradient is 5x the segment width and shifted by --k, so each filled segment shows its
+     own slice and the filled run reads as one continuous gradient. */
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 62%, white), var(--accent));
+  background-size: 500% 100%;
+  background-position: calc((var(--k) - 1) * 25%) 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform-origin: left center;
+  animation: segIn 0.42s var(--ease-out) backwards;
+  animation-delay: calc(var(--k) * 55ms + 160ms);
+}
+
+@keyframes segIn {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+}
+
+.chipCloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.chipButton {
+  border: none;
+  cursor: default;
+  transition:
+    background-color 0.15s,
+    transform 0.32s var(--lg-spring);
+}
+.chipButton:hover {
+  background: var(--lg-control-hover);
+  color: var(--accent);
+}
+.chipButton:active {
+  transform: scale(0.94);
+  background: var(--lg-control-press);
+  transition-duration: 0.1s;
+}
+
+/* ───────────────────────── Education ───────────────────────── */
+
+.eduGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.eduCard {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  animation: rise 0.45s var(--ease-out) backwards;
+  animation-delay: calc(var(--i) * 80ms + 40ms);
+}
+
+.eduIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  color: #fff;
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0) 55%),
+    linear-gradient(145deg, color-mix(in srgb, var(--accent) 70%, white), var(--accent));
+  box-shadow:
+    inset 0.5px 0.5px 0 0 rgba(255, 255, 255, 0.6),
+    inset -0.5px -0.5px 0 0 rgba(255, 255, 255, 0.2),
+    0 4px 12px color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+.eduBody {
+  min-width: 0;
+}
+.eduBody h3 {
+  margin: 1px 0 2px;
+  font-size: 14px;
+  font-weight: 650;
+}
+.eduBody p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.eduPeriod {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ───────────────────────── Narrow windows ───────────────────────── */
+
+@container (max-width: 619px) {
+  .layout {
+    display: block;
+    overflow-y: auto;
+  }
+
+  /* The card becomes a floating glass pane at the top of the scrolling page. */
+  .sidebar {
+    margin: var(--lg-inset);
+  }
+
+  .sidebarScroll {
+    height: auto;
+    overflow: visible;
+    gap: 14px;
+    padding: 38px 18px 16px;
+  }
+
+  .profile {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+  }
+
+  .avatar {
+    width: 68px;
+    height: 68px;
+    font-size: 26px;
+  }
+
+  .identity {
+    align-items: flex-start;
+  }
+
+  .actions {
+    justify-content: flex-start;
+  }
+
+  .contacts {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    padding-top: 12px;
+  }
+
+  .main {
+    display: block;
+  }
+
+  /* Once stuck to the top of the window the bar sits under the traffic lights: keep it clear of them
+     (the inline padding comes from <Toolbar inset={false}>, hence !important). Content scrolling
+     beneath it fades out behind the glass tab bar (scroll edge effect). */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding-left: 80px !important;
+    justify-content: center;
+    justify-content: safe center;
+    background: linear-gradient(to bottom, color-mix(in srgb, var(--window-bg) 82%, transparent) 30%, transparent);
+  }
+
+  .tabs {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .tab {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .content {
+    overflow: visible;
+  }
+
+  .panel {
+    padding: 16px 16px 30px;
+  }
+
+  .display {
+    font-size: 23px;
+  }
+
+  .miniGrid,
+  .skillGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@container (max-width: 420px) {
+  .stats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tab {
+    padding: 0 9px;
+  }
+}

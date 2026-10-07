@@ -1,0 +1,29 @@
+.field {
+  font: inherit;
+  font-size: max(12px, var(--input-font-min));
+  line-height: 1.25;
+  color: var(--text);
+  background: var(--input-bg);
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 50%, transparent), 0 1px 3px rgba(0, 0, 0, 0.18);
+  padding: 1px 5px;
+  min-width: 0;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.multi {
+  width: 100%;
+  resize: none;
+  overflow: hidden;
+  text-align: center;
+  display: block;
+}
+
+.single {
+  width: 100%;
+  min-height: 18px;
+  font-size: max(13px, var(--input-font-min));
+}
