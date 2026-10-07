@@ -33,8 +33,6 @@
   color: var(--cc-text);
   font-size: 14px;
   line-height: 1.2;
-  transform-origin: top right;
-  animation: ccIn 0.34s var(--lg-spring);
   user-select: none;
   -webkit-user-select: none;
 }
@@ -87,20 +85,25 @@
   display: none;
 }
 
+/* The controls fade in and out in place. The fade runs on each glass shape rather than on the
+   panel: opacity below 1 on an ancestor would cut the shapes' backdrop blur off from the desktop. */
 .closing {
-  animation: ccOut 0.17s ease-in forwards;
   pointer-events: none;
+}
+.shape {
+  animation: ccIn 0.2s ease-out both;
+}
+.closing .shape {
+  animation: ccOut 0.17s ease-in forwards;
 }
 @keyframes ccIn {
   from {
     opacity: 0;
-    transform: translateY(-8px) scale(0.94);
   }
 }
 @keyframes ccOut {
   to {
     opacity: 0;
-    transform: translateY(-4px) scale(0.97);
   }
 }
 
