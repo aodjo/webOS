@@ -105,6 +105,17 @@ export const APPS: AppManifest[] = [
     bundleId: 'com.webos.terminal',
   },
   {
+    id: 'linux',
+    name: 'Linux',
+    description: { en: 'A real Linux PC in your browser', ko: '브라우저 속 진짜 리눅스' },
+    icon: I.LinuxIcon,
+    component: lazyApp(() => import('./linux'), 'linux'),
+    window: { width: 760, height: 520, minWidth: 420, minHeight: 280 },
+    singleWindow: true,
+    category: 'utility',
+    bundleId: 'com.webos.linux',
+  },
+  {
     id: 'textedit',
     name: { en: 'TextEdit', ko: '텍스트 편집기' },
     icon: I.TextEditIcon,

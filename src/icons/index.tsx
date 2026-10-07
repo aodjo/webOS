@@ -12,6 +12,7 @@ export {
   AboutMeIcon,
   ProjectsIcon,
   TerminalIcon,
+  LinuxIcon,
   TextEditIcon,
   PreviewIcon,
   CalculatorIcon,

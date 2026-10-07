@@ -16,6 +16,7 @@ Real window management, a persistent virtual file system, a zsh-like terminal an
 - **Window manager** — drag, resize from every edge, snap to halves or fill, minimize into the Dock, Mission Control (F3), ⌥Tab app switcher, Show Desktop (F11).
 - **Virtual file system** — shared by every app and saved in IndexedDB: create, rename, move, copy, trash and restore files; import files by dropping them in, download them back.
 - **Apps** — Finder (icon / list / column / gallery views, Quick Look, Get Info), Terminal (pipes, redirection, globbing, history, tab completion, `neofetch`), TextEdit, Preview, Notes, Safari, Mail, Calculator, Activity Monitor, System Settings, Minesweeper.
+- **Linux** — a real Alpine Linux PC emulated in the browser with [v86](https://github.com/copy/v86), with Python, vim and git. It resumes from a booted snapshot and fetches files on demand, so it only costs bandwidth when opened. It has no network and nothing is saved. Rebuild the image with `scripts/vm/build.sh` (Docker) and `node scripts/vm/build-state.mjs`.
 - **Portfolio apps** — About Me, Projects and a first-run Tips tour, all generated from one data file.
 - **System** — boot, login and lock screens, sleep / restart / shut down, menu bar with real menus and shortcuts, Control Center, Notification Center, Spotlight (apps, files, math), Launchpad, desktop widgets.
 - **Liquid Glass** — translucent glass with a thin rim light, modelled on macOS 26: Control Center and widgets switch between white and dark content depending on what lies behind them, and the lock screen clock is milky glass over the wallpaper. On Chromium browsers an SVG filter adds real edge refraction (Dock, Spotlight, menus, Control Center, widgets).
@@ -34,7 +35,7 @@ Requires Node.js 22.12 or later.
 
 ## Make it yours
 
-Edit **`src/data/portfolio.ts`** — name, role, bio, contact links, skills, experience, education and projects. Everything else (About Me, Projects, Mail, Terminal commands, Spotlight, the résumé and project files in Finder) is generated from it. Every text field accepts a plain string or `{ en, ko }`.
+Edit **`src/data/portfolio.ts`** — name, role, bio, contact links, skills, experience, education and projects. Everything else (About Me, Projects, Mail, Terminal commands, Spotlight and the project files in Finder) is generated from it. Every text field accepts a plain string or `{ en, ko }`.
 
 - Avatar: replace `public/avatar.jpg` and point `owner.avatar` at it.
 - Project covers: `public/projects/*.svg`, referenced by each project's `cover`.
@@ -68,7 +69,7 @@ This is an independent fan-made project inspired by macOS. It is not affiliated 
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE). The Linux app bundles third-party software under its own licenses: v86 (BSD-2-Clause), SeaBIOS and its VGA BIOS in `public/vm` (LGPL-3.0) and the Alpine Linux packages in the disk image (their respective licenses).
 
 ---
 
@@ -87,7 +88,7 @@ npm run build      # dist/ 에 정적 사이트 생성
 
 ### 내 포트폴리오로 바꾸기
 
-**`src/data/portfolio.ts` 한 파일만 수정하면 됩니다.** 이름·직함·소개·연락처·기술·경력·학력·프로젝트가 About Me, Projects, 메일, 터미널 명령어, Spotlight, Finder 안의 이력서와 프로젝트 파일에 자동으로 반영됩니다. 모든 문구는 문자열 또는 `{ en, ko }`로 쓸 수 있습니다.
+**`src/data/portfolio.ts` 한 파일만 수정하면 됩니다.** 이름·직함·소개·연락처·기술·경력·학력·프로젝트가 About Me, Projects, 메일, 터미널 명령어, Spotlight, Finder 안의 프로젝트 파일에 자동으로 반영됩니다. 모든 문구는 문자열 또는 `{ en, ko }`로 쓸 수 있습니다.
 
 - 아바타: `public/avatar.jpg`를 교체하고 `owner.avatar`가 그 파일을 가리키게 합니다
 - 프로젝트 커버: `public/projects/*.svg`
@@ -105,4 +106,4 @@ npm run build      # dist/ 에 정적 사이트 생성
 
 ### 라이선스 및 고지
 
-MIT 라이선스. Apple, LG전자와 무관한 개인 프로젝트이며 macOS·Finder·Safari는 Apple의, webOS는 LG전자의 상표입니다. 아이콘·배경화면·커버 이미지는 모두 직접 제작한 것입니다.
+MIT 라이선스. Apple, LG전자와 무관한 개인 프로젝트이며 macOS·Finder·Safari는 Apple의, webOS는 LG전자의 상표입니다. 아이콘·배경화면·커버 이미지는 모두 직접 제작한 것입니다. Linux 앱에 포함된 v86(BSD-2-Clause), SeaBIOS(LGPL-3.0), Alpine Linux 패키지는 각자의 라이선스를 따릅니다.

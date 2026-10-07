@@ -330,6 +330,32 @@ export const TerminalIcon: IconFC = ({ size }) => {
   );
 };
 
+/**
+ * Linux app icon.
+ *
+ * A deep indigo squircle holding a small white-framed monitor on a stand, its dark screen
+ * showing a green `>_` shell prompt.
+ *
+ * @param {Object} props - Icon props.
+ * @param {number} props.size - Rendered width and height in pixels.
+ * @returns {JSX.Element} The icon SVG.
+ *
+ * @example
+ * <LinuxIcon size={64} />
+ */
+export const LinuxIcon: IconFC = ({ size }) => {
+  const ids = useIconIds();
+  return (
+    <AppIconFrame size={size} fill={ids.url('bg')} rim={0.24} defs={<VGrad id={ids('bg')} from="#4b4fd8" to="#1d1f63" />}>
+      <rect x="23" y="25" width="54" height="38" rx="5" fill="#0c0d18" stroke="#fff" strokeWidth="3.6" />
+      <path d="M44 63.5L42 71H58L56 63.5" fill="#fff" fillOpacity="0.9" />
+      <rect x="36" y="70" width="28" height="4" rx="2" fill="#fff" />
+      <path d="M31 37L38 43L31 49" fill="none" stroke="#30d158" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="41" y="46.5" width="11" height="3.4" rx="1" fill="#30d158" />
+    </AppIconFrame>
+  );
+};
+
 const TEXT_LINES = [30, 37, 44, 51, 58, 65].map((y, i) => ({ y, w: [22, 36, 32, 36, 28, 18][i] })); /** Y position and length of each text line on the TextEdit page, top to bottom. */
 
 /**
