@@ -250,16 +250,17 @@ describe('Finder renders', () => {
     expect(quickLook?.disabled).toBe(false);
     act(() => quickLook!.action!());
     /**
-     * Returns the Quick Look panel currently rendered in the container.
+     * Returns the Quick Look panel currently rendered on the page.
      *
-     * Looks up the element with `role="dialog"`, which only Quick Look renders in this test.
+     * Looks up the element with `role="dialog"` in the whole document, since Quick Look is
+     * portalled to the body; only Quick Look renders one in this test.
      *
      * @returns {Element | null} The panel element, or null when Quick Look is closed.
      *
      * @example
      * expect(dialog()?.textContent).toContain('Hello');
      */
-    const dialog = () => container.querySelector('[role="dialog"]');
+    const dialog = () => document.querySelector('[role="dialog"]');
     expect(dialog()?.getAttribute('aria-label')).toContain('Readme.md');
     expect(dialog()?.textContent).toContain('Hello');
     act(() => void window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true })));

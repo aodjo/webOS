@@ -3,6 +3,7 @@
  * context menus and the four view modes over the shared virtual file system.
  */
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type DragEvent, type MouseEvent } from 'react';
+import { createPortal } from 'react-dom';
 import type { AppArgs, AppProps, FSNode, LString, MenuDef, MenuItem, SortKey } from '@/kernel';
 import {
   HOME,
@@ -35,6 +36,7 @@ import {
   useT,
   useTrashCount,
   useWindow,
+  useWM,
   useWindowKeydown,
   wm,
 } from '@/kernel';
@@ -76,6 +78,7 @@ import { Sidebar } from './Sidebar';
 import { FinderToolbar } from './FinderToolbar';
 import { PathBar, ScopeBar, StatusBar, TrashBanner } from './Bars';
 import { QuickLook } from './QuickLook';
+import { Z } from '@/shell/layers';
 import { IconView } from './views/IconView';
 import { ListView } from './views/ListView';
 import { ColumnView, type Column } from './views/ColumnView';
@@ -152,6 +155,23 @@ function onKeyboardFocusedControl(target: EventTarget | null): boolean {
   } catch {
     return false;
   }
+}
+
+/**
+ * Returns the centre of a window in viewport coordinates.
+ *
+ * Reads the window's current bounds from the window manager; used to open Quick Look over the
+ * Finder window it belongs to.
+ *
+ * @param {string} windowId - Id of the window.
+ * @returns {{ x: number; y: number } | undefined} The centre point, or undefined when the window is gone.
+ *
+ * @example
+ * windowCenter(windowId); // { x: 720, y: 400 }
+ */
+function windowCenter(windowId: string): { x: number; y: number } | undefined {
+  const w = useWM.getState().windows.find((win) => win.id === windowId);
+  return w ? { x: w.x + w.width / 2, y: w.y + w.height / 2 } : undefined;
 }
 
 /**
@@ -1567,14 +1587,21 @@ export function FinderBrowser({ windowId, args }: AppProps) {
           />
         </>
       )}
-      {quickLook && leadNode && (
-        <QuickLook
-          node={leadNode}
-          position={sel.length > 1 ? { index: sel.indexOf(leadNode.path), total: sel.length } : undefined}
-          onClose={() => setQuickLook(false)}
-          onOpen={(n) => openItems([n.path])}
-        />
-      )}
+      {quickLook &&
+        leadNode &&
+        focused &&
+        createPortal(
+          <div className={s.quickLook} style={{ zIndex: Z.WINDOWS + 1 }}>
+            <QuickLook
+              node={leadNode}
+              position={sel.length > 1 ? { index: sel.indexOf(leadNode.path), total: sel.length } : undefined}
+              origin={windowCenter(windowId)}
+              onClose={() => setQuickLook(false)}
+              onOpen={(n) => openItems([n.path])}
+            />
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }

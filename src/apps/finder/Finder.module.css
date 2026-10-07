@@ -395,3 +395,10 @@
     display: none;
   }
 }
+
+/* Screen-wide layer for Quick Look, so the panel can be dragged outside the Finder window. */
+.quickLook {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}

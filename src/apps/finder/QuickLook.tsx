@@ -13,6 +13,8 @@ interface Props {
   node: FSNode;
   /** Zero-based item index and selection size; shown as a 1-based counter when total > 1. */
   position?: { index: number; total: number };
+  /** Viewport point the panel is first centred on (e.g. the middle of the Finder window); the middle of the viewport when omitted. */
+  origin?: { x: number; y: number };
   onClose: () => void;
   onOpen: (node: FSNode) => void;
 }
@@ -58,6 +60,7 @@ function openerFor(node: FSNode): string | null {
  * @param {Props} props - Component props.
  * @param {FSNode} props.node - Item being previewed.
  * @param {{ index: number; total: number }} [props.position] - Position of the item in a multi-item selection.
+ * @param {{ x: number; y: number }} [props.origin] - Viewport point the panel is first centred on.
  * @param {() => void} props.onClose - Closes the panel.
  * @param {(node: FSNode) => void} props.onOpen - Opens the item; the panel closes right after.
  * @returns {JSX.Element} The panel overlay.
@@ -66,10 +69,10 @@ function openerFor(node: FSNode): string | null {
  * <QuickLook node={leadNode} onClose={() => setQuickLook(false)}
  *   onOpen={(n) => openItems([n.path])} />
  */
-export function QuickLook({ node, position, onClose, onOpen }: Props) {
+export function QuickLook({ node, position, origin, onClose, onOpen }: Props) {
   const t = useT();
   const locale = useLocale();
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [offset, setOffset] = useState(() => (origin ? { x: Math.round(origin.x - window.innerWidth / 2), y: Math.round(origin.y - window.innerHeight / 2) } : { x: 0, y: 0 }));
   const [full, setFull] = useState(false);
   const drag = useRef<{ x: number; y: number; ox: number; oy: number } | null>(null);
   const opener = openerFor(node);
