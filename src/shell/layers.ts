@@ -18,3 +18,20 @@ export const Z = {
   LOCK: 10000,
   POWER: 11000,
 } as const; /** z-index of every shell layer, lowest to highest; windows stack among themselves inside the WindowLayer stacking context (z-index: WINDOWS). */
+
+/**
+ * Returns the element that holds every shell layer (desktop, windows, Dock, menu bar, menus…).
+ *
+ * Overlays portalled out of a window (e.g. Quick Look) must be mounted here rather than on
+ * `document.body`: the shell sits in its own stacking context, so anything outside it is stacked
+ * against the shell as a whole and would cover the menu bar and context menus whatever its
+ * z-index. Falls back to `document.body` before the shell has mounted.
+ *
+ * @returns {HTMLElement} The shell layer container.
+ *
+ * @example
+ * createPortal(<Panel />, shellLayerRoot());
+ */
+export function shellLayerRoot(): HTMLElement {
+  return document.querySelector<HTMLElement>('[data-shell-layers]') ?? document.body;
+}

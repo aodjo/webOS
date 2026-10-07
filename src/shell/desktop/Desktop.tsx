@@ -43,7 +43,7 @@ import {
   type Bounds,
   type FSNode,
 } from '@/kernel';
-import { Z } from '../layers';
+import { Z, shellLayerRoot } from '../layers';
 import { isModKey } from './DialogParts';
 import { DesktopIcon, iconLabel, type IconEvents } from './DesktopIcon';
 import {
@@ -1502,7 +1502,7 @@ export function Desktop() {
               />
             </Suspense>
           </div>,
-          document.body,
+          shellLayerRoot(),
         )}
     </div>
   );

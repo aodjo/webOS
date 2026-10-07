@@ -78,7 +78,7 @@ import { Sidebar } from './Sidebar';
 import { FinderToolbar } from './FinderToolbar';
 import { PathBar, ScopeBar, StatusBar, TrashBanner } from './Bars';
 import { QuickLook } from './QuickLook';
-import { Z } from '@/shell/layers';
+import { Z, shellLayerRoot } from '@/shell/layers';
 import { IconView } from './views/IconView';
 import { ListView } from './views/ListView';
 import { ColumnView, type Column } from './views/ColumnView';
@@ -1600,7 +1600,7 @@ export function FinderBrowser({ windowId, args }: AppProps) {
               onOpen={(n) => openItems([n.path])}
             />
           </div>,
-          document.body,
+          shellLayerRoot(),
         )}
     </div>
   );

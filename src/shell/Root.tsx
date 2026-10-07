@@ -551,7 +551,7 @@ export function Root() {
   return (
     <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', background: '#000' }} onContextMenu={(e) => e.preventDefault()}>
       {sessionVisible && (
-        <div style={{ position: 'absolute', inset: 0 }} inert={power !== 'desktop' ? true : undefined}>
+        <div style={{ position: 'absolute', inset: 0 }} data-shell-layers inert={power !== 'desktop' ? true : undefined}>
           <Desktop />
           <WindowLayer />
           <MissionControl />
