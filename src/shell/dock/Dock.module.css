@@ -442,7 +442,8 @@
 
 /* ───────── Minimized window tile ───────── */
 
-.mini {
+/* `.icon > .mini` outranks `.icon > :first-child { display: block }`, which would drop the centring. */
+.icon > .mini {
   position: absolute;
   inset: 0;
   display: flex;
