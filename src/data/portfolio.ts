@@ -26,7 +26,7 @@ export const owner = {
   name: 'aod_jo' as LString,
   role: { en: 'Full-stack Engineer', ko: '풀스택 엔지니어' } as LString,
   location: { en: 'Seoul, South Korea', ko: '대한민국 서울' } as LString,
-  /** One-line summary used as the About Me headline and shown in Tips, the Safari portfolio page, the résumé and Terminal `about`. */
+  /** One-line summary used as the About Me headline and shown in Tips, the Safari portfolio page and Terminal `about`. */
   tagline: {
     en: 'I build products end to end, from the interface to the server.',
     ko: '화면부터 서버까지, 제품을 처음부터 끝까지 만듭니다.',
@@ -40,7 +40,7 @@ export const owner = {
       '저는 초등학교 5학년 때 프로그래밍을 처음 접하고 계속하여 프로그램과 웹사이트를 제작하고 있어요. ' +
       '지금은 **목포대학교 정보보호영재원**을 수료하고, **선린인터넷고등학교 소프트웨어과**에 재학하면서 열심히 공부하고 있어요.'
   } as LString,
-  /** Contact address used as the sender in Mail and in the résumé and contact links. */
+  /** Contact address used as the sender in Mail and in the contact links. */
   email: 'me@junx.dev',
   /** Profile URLs; leave a field empty to hide that link. */
   links: {
@@ -50,8 +50,7 @@ export const owner = {
     website: '',
   },
   avatar: '/avatar.jpg',
-  resume: '/resume.pdf',
-}; /** The portfolio owner's profile: identity, bio, contact details, links, avatar and résumé paths. */
+}; /** The portfolio owner's profile: identity, bio, contact details, links and avatar. */
 
 /** One skill and its proficiency. */
 export interface Skill {
@@ -96,7 +95,7 @@ export const skills: { category: LString; items: Skill[] }[] = [
       { name: 'Vitest / Playwright', level: 4 },
     ],
   },
-]; /** Skills grouped by category, shown in About Me, the Safari portfolio page, the résumé and Terminal `skills`, and searchable from Spotlight. */
+]; /** Skills grouped by category, shown in About Me, the Safari portfolio page and Terminal `skills`, and searchable from Spotlight. */
 
 /** One job in the work history. */
 export interface Experience {
@@ -108,7 +107,7 @@ export interface Experience {
   highlights: LString[];
 }
 
-export const experience: Experience[] = []; /** Work history, newest first (the résumé email presents the first entry as the current job); shown in About Me, the résumé, the Safari portfolio page and Terminal `experience`. Leave it empty to show only awards. */
+export const experience: Experience[] = []; /** Work history, newest first; shown in About Me, the Safari portfolio page and Terminal `experience`. Leave it empty to show only awards. */
 
 /** One award or competition entry. */
 export interface Award {
@@ -178,7 +177,7 @@ export const awards: Award[] = [
     title: { en: '11th KERIS Information Security Competition, individual', ko: '제11회 정보보안경진대회 (KERIS) 개인전' },
     result: { en: '4th place', ko: '4위' },
   },
-]; /** Awards and competitions, newest first; shown in About Me, the résumé, the Safari portfolio page and Terminal `experience`. */
+]; /** Awards and competitions, newest first; shown in About Me, the Safari portfolio page and Terminal `experience`. */
 
 export const education: { school: LString; degree: LString; period: string }[] = [
   {
@@ -196,7 +195,7 @@ export const education: { school: LString; degree: LString; period: string }[] =
     degree: { en: 'Completed the advanced course', ko: '심화과정 수료' },
     period: '2025',
   },
-]; /** Schools and programs, newest first, shown in About Me, the résumé, the Safari portfolio page and Terminal `experience`. */
+]; /** Schools and programs, newest first, shown in About Me, the Safari portfolio page and Terminal `experience`. */
 
 /** One portfolio project, shown in the Projects app, Finder, Spotlight and Mail. */
 export interface Project {

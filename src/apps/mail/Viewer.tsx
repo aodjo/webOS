@@ -2,7 +2,7 @@
  * The main Mail window: mailboxes sidebar, message list and reading pane.
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ChevronLeft, File as FileIcon, Flag, Forward, Inbox, Mail as MailIcon, MailOpen, Paperclip, Reply, Send, SquarePen, Trash2 } from 'lucide-react';
+import { ChevronLeft, File as FileIcon, Flag, Forward, Inbox, Mail as MailIcon, MailOpen, Reply, Send, SquarePen, Trash2 } from 'lucide-react';
 import { IconButton, SearchField } from '@/components/ui';
 import { GlassGroup } from '@/components/Glass';
 import { fmt, formatDate, showContextMenu, useAppMenus, useLocale, useT, useWindowKeydown, wm, type LString, type MenuItem } from '@/kernel';
@@ -575,7 +575,6 @@ export function Viewer({ windowId }: { windowId: string }) {
                         <span className={styles.rowDate}>{listDate(m.date, locale, t(V.yesterday))}</span>
                       </div>
                       <div className={styles.rowSubject}>
-                        {m.attachments?.length ? <Paperclip size={11} /> : null}
                         <span>{m.subject || '—'}</span>
                       </div>
                       <div className={styles.rowPreview}>{preview(m.body)}</div>
@@ -589,7 +588,7 @@ export function Viewer({ windowId }: { windowId: string }) {
           <div className={styles.reader}>
             {selected ? (
               <div key={selected.id} className={styles.readerScroll}>
-                <MessageView message={selected} windowId={windowId} />
+                <MessageView message={selected} />
               </div>
             ) : (
               <div className="ui-empty">
@@ -671,7 +670,7 @@ export function MessageWindow({ windowId, messageId }: { windowId: string; messa
         </GlassGroup>
         <div className={styles.toolbarSpacer} data-drag-region />
       </div>
-      <div className={styles.readerScroll}>{m ? <MessageView message={m} windowId={windowId} /> : <div className="ui-empty">{t(V.noSelection)}</div>}</div>
+      <div className={styles.readerScroll}>{m ? <MessageView message={m} /> : <div className="ui-empty">{t(V.noSelection)}</div>}</div>
     </div>
   );
 }

@@ -9,14 +9,6 @@ export interface Address {
   email: string;
 }
 
-/** A file attached to a message. */
-export interface Attachment {
-  /** File name shown in the attachment chip. */
-  name: string;
-  /** How the attachment is resolved: `resume` maps to the resume file in the virtual FS. */
-  kind: 'resume';
-}
-
 /** A single mail message, either seeded from portfolio data or written by the visitor. */
 export interface MailMessage {
   id: string;
@@ -37,7 +29,6 @@ export interface MailMessage {
   flagged: boolean;
   /** Extra interactive UI rendered under the body of seeded messages. */
   extra?: 'welcome' | 'projects' | 'contact' | 'system';
-  attachments?: Attachment[];
   /** Mailbox a trashed message came from, used by "Put Back". */
   trashedFrom?: MailboxId;
 }

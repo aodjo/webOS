@@ -35,16 +35,12 @@ describe('mail store', () => {
     const ko = buildSeedMessages('ko', 1_000_000_000, ME);
     expect(en.map((m) => m.id)).toEqual([...SEED_IDS]);
     expect(en[0].subject).not.toBe(ko[0].subject);
-    expect(en.find((m) => m.id === 'resume')?.attachments?.[0].name).toBe('Resume.md');
-    expect(ko.find((m) => m.id === 'resume')?.attachments?.[0].name).toBe('이력서.md');
   });
 
   it('localizes an open-ended experience period', () => {
     expect(localizePeriod('2024 — Present', 'ko')).toBe('2024 — 현재');
     expect(localizePeriod('2024 — present', 'en')).toBe('2024 — Present');
     expect(localizePeriod('2023 — 2024', 'ko')).toBe('2023 — 2024');
-    const ko = buildSeedMessages('ko', 1_000_000_000, ME).find((m) => m.id === 'resume')!;
-    expect(ko.body).not.toMatch(/present/i);
   });
 
   it('counts unread inbox messages and follows read / trash state', () => {

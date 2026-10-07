@@ -78,11 +78,11 @@ describe('Mail window', () => {
   it('lists the seeded inbox, reads a message and badges the Dock', () => {
     const { host } = mount();
     const rows = host.querySelectorAll('[role="option"]');
-    expect(rows).toHaveLength(5);
-    expect(useBadges.getState().badges.mail).toBe('5');
+    expect(rows).toHaveLength(4);
+    expect(useBadges.getState().badges.mail).toBe('4');
     act(() => rows[0].dispatchEvent(new MouseEvent('mousedown', { bubbles: true })));
     expect(host.querySelector('article')?.textContent).toContain('Welcome');
-    expect(useBadges.getState().badges.mail).toBe('4');
+    expect(useBadges.getState().badges.mail).toBe('3');
     const flagged = [...host.querySelectorAll('nav button')].find((b) => b.textContent?.includes('Flagged'))!;
     act(() => (flagged as HTMLButtonElement).click());
     expect(host.querySelectorAll('[role="option"]')).toHaveLength(1);

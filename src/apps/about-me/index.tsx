@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
-import { ArrowRight, ArrowUpRight, Briefcase, Check, Copy, FileText, Globe, GraduationCap, Layers, Mail, MapPin, PenLine, Sparkles, Trophy } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Briefcase, Check, Copy, Globe, GraduationCap, Layers, Mail, MapPin, PenLine, Sparkles, Trophy } from 'lucide-react';
 import type { AppProps, MenuItem } from '@/kernel';
-import { COMMON, PATHS, buildResume, dialogs, extname, fs, join, localizePeriod, showFSError, stem, useAppMenus, useArgsChange, useLocale, useNode, useSystem, useT, wm } from '@/kernel';
+import { COMMON, fs, localizePeriod, useAppMenus, useArgsChange, useLocale, useNode, useSystem, useT, wm } from '@/kernel';
 import { Toolbar } from '@/components/ui';
 import { Markdown } from '@/components/Markdown';
 import { useDraggableThumb } from '@/components/segmentThumb';
@@ -13,7 +13,6 @@ import styles from './AboutMe.module.css';
 
 const S = {
   mail: { en: 'Mail', ko: '메일' },
-  resume: { en: 'Résumé', ko: '이력서' },
   copy: { en: 'Copy', ko: '복사' },
   copyEmail: { en: 'Copy Email Address', ko: '이메일 주소 복사' },
   copied: { en: 'Copied', ko: '복사됨' },
@@ -50,13 +49,10 @@ const S = {
   openLinkedIn: { en: 'Open LinkedIn Profile', ko: 'LinkedIn 프로필 열기' },
   openWebsite: { en: 'Open Website', ko: '웹사이트 열기' },
   openBlog: { en: 'Open Blog', ko: '블로그 열기' },
-  openResume: { en: 'Open Résumé', ko: '이력서 열기' },
   showProjects: { en: 'Show Projects', ko: '프로젝트 보기' },
-  resumeMissing: { en: 'Your résumé can’t be found.', ko: '이력서를 찾을 수 없습니다.' },
-  resumeMissingMsg: { en: 'It was moved or deleted from the Documents folder. Do you want to restore it?', ko: '‘문서’ 폴더에서 이동되었거나 삭제되었습니다. 복원하겠습니까?' },
   restore: { en: 'Restore', ko: '복원' },
   sections: { en: 'Sections', ko: '섹션' },
-}; /** Localized strings for the About Me window, its menus and the résumé restore dialog. */
+}; /** Localized strings for the About Me window and its menus. */
 
 const TABS = ['overview', 'experience', 'skills', 'education'] as const; /** Section ids of the main pane, in tab-bar and keyboard order. */
 type Tab = (typeof TABS)[number];
@@ -127,55 +123,6 @@ const composeMail = () => wm.openWindow('mail', { compose: true });
  * prettyURL('https://github.com/aodjo/'); // "github.com/aodjo"
  */
 const prettyURL = (url: string) => url.replace(/^https?:\/\//, '').replace(/\/$/, '');
-
-/**
- * Opens the résumé from the Documents folder in Preview.
- *
- * Looks in ~/Documents for a file whose name starts with "resume", "résumé", "cv" or the Korean
- * word for résumé, preferring a Markdown file, and opens it in Preview. When none is found, asks the user (as a
- * sheet on the given window) whether to restore it; on confirmation a résumé is generated with
- * `buildResume` in the current locale, written to Documents under a unique name and opened.
- * File-system errors while restoring are shown in an alert rather than thrown.
- *
- * @async
- * @param {string} windowId - Window that hosts the confirmation sheet and any error alert.
- * @returns {Promise<void>} Resolves once the résumé is opened or the user declines to restore it.
- *
- * @example
- * await openResume(windowId);
- */
-async function openResume(windowId: string): Promise<void> {
-  const docs = fs.isDir(PATHS.documents) ? fs.readdir(PATHS.documents) : [];
-  /**
-   * Checks whether a file name looks like a résumé.
-   *
-   * Tests the name without its extension against common résumé prefixes in English and
-   * Korean, ignoring case.
-   *
-   * @param {string} name - File name to test.
-   * @returns {boolean} True when the name starts with "resume", "résumé", "cv" or the Korean
-   *   word for résumé.
-   *
-   * @example
-   * isResume('Resume.md'); // true
-   */
-  const isResume = (name: string) => /^(resume|résumé|cv|이력서)/i.test(stem(name));
-  const found = docs.find((n) => n.type === 'file' && isResume(n.name) && ['md', 'markdown'].includes(extname(n.name))) ?? docs.find((n) => n.type === 'file' && isResume(n.name));
-  if (found) {
-    wm.openPath(found.path, 'preview');
-    return;
-  }
-  const ok = await dialogs.confirm({ windowId, appId: 'about-me', title: S.resumeMissing, message: S.resumeMissingMsg, okLabel: S.restore });
-  if (!ok) return;
-  const locale = useSystem.getState().settings.locale;
-  try {
-    const path = join(PATHS.documents, fs.uniqueName(PATHS.documents, locale === 'ko' ? '이력서.md' : 'Resume.md'));
-    fs.writeFile(path, buildResume(locale));
-    wm.openPath(path, 'preview');
-  } catch (e) {
-    void showFSError(e, windowId);
-  }
-}
 
 /**
  * Copies text to the host clipboard.
@@ -714,10 +661,10 @@ function EducationTab() {
 }
 
 /**
- * The About Me window: a profile card beside a tabbed résumé.
+ * The About Me window: a profile card beside tabbed sections.
  *
- * The sidebar shows the avatar, name, role, location, quick actions (mail, GitHub, résumé,
- * copy email address) and contact links; the main pane shows the Overview, Experience, Skills
+ * The sidebar shows the avatar, name, role, location, quick actions (mail, GitHub, copy
+ * email address) and contact links; the main pane shows the Overview, Experience, Skills
  * or Education section. The first section comes from `args.tab`, and later launches that pass
  * a `tab` argument switch to it. On every section change the panel gets the slide direction
  * (`data-dir`) for its entrance animation and the content is scrolled to its top; in the
@@ -820,7 +767,6 @@ export default function AboutMe({ windowId, args }: AppProps) {
           { separator: true },
           ...linkItems,
           { separator: true },
-          { label: S.openResume, action: () => void openResume(windowId) },
           { label: S.showProjects, action: () => wm.launch('projects') },
         ],
       },
@@ -856,7 +802,6 @@ export default function AboutMe({ windowId, args }: AppProps) {
             <div className={styles.actions}>
               <ActionButton icon={<Mail size={16} />} label={t(S.mail)} title={t(S.sendEmail)} onClick={composeMail} />
               {github && <ActionButton icon={<GitHubMark size={16} />} label="GitHub" title={t(S.openGitHub)} onClick={() => openURL(github)} />}
-              <ActionButton icon={<FileText size={16} />} label={t(S.resume)} title={t(S.openResume)} onClick={() => void openResume(windowId)} />
               <ActionButton
                 icon={copied ? <Check size={16} /> : <Copy size={15} />}
                 label={t(copied ? S.copied : S.copy)}

@@ -1,5 +1,5 @@
-/** Portfolio commands that render the data in src/data/portfolio.ts: about, projects, skills, experience, contact, resume. */
-import { PATHS, buildResume, fs, join, localizePeriod, t, useSystem, wm } from '@/kernel';
+/** Portfolio commands that render the data in src/data/portfolio.ts: about, projects, skills, experience, contact. */
+import { localizePeriod, t, useSystem, wm } from '@/kernel';
 import { awards, education, experience, owner, projects, skills } from '@/data/portfolio';
 import { c, displayWidth } from '../ansi';
 import type { CommandContext, CommandDef } from '../types';
@@ -136,7 +136,7 @@ function styler(ctx: CommandContext) {
   };
 }
 
-const HINT = { en: 'Try: about · projects · skills · experience · contact · resume', ko: '이것도 해보세요: about · projects · skills · experience · contact · resume' }; /** Footer hint listing the portfolio commands, printed at the end of `about`. */
+const HINT = { en: 'Try: about · projects · skills · experience · contact', ko: '이것도 해보세요: about · projects · skills · experience · contact' }; /** Footer hint listing the portfolio commands, printed at the end of `about`. */
 
 const about: CommandDef = {
   name: 'about',
@@ -405,46 +405,4 @@ const contact: CommandDef = {
   },
 }; /** `contact`: prints the owner's email and links and offers to compose a message in Mail. */
 
-const resume: CommandDef = {
-  name: 'resume',
-  aliases: ['cv'],
-  path: '/usr/local/bin',
-  group: 'portfolio',
-  summary: { en: 'open my résumé in Preview', ko: '이력서를 미리보기에서 열기' },
-  usage: 'resume [-p]',
-  options: [['-p', { en: 'Print it here instead of opening Preview', ko: '미리보기 대신 여기에 출력' }]],
-  /**
-   * Opens the résumé in Preview, or prints it with `-p`.
-   *
-   * Looks for Resume.md or 이력서.md in ~/Documents, then on the Desktop.
-   * With `-p`, prints the file found, or a résumé generated from the
-   * portfolio data when none exists. Otherwise opens the file in Preview; if
-   * no copy exists (for example because it was deleted), a fresh one is
-   * generated into /tmp, named for the current locale, and opened instead.
-   *
-   * @param {CommandContext} ctx - The running command's context.
-   * @returns {number} Exit status 0.
-   * @throws {FSError} When reading the found file or writing the /tmp copy fails.
-   *
-   * @example
-   * resume.run({ ...ctx, args: ['-p'] }); // prints the résumé markdown
-   */
-  run(ctx) {
-    const locale = useSystem.getState().settings.locale;
-    const candidates = [join(PATHS.documents, 'Resume.md'), join(PATHS.documents, '이력서.md'), join(PATHS.desktop, 'Resume.md'), join(PATHS.desktop, '이력서.md')];
-    let path = candidates.find((p) => fs.stat(p)?.type === 'file');
-    if (ctx.args.includes('-p')) {
-      ctx.print(path ? fs.readFile(path) : buildResume(locale));
-      return 0;
-    }
-    if (!path) {
-      path = `/tmp/${locale === 'ko' ? '이력서' : 'Resume'}.md`;
-      fs.writeFile(path, buildResume(locale));
-    }
-    wm.openPath(path, 'preview');
-    ctx.print(styler(ctx).dim(t({ en: `Opening ${path.split('/').pop()} in Preview…`, ko: `미리보기에서 ${path.split('/').pop()} 여는 중…` })));
-    return 0;
-  },
-}; /** `resume` (alias `cv`): opens the résumé in Preview, regenerating it when missing, or prints it with `-p`. */
-
-export const PORTFOLIO_COMMANDS: CommandDef[] = [about, projectsCmd, skillsCmd, experienceCmd, contact, resume]; /** The portfolio command definitions, merged into the shell's command registry. */
+export const PORTFOLIO_COMMANDS: CommandDef[] = [about, projectsCmd, skillsCmd, experienceCmd, contact]; /** The portfolio command definitions, merged into the shell's command registry. */

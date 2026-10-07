@@ -20,7 +20,6 @@ const S = {
   mail: { en: 'Mail', ko: '메일' },
   mailDesc: { en: 'Say hello', ko: '인사 건네기' },
   documents: { en: 'Documents', ko: '문서' },
-  resume: { en: 'Résumé.md', ko: '이력서.md' },
   notes: { en: 'Notes', ko: '메모' },
   pictures: { en: 'Pictures', ko: '사진' },
   draft: { en: 'Old Draft.txt', ko: '오래된 초안.txt' },
@@ -214,8 +213,8 @@ export function WindowsScene() {
 /**
  * Illustration for the fourth Tips page (Files).
  *
- * Combines a miniature Finder window listing localized Documents, Résumé, Notes and
- * Pictures entries (drawn with the real `FileIcon`, using paths under `PATHS` so the
+ * Combines a miniature Finder window listing localized Documents, Notes and Pictures
+ * entries (drawn with the real `FileIcon`, using paths under `PATHS` so the
  * correct folder icons are picked), a Terminal window running `neofetch` with the
  * owner's handle and OS info from the portfolio data, and a document that animates
  * into the Trash. Purely decorative and hidden from assistive technology.
@@ -229,7 +228,6 @@ export function FilesScene() {
   const t = useT();
   const items = [
     { name: t(S.documents), type: 'dir' as const, path: PATHS.documents },
-    { name: t(S.resume), type: 'file' as const, path: `${PATHS.documents}/${t(S.resume)}` },
     { name: t(S.notes), type: 'dir' as const, path: PATHS.notes },
     { name: t(S.pictures), type: 'dir' as const, path: PATHS.pictures },
   ];

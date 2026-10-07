@@ -20,7 +20,7 @@ export { fileClipboard, useFileClipboard, DRAG_MIME, setDragPaths, getDragPaths,
 export { importHostFiles, downloadFile, pickHostFiles } from './io';
 export { WALLPAPERS, DEFAULT_WALLPAPER, wallpaperURL } from './wallpapers';
 export type { Wallpaper } from './wallpapers';
-export { ensureSeeded, eraseAll, buildResume } from './seed';
+export { ensureSeeded, eraseAll } from './seed';
 export { buildMenuBar, buildLogoMenu, buildGlobalShortcuts, confirmPower, SYSTEM_SHORTCUTS } from './systemMenus';
 export {
   openGetInfo,

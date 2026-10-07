@@ -465,26 +465,26 @@ describe('Desktop', () => {
      * icons().map((i) => i.getAttribute('aria-label'));
      */
     const icons = () => Array.from(host.querySelectorAll('[data-desktop-item]'));
-    expect(icons().map((i) => i.getAttribute('aria-label'))).toEqual(['Read Me.md', 'Resume.md', 'Screenshot.svg']);
+    expect(icons().map((i) => i.getAttribute('aria-label'))).toEqual(['Read Me.md', 'Screenshot.svg']);
 
     pointer(icons()[1], 'pointerdown');
     expect(icons()[1].getAttribute('aria-selected')).toBe('true');
     expect(useMenus.getState().byApp.finder?.[0].items.find((i) => i.shortcut === 'mod+o')?.disabled).toBe(false);
 
-    key('ArrowDown');
-    expect(icons()[2].getAttribute('aria-selected')).toBe('true');
     key('ArrowUp');
+    expect(icons()[0].getAttribute('aria-selected')).toBe('true');
+    key('ArrowDown');
 
     key('Enter');
     const field = host.querySelector('textarea') as HTMLTextAreaElement;
-    expect(field.value).toBe('Resume.md');
-    field.value = 'CV.md';
+    expect(field.value).toBe('Screenshot.svg');
+    field.value = 'CV.svg';
     key('Enter', {}, field);
     await flush();
-    expect(fs.exists(`${PATHS.desktop}/CV.md`)).toBe(true);
-    expect(icons().map((i) => i.getAttribute('aria-label'))).toContain('CV.md');
+    expect(fs.exists(`${PATHS.desktop}/CV.svg`)).toBe(true);
+    expect(icons().map((i) => i.getAttribute('aria-label'))).toContain('CV.svg');
     // The renamed item keeps its cell.
-    expect(fs.stat(`${PATHS.desktop}/CV.md`)?.meta).toMatchObject({ x: 0, y: 1 });
+    expect(fs.stat(`${PATHS.desktop}/CV.svg`)?.meta).toMatchObject({ x: 0, y: 1 });
   });
 
   it('ignores its shortcuts while the user types in a field elsewhere, and keys behind the lock screen', () => {
@@ -561,7 +561,7 @@ describe('Desktop', () => {
     act(() => {
       fs.writeFile(`${PATHS.desktop}/new.txt`, 'hi');
     });
-    expect(fs.stat(`${PATHS.desktop}/new.txt`)?.meta).toMatchObject({ x: 0, y: 3 });
+    expect(fs.stat(`${PATHS.desktop}/new.txt`)?.meta).toMatchObject({ x: 0, y: 2 });
     act(() => {
       host.firstElementChild!.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, clientX: 300, clientY: 300 }));
     });

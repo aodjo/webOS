@@ -2,11 +2,10 @@
  * Message-level actions shared by the viewer, the standalone message window and menus.
  */
 import { owner } from '@/data/portfolio';
-import { PATHS, buildResume, dialogs, extname, formatDate, fs, join, notify, showFSError, t, useSystem, wm, type LString } from '@/kernel';
+import { dialogs, formatDate, notify, t, useSystem, wm, type LString } from '@/kernel';
 import { openCompose, parseMailto } from './compose';
 import { ME, formatAddresses, useMail } from './store';
-import { resumeFileName } from './seed';
-import type { Address, Attachment, MailMessage } from './types';
+import type { Address, MailMessage } from './types';
 
 export const A = {
   me: { en: 'Me', ko: '나' },
@@ -22,7 +21,6 @@ export const A = {
   eraseMsg: { en: 'You can’t undo this action.', ko: '이 동작은 실행 취소할 수 없습니다.' },
   erase: { en: 'Erase', ko: '지우기' },
   delete: { en: 'Delete', ko: '삭제' },
-  attachmentMissing: { en: 'The attachment was saved to your Downloads folder.', ko: '첨부 파일을 다운로드 폴더에 저장했습니다.' },
 } satisfies Record<string, LString>; /** Localized strings for message actions, quoted headers and confirmation dialogs. */
 
 /**
@@ -190,102 +188,6 @@ export function copyAddress(email: string = owner.email): void {
 export function openLink(href: string): void {
   if (href.startsWith('mailto:')) openCompose(parseMailto(href));
   else if (/^(https?:|webos:)/i.test(href)) wm.openWindow('safari', { url: href });
-}
-
-/**
- * Finds the existing file for an attachment, without writing anything.
- *
- * For the resume, searches ~/Documents and then ~/Downloads for Markdown files whose name
- * contains "resume" or "이력서" (so a resume in either language matches), preferring the file
- * named for the current locale and otherwise taking the first match.
- *
- * @param {Attachment} att - The attachment to look up.
- * @returns {string | null} The path of the file, or null if none exists.
- *
- * @example
- * const path = findAttachment({ name: 'Resume.md', kind: 'resume' });
- */
-export function findAttachment(att: Attachment): string | null {
-  if (att.kind !== 'resume') return null;
-  for (const dir of [PATHS.documents, PATHS.downloads]) {
-    const candidates = [...fs.search('resume', dir), ...fs.search('이력서', dir)].filter((n) => n.type === 'file' && extname(n.name) === 'md');
-    const hit = candidates.find((n) => n.name === resumeFileName(locale())) ?? candidates[0];
-    if (hit) return hit.path;
-  }
-  return null;
-}
-
-/**
- * Returns the file for an attachment, recreating it when it is missing.
- *
- * Uses `findAttachment` first. If nothing is found, writes a freshly generated resume in the
- * current locale to ~/Downloads under a unique name (like saving a real attachment) and shows
- * a notification. File system errors are swallowed and reported as null.
- *
- * @param {Attachment} att - The attachment to resolve.
- * @returns {string | null} The path of the attachment's file, or null if it could not be found or created.
- *
- * @example
- * const path = resolveAttachment(message.attachments[0]);
- * if (path) wm.openPath(path);
- */
-export function resolveAttachment(att: Attachment): string | null {
-  if (att.kind !== 'resume') return null;
-  const found = findAttachment(att);
-  if (found) return found;
-  try {
-    const dir = PATHS.downloads;
-    const path = join(dir, fs.uniqueName(dir, resumeFileName(locale())));
-    fs.writeFile(path, buildResume(locale()));
-    notify({ appId: 'mail', title: att.name, body: A.attachmentMissing });
-    return path;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Opens an attachment with its default app.
- *
- * Resolves (and if needed recreates) the attachment's file, then opens it through the window
- * manager; does nothing if the file cannot be resolved.
- *
- * @param {Attachment} att - The attachment to open.
- * @returns {void}
- *
- * @example
- * openAttachment({ name: 'Resume.md', kind: 'resume' });
- */
-export function openAttachment(att: Attachment): void {
-  const path = resolveAttachment(att);
-  if (path) wm.openPath(path);
-}
-
-/**
- * Saves a copy of an attachment to a location the visitor chooses.
- *
- * Resolves the attachment's file, shows a save panel (as a sheet when `windowId` is given)
- * defaulting to ~/Downloads, and copies the file's content to the chosen path. Cancelling or
- * choosing the source file itself does nothing; write errors are shown in an alert.
- *
- * @async
- * @param {Attachment} att - The attachment to save.
- * @param {string} [windowId] - Window to attach the save panel and error alert to.
- * @returns {Promise<void>} Resolves when the copy is written or the panel is dismissed.
- *
- * @example
- * await saveAttachment(message.attachments[0], windowId);
- */
-export async function saveAttachment(att: Attachment, windowId?: string): Promise<void> {
-  const src = resolveAttachment(att);
-  if (!src) return;
-  const dest = await dialogs.save({ windowId, appId: 'mail', defaultName: att.name, defaultDir: PATHS.downloads });
-  if (!dest || dest === src) return;
-  try {
-    fs.writeFile(dest, fs.readFile(src));
-  } catch (e) {
-    void showFSError(e, windowId);
-  }
 }
 
 /**

@@ -6,12 +6,12 @@
  * seed does not contain them), everything they created or changed is kept.
  */
 import type { AppManifest, FSNode, Locale } from './types';
-import { awards, education, experience, osInfo, owner, projects, skills } from '@/data/portfolio';
+import { education, experience, osInfo, owner, projects, skills } from '@/data/portfolio';
 import { HOME, PATHS, USER } from './constants';
 import { WALLPAPERS } from './wallpapers';
 import { fs, mimeFor, useFS } from './fs';
 import { basename, dirname, extname, isWithin, join } from './path';
-import { localizePeriod, tr } from './i18n';
+import { tr } from './i18n';
 
 const SEED_SCHEMA = 5; /** Schema version hashed into the seed version; increment it after changing how this file builds the seed so returning visitors get the new seed merged in. */
 
@@ -57,7 +57,7 @@ type Draft = Record<string, FSNode>;
  *
  * Builds the system folders (locked), wallpapers, a few /etc and /var files, one locked `.app`
  * file per visible registered app (its content is the app id), the home folder with its standard
- * folders, a folder with README, cover and link files for each project, the résumé, sample notes,
+ * folders, a folder with README, cover and link files for each project, sample notes,
  * the Desktop items and a few Pictures/Downloads files. Text is localized for `locale`. Every item
  * gets a distinct timestamp on a whole hour (starting at January 15 of `osInfo.year`) with
  * createdAt === modifiedAt, which is how `isPristineSeed` recognizes untouched seeded items.
@@ -196,9 +196,6 @@ function buildSeed(locale: Locale, apps: AppManifest[]): Draft {
     if (p.links.github) file(join(folder, `GitHub.webloc`), p.links.github);
   }
 
-  const resume = buildResume(locale);
-  file(join(PATHS.documents, locale === 'ko' ? '이력서.md' : 'Resume.md'), resume);
-
   file(
     join(PATHS.notes, locale === 'ko' ? '아이디어.md' : 'Ideas.md'),
     locale === 'ko'
@@ -235,9 +232,8 @@ function buildSeed(locale: Locale, apps: AppManifest[]): Draft {
     `# ${locale === 'ko' ? `${osInfo.name}에 오신 것을 환영합니다 👋` : `Welcome to ${osInfo.name} 👋`}\n\n${L(owner.bio)}\n\n---\n\n${locale === 'ko' ? '**바로가기**' : '**Quick links**'}\n\n- ${locale === 'ko' ? `Dock의 **${aboutMe}** — 저에 대해` : `**${aboutMe}** in the Dock — who I am`}\n- ${locale === 'ko' ? `Dock의 **${projectsApp}** — 작업물` : `**${projectsApp}** in the Dock — my work`}\n- ${locale === 'ko' ? `**${mail}** — 연락하기` : `**${mail}** — get in touch`}\n`,
     { x: 0, y: 0 },
   );
-  file(join(PATHS.desktop, locale === 'ko' ? '이력서.md' : 'Resume.md'), resume, { x: 0, y: 1 });
   const shot = projects[0]?.cover ?? '/projects/webos.svg';
-  asset(join(PATHS.desktop, `Screenshot.${extname(shot)}`), shot, 52_000, { x: 0, y: 2 });
+  asset(join(PATHS.desktop, `Screenshot.${extname(shot)}`), shot, 52_000, { x: 0, y: 1 });
 
   for (const p of projects) asset(join(PATHS.pictures, `${p.id}.${extname(p.cover)}`), p.cover, 52_000);
   asset(join(PATHS.pictures, `avatar.${extname(owner.avatar)}`), owner.avatar, 40_000);
@@ -245,61 +241,6 @@ function buildSeed(locale: Locale, apps: AppManifest[]): Draft {
   file(join(PATHS.downloads, 'todo.txt'), locale === 'ko' ? '- 포트폴리오 업데이트\n- 운동하기\n' : '- update portfolio\n- go for a run\n');
 
   return d;
-}
-
-/**
- * Generates the résumé as Markdown.
- *
- * Combines the owner's name, role, location, email, links and tagline with sections for
- * experience, projects, skills and education from the portfolio data, localized for `locale`
- * (including the section headings and date periods).
- *
- * @param {Locale} locale - Language of the résumé.
- * @returns {string} The Markdown document.
- *
- * @example
- * const md = buildResume('ko');
- */
-export function buildResume(locale: Locale): string {
-  /**
-   * Localizes a string for the résumé's locale.
-   *
-   * Shorthand for `tr(s, locale)` with the `locale` passed to `buildResume`.
-   *
-   * @param {Parameters<typeof tr>[0]} s - The localized string.
-   * @returns {string} The text in `locale`.
-   *
-   * @example
-   * L(owner.role);
-   */
-  const L = (s: Parameters<typeof tr>[0]) => tr(s, locale);
-  const ko = locale === 'ko';
-  const contact = [owner.email && `✉️ ${owner.email}`, owner.links.github && `🐙 ${owner.links.github}`, owner.links.linkedin && `💼 ${owner.links.linkedin}`, owner.links.website && `🌐 ${owner.links.website}`]
-    .filter(Boolean)
-    .join(' · ');
-  return [
-    `# ${L(owner.name)}`,
-    `**${L(owner.role)}** · ${L(owner.location)}`,
-    contact,
-    '',
-    `> ${L(owner.tagline)}`,
-    '',
-    ...(experience.length
-      ? [`## ${ko ? '경력' : 'Experience'}`, ...experience.flatMap((e) => [`### ${L(e.role)} — ${L(e.company)}`, `*${localizePeriod(e.period, locale)}*`, '', L(e.description), ...e.highlights.map((h) => `- ${L(h)}`), ''])]
-      : []),
-    ...(awards.length
-      ? [`## ${ko ? '수상' : 'Awards'}`, ...awards.map((a) => `- ${a.date} **${L(a.title)}**${a.result ? ` ${L(a.result)}` : ''}${a.detail ? ` (${L(a.detail)})` : ''}`), '']
-      : []),
-    `## ${ko ? '프로젝트' : 'Projects'}`,
-    ...projects.map((p) => `- **${p.name}** (${p.year}) — ${L(p.tagline)}`),
-    '',
-    `## ${ko ? '기술' : 'Skills'}`,
-    ...skills.map((s) => `- **${L(s.category)}**: ${s.items.map((i) => i.name).join(', ')}`),
-    '',
-    `## ${ko ? '학력' : 'Education'}`,
-    ...education.map((e) => `- **${L(e.school)}** — ${L(e.degree)} (${localizePeriod(e.period, locale)})`),
-    '',
-  ].join('\n');
 }
 
 const SEED_TICK = 3_600_000; /** Spacing of seed timestamps (one hour); seeded items are stamped on multiples of it. */

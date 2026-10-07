@@ -1,21 +1,20 @@
 /**
  * Mail's reading view for one message: header (avatar, sender, date, recipients), markdown
- * body, the extra actions seeded messages carry (project cards, quick links) and attachment
- * chips.
+ * body, the extra actions seeded messages carry (project cards, quick links).
  */
 import { useState } from 'react';
-import { ArrowRight, Copy, FileText, Flag, Keyboard, Monitor, PenLine, Reply, Terminal, User, FolderOpen, Globe } from 'lucide-react';
+import { ArrowRight, Copy, Flag, Keyboard, Monitor, PenLine, Reply, Terminal, User, FolderOpen, Globe } from 'lucide-react';
 import { owner, projects } from '@/data/portfolio';
 import { Button } from '@/components/ui';
 import { Markdown } from '@/components/Markdown';
 import { OSLogo } from '@/icons';
-import { COMMON, formatBytes, formatDate, fs, revealInFinder, showContextMenu, useLocale, useNode, useSystem, useT, wm, type LString } from '@/kernel';
+import { formatDate, fs, showContextMenu, useLocale, useNode, useSystem, useT, wm, type LString } from '@/kernel';
 import { GitHubMark, LinkedInMark } from '@/apps/safari/brands';
 import { openCompose } from './compose';
-import { A, copyAddress, displayName, findAttachment, initialsOf, openAttachment, openLink, reply, resolveAttachment, saveAttachment } from './actions';
+import { A, copyAddress, displayName, initialsOf, openLink, reply } from './actions';
 import { SYSTEM_ADDRESS } from './seed';
 import { formatAddresses } from './store';
-import type { Attachment, MailMessage } from './types';
+import type { MailMessage } from './types';
 import styles from './Mail.module.css';
 
 const V = {
@@ -32,9 +31,6 @@ const V = {
   newEmail: { en: 'New Email', ko: '새로운 이메일' },
   shortcuts: { en: 'Keyboard Shortcuts', ko: '키보드 단축키' },
   aboutComputer: { en: 'About This Computer', ko: '이 컴퓨터에 관하여' },
-  attachments: { en: '{n} Attachment', ko: '첨부 파일 {n}개' },
-  saveAttachment: { en: 'Save Attachment…', ko: '첨부 파일 저장…' },
-  showInFinder: { en: 'Show in Finder', ko: 'Finder에서 보기' },
   cc: { en: 'Cc', ko: '참조' },
   flagged: { en: 'Flagged', ko: '깃발 표시됨' },
 } satisfies Record<string, LString>; /** Localized strings used by the message view. */
@@ -90,59 +86,6 @@ export function Avatar({ from, size = 40 }: { from: MailMessage['from']; size?: 
     >
       {system ? <OSLogo size={size * 0.5} color="#fff" /> : photo ? <img src={photo} alt="" draggable={false} onError={() => setPhotoFailed(true)} /> : initialsOf(from)}
     </div>
-  );
-}
-
-/**
- * A clickable chip for one message attachment.
- *
- * Clicking opens the attachment; the context menu also offers Save Attachment… and Show in
- * Finder. The size label is shown only when the attachment's file already exists in the VFS,
- * since the file is otherwise generated on demand when first opened.
- *
- * @param {Object} props - Component props.
- * @param {Attachment} props.att - The attachment to show.
- * @param {string} props.windowId - Window that the save panel attaches to as a sheet.
- * @returns {JSX.Element} The attachment button.
- *
- * @example
- * <AttachmentChip att={{ name: 'Resume.md', kind: 'resume' }} windowId={windowId} />
- */
-function AttachmentChip({ att, windowId }: { att: Attachment; windowId: string }) {
-  const t = useT();
-  const locale = useLocale();
-  const path = findAttachment(att);
-  const size = path ? fs.size(path) : 0;
-  return (
-    <button
-      type="button"
-      className={styles.attachment}
-      onClick={() => openAttachment(att)}
-      onContextMenu={(e) =>
-        showContextMenu(e, [
-          { label: COMMON.open, action: () => openAttachment(att) },
-          { label: V.saveAttachment, action: () => void saveAttachment(att, windowId) },
-          { separator: true },
-          {
-            label: V.showInFinder,
-            action: () => {
-              const p = resolveAttachment(att);
-              if (p) revealInFinder(p);
-            },
-          },
-        ])
-      }
-      title={t(COMMON.open)}
-    >
-      <span className={styles.attachmentIcon}>
-        <FileText size={20} strokeWidth={1.5} />
-        <span>MD</span>
-      </span>
-      <span className={styles.attachmentText}>
-        <span className={styles.attachmentName}>{att.name}</span>
-        {size > 0 && <span className={styles.attachmentSize}>{formatBytes(size, locale)}</span>}
-      </span>
-    </button>
   );
 }
 
@@ -268,18 +211,17 @@ function Extras({ m }: { m: MailMessage }) {
  *
  * Renders the header (avatar, sender, date, subject, recipients, flag), a draft bar with an
  * Edit Draft button for messages in Drafts, the markdown body (links open in Compose or
- * Safari), the seeded extras and the attachment chips. Clicking or right-clicking the sender
+ * Safari), and the seeded extras. Clicking or right-clicking the sender
  * opens a menu to write to or copy their address.
  *
  * @param {Object} props - Component props.
  * @param {MailMessage} props.message - The message to show.
- * @param {string} props.windowId - Id of the Mail window, used for attachment save panels.
  * @returns {JSX.Element} The message article.
  *
  * @example
- * <MessageView message={selected} windowId={windowId} />
+ * <MessageView message={selected} />
  */
-export function MessageView({ message: m, windowId }: { message: MailMessage; windowId: string }) {
+export function MessageView({ message: m }: { message: MailMessage }) {
   const t = useT();
   const locale = useLocale();
 
@@ -340,14 +282,6 @@ export function MessageView({ message: m, windowId }: { message: MailMessage; wi
 
       <Extras m={m} />
 
-      {m.attachments && m.attachments.length > 0 && (
-        <div className={styles.attachments}>
-          <div className={styles.attachmentsLabel}>{t(V.attachments).replace('{n}', String(m.attachments.length))}</div>
-          {m.attachments.map((a) => (
-            <AttachmentChip key={a.name} att={a} windowId={windowId} />
-          ))}
-        </div>
-      )}
     </article>
   );
 }

@@ -2,18 +2,17 @@
  * The Inbox the visitor finds: messages FROM the owner TO the visitor, generated from
  * src/data/portfolio.ts in the current language (so switching language re-localizes them).
  */
-import { osInfo, owner, projects, experience, skills } from '@/data/portfolio';
-import { localizePeriod, tr, type Locale } from '@/kernel';
+import { osInfo, owner, projects } from '@/data/portfolio';
+import { tr, type Locale } from '@/kernel';
 import type { MailMessage } from './types';
 
-export const SEED_IDS = ['welcome', 'projects', 'resume', 'contact', 'system'] as const; /** Ids of the seeded messages, in the order `buildSeedMessages` returns them. */
+export const SEED_IDS = ['welcome', 'projects', 'contact', 'system'] as const; /** Ids of the seeded messages, in the order `buildSeedMessages` returns them. */
 /** Id of one of the seeded messages. */
 export type SeedId = (typeof SEED_IDS)[number];
 
 export const SEED_DEFAULTS: Record<SeedId, { read: boolean; flagged: boolean }> = {
   welcome: { read: false, flagged: false },
   projects: { read: false, flagged: false },
-  resume: { read: false, flagged: false },
   contact: { read: false, flagged: true },
   system: { read: false, flagged: false },
 }; /** Initial read / flag state of each seeded message, used until the visitor changes it. */
@@ -25,26 +24,10 @@ const HOUR = 60 * MIN; /** One hour in milliseconds. */
 const DAY = 24 * HOUR; /** One day in milliseconds. */
 
 /**
- * Returns the localized file name of the resume attachment.
- *
- * The same name is used for the attachment chip and for the file written to the virtual
- * file system, so the attachment can be matched to an existing resume file.
- *
- * @param {Locale} locale - The current UI locale.
- * @returns {string} `이력서.md` for Korean, `Resume.md` otherwise.
- *
- * @example
- * resumeFileName('en'); // 'Resume.md'
- */
-export function resumeFileName(locale: Locale): string {
-  return locale === 'ko' ? '이력서.md' : 'Resume.md';
-}
-
-/**
  * Generates the seeded Inbox messages from the portfolio data.
  *
- * Builds five messages from the owner to the visitor (welcome, featured projects, resume
- * with attachment, contact links, and a system message from the OS team), fully written
+ * Builds four messages from the owner to the visitor (welcome, featured projects, contact
+ * links, and a system message from the OS team), fully written
  * in the given locale. Dates are fixed offsets (minutes to a few days) before `seededAt`, so
  * the messages look like they arrived before the visitor's first visit. Featured projects
  * fall back to the first three projects, and only the owner links that are set are listed.
@@ -58,7 +41,7 @@ export function resumeFileName(locale: Locale): string {
  *
  * @example
  * const msgs = buildSeedMessages('en', Date.now(), ME);
- * console.log(msgs.map((m) => m.id)); // ['welcome', 'projects', 'resume', 'contact', 'system']
+ * console.log(msgs.map((m) => m.id)); // ['welcome', 'projects', 'contact', 'system']
  */
 export function buildSeedMessages(locale: Locale, seededAt: number, me: { name: string }): MailMessage[] {
   const ko = locale === 'ko';
@@ -121,29 +104,6 @@ export function buildSeedMessages(locale: Locale, seededAt: number, me: { name: 
       : `Here’s the work I’m proudest of:\n\n${showcase.map((p) => `- **${p.name}** (${p.year}): ${L(p.tagline)}`).join('\n')}\n\nClick a card to see the details in the **Projects** app. The write-ups also live in Finder under \`~/Documents/Projects\`.${sign}`,
   };
 
-  const latest = experience[0];
-  const resume: MailMessage = {
-    id: 'resume',
-    seed: true,
-    mailbox: 'inbox',
-    from,
-    to,
-    date: seededAt - (DAY + 2 * HOUR),
-    subject: ko ? '이력서' : 'Resume',
-    read: false,
-    flagged: false,
-    attachments: [{ name: resumeFileName(locale), kind: 'resume' }],
-    body: ko
-      ? `이력서를 첨부합니다.\n\n${latest ? `현재 **${L(latest.company)}**에서 **${L(latest.role)}**로 일하고 있습니다 (${localizePeriod(latest.period, locale)}). ` : ''}주로 다루는 기술은 ${skills
-          .flatMap((s) => s.items.filter((i) => i.level >= 5).map((i) => i.name))
-          .slice(0, 5)
-          .join(', ')} 등입니다.\n\n첨부 파일을 클릭하면 **미리보기**에서 열립니다. 다운로드가 필요하면 Finder에서 파일을 우클릭한 뒤 *이 컴퓨터로 다운로드*를 선택하세요.${sign}`
-      : `My resume is attached.\n\n${latest ? `I’m currently a **${L(latest.role)}** at **${L(latest.company)}** (${localizePeriod(latest.period, locale)}). ` : ''}Day to day I mostly work with ${skills
-          .flatMap((s) => s.items.filter((i) => i.level >= 5).map((i) => i.name))
-          .slice(0, 5)
-          .join(', ')}.\n\nClick the attachment to open it in **Preview**. Need a copy? Right-click the file in Finder and choose *Download to This Computer*.${sign}`,
-  };
-
   const contact: MailMessage = {
     id: 'contact',
     seed: true,
@@ -176,5 +136,5 @@ export function buildSeedMessages(locale: Locale, seededAt: number, me: { name: 
       : `Thank you for choosing **${L(osInfo.machine)}**.\n\n| | |\n| --- | --- |\n| Chip | ${osInfo.chip} |\n| Memory | ${osInfo.memory} |\n| Version | ${osInfo.name} ${osInfo.version} (${osInfo.build}) |\n\n**Shortcuts worth knowing**\n\n- ⌥W close window · ⌥Q quit app · ⌥M minimize\n- ⌘K Spotlight · F3 Mission Control · F4 Launchpad\n- ⌃⌥←/→ tile a window to half the screen\n\nFun fact: this email was generated from \`src/data/portfolio.ts\`. Try typing \`sudo\` in the Terminal… actually, maybe don’t. 🙃\n\n— The ${osInfo.name} Team`,
   };
 
-  return [welcome, projectsMsg, resume, contact, system];
+  return [welcome, projectsMsg, contact, system];
 }

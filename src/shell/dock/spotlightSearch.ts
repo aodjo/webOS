@@ -90,7 +90,7 @@ const APP_ALIASES: Record<string, string[]> = {
   safari: ['browser', 'web', 'internet', '브라우저', '인터넷'],
   mail: ['email', 'contact', 'message', '이메일', '연락', '메시지'],
   notes: ['memo', '노트'],
-  'about-me': ['resume', 'cv', 'profile', 'bio', 'experience', '이력서', '프로필', '경력'],
+  'about-me': ['profile', 'bio', 'experience', '프로필', '경력'],
   projects: ['portfolio', 'work', '포트폴리오', '작업'],
   terminal: ['shell', 'console', 'command line', 'bash', 'zsh', 'cli', '셸', '콘솔'],
   textedit: ['editor', 'text', 'write', '편집기', '텍스트'],
