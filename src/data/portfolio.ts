@@ -300,4 +300,59 @@ export const projects: Project[] = [
     ],
     featured: true,
   },
+  {
+    id: 'mactree',
+    name: 'MacTree',
+    year: 2026,
+    tagline: { en: 'A fast disk usage analyzer for macOS, like WizTree.', ko: 'WizTree처럼 빠른 macOS용 디스크 분석기.' },
+    description: {
+      en:
+        'MacTree shows at a glance where your disk space goes. It scans a whole disk quickly with many threads at once (about 6.7 million items in roughly 25 seconds on an M5 Pro Mac) ' +
+        'and presents the result as a folder tree, a size-sorted file list, per-extension statistics and a cushion treemap you can zoom up to 10,000×. ' +
+        'Files can be moved to the Trash or marked and deleted in one go, and allocated size is the default so sparse files and cloud-only files do not mislead you.',
+      ko:
+        'MacTree는 디스크 공간을 어디에 쓰고 있는지 한눈에 보여 줍니다. 여러 스레드로 디스크 전체를 빠르게 스캔하고(M5 Pro Mac에서 약 670만 항목을 약 25초), ' +
+        '폴더 트리, 크기순 파일 목록, 확장자별 통계, 최대 10,000배까지 확대되는 쿠션 트리맵으로 보여 줍니다. ' +
+        '휴지통으로 보내거나 여러 항목을 표시해 한 번에 삭제할 수 있고, 기본값이 할당 크기라서 희소 파일이나 iCloud 전용 파일에 속지 않습니다.',
+    },
+    role: { en: 'Design and development', ko: '디자인 및 개발' },
+    tags: ['Swift', 'macOS'],
+    cover: '/projects/mactree.jpg',
+    color: '#10b981',
+    links: { github: 'https://github.com/aodjo/macTree' },
+    highlights: [
+      { en: 'Multi-threaded scan: about 6.7 million items in roughly 25 seconds', ko: '멀티스레드 스캔: 약 670만 항목을 약 25초에' },
+      { en: 'Cushion treemap with pointer-centred zoom up to 10,000×', ko: '포인터 중심 확대(최대 10,000배) 쿠션 트리맵' },
+      { en: 'File search with wildcards, per-extension statistics and CSV export', ko: '와일드카드 파일 검색, 확장자별 통계, CSV 내보내기' },
+      { en: 'Signed and notarized, distributed through Homebrew with a `mactree` command', ko: '서명·공증된 빌드, Homebrew 배포와 `mactree` 명령' },
+    ],
+    featured: true,
+  },
+  {
+    id: 'junlang',
+    name: 'Junlang',
+    year: 2026,
+    tagline: { en: 'A Turing-complete esoteric programming language.', ko: '튜링 완전한 난해한 프로그래밍 언어.' },
+    description: {
+      en:
+        'Junlang (준랭) is a Turing-complete esoteric programming language, made for a classmate as a deliberately cryptic puzzle rather than a productive tool. ' +
+        'The interpreter is written in C#: a lexer and parser build an AST that is compiled to bytecode and run on a virtual machine with exact fraction arithmetic. ' +
+        'It comes with Korean and English documentation built with VitePress and a VS Code extension for syntax highlighting.',
+      ko:
+        '준랭은 튜링 완전한 난해한 프로그래밍 언어로, 생산성 대신 지능을 시험하는 퍼즐처럼 친구를 위해 만들었습니다. ' +
+        'C#으로 만든 인터프리터는 렉서와 파서로 AST를 만들고 바이트코드로 컴파일해 분수를 정확히 다루는 가상 머신에서 실행합니다. ' +
+        'VitePress로 만든 한국어·영어 문서와 구문 강조를 위한 VS Code 확장도 함께 제공합니다.',
+    },
+    role: { en: 'Language design and implementation', ko: '언어 설계 및 구현' },
+    tags: ['C#', 'Compiler', 'VitePress', 'VS Code'],
+    cover: '/projects/junlang.jpg',
+    color: '#4f46e5',
+    links: { demo: 'https://junlang.junx.dev/', github: 'https://github.com/aodjo/junlang' },
+    highlights: [
+      { en: 'Lexer, parser, bytecode compiler and virtual machine in C#', ko: 'C# 렉서, 파서, 바이트코드 컴파일러, 가상 머신' },
+      { en: 'Exact fraction values, conditionals, loops and I/O', ko: '정확한 분수 값, 조건문, 반복문, 입출력' },
+      { en: 'Bilingual documentation site with examples (Fibonacci, GCD)', ko: '예제(피보나치, 최대공약수)가 있는 한·영 문서 사이트' },
+      { en: 'VS Code extension with a TextMate grammar', ko: 'TextMate 문법을 쓰는 VS Code 확장' },
+    ],
+  },
 ]; /** Portfolio projects; each also gets a Finder folder ~/Documents/Projects/<name>, and the first one's cover becomes the Desktop screenshot. TODO: replace with your real projects. */
