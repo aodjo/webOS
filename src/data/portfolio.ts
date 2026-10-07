@@ -272,4 +272,32 @@ export const projects: Project[] = [
     ],
     featured: true,
   },
+  {
+    id: 'reprise',
+    name: 'Reprise',
+    year: 2026,
+    tagline: { en: 'A lightweight menu bar music controller for macOS.', ko: 'macOS용 가벼운 메뉴 막대 음악 컨트롤러.' },
+    description: {
+      en:
+        'Reprise puts whatever you are listening to one click away: album art, title and artist, a scrubbable progress bar and playback controls in a single menu bar panel, ' +
+        'with time-synced lyrics in the panel and in the menu bar. It follows Apple Music, Spotify and YouTube Music (through a browser extension) automatically, ' +
+        'with no account, no API keys and no relay server. Built natively with SwiftUI and released under GPLv3.',
+      ko:
+        'Reprise는 지금 듣는 음악을 클릭 한 번 거리에 둡니다. 앨범 아트, 곡 제목과 아티스트, 탐색 가능한 진행 막대, 재생 컨트롤을 메뉴 막대 패널 하나에 담고, ' +
+        '싱크 가사를 패널과 메뉴 막대에 보여 줍니다. Apple Music, Spotify, YouTube Music(브라우저 확장 프로그램)을 자동으로 따라가며, 계정이나 API 키, 중계 서버가 필요 없습니다. ' +
+        'SwiftUI로 만든 네이티브 앱이며 GPLv3로 공개되어 있습니다.',
+    },
+    role: { en: 'Design and development', ko: '디자인 및 개발' },
+    tags: ['Swift', 'SwiftUI', 'macOS', 'JavaScript'],
+    cover: '/projects/reprise.jpg',
+    color: '#8b5cf6',
+    links: { github: 'https://github.com/aodjo/reprise' },
+    highlights: [
+      { en: 'One control for Apple Music, Spotify and YouTube Music, following whichever is playing', ko: 'Apple Music·Spotify·YouTube Music을 재생 중인 앱에 맞춰 자동으로 제어' },
+      { en: 'Time-synced lyrics in the panel and in the menu bar', ko: '패널과 메뉴 막대에 표시되는 싱크 가사' },
+      { en: 'Customisable title format, album art style, carousel and panel theme (including Liquid)', ko: '제목 형식, 앨범 아트 스타일, 캐러셀, 패널 테마(Liquid 포함) 설정' },
+      { en: 'Distributed through Homebrew and GitHub Releases', ko: 'Homebrew와 GitHub Releases로 배포' },
+    ],
+    featured: true,
+  },
 ]; /** Portfolio projects; each also gets a Finder folder ~/Documents/Projects/<name>, and the first one's cover becomes the Desktop screenshot. TODO: replace with your real projects. */
