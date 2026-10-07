@@ -1,11 +1,11 @@
-import { useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
-import { X } from 'lucide-react';
+import { useRef, useState, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent } from 'react';
+import { Maximize2, Minimize2, Share, X } from 'lucide-react';
 import type { FSNode } from '@/kernel';
-import { defaultAppFor, fileSizeOf, formatBytes, fs, getApp, useLocale, useT } from '@/kernel';
-import { Button } from '@/components/ui';
+import { defaultAppFor, downloadFile, fileClipboard, fileSizeOf, fmt, formatBytes, formatDate, fs, getApp, notify, showContextMenu, useLocale, useT } from '@/kernel';
+import { FileIcon } from '@/icons';
 import { displayName, isAppFile, itemCount, kindLabel, withRo } from './model';
 import { S } from './strings';
-import { FilePreview } from './Preview';
+import { FilePreview, hasContentPreview } from './Preview';
 import s from './QuickLook.module.css';
 
 interface Props {
@@ -42,10 +42,17 @@ function openerFor(node: FSNode): string | null {
  * It never takes focus, so the Finder keeps handling the keyboard: arrow keys move the selection
  * underneath (the panel follows `node`) and Space / Escape close it. The header can be dragged
  * with the primary button to offset the panel (pointer capture keeps the drag going outside it);
- * presses on its buttons do not start a drag. The header shows a close button, the item name with
- * an "index / total" counter for multi-item selections, and an "Open" / "Open with <app>" button
- * when the item can be opened. The footer shows the item count of a folder, or a file's kind and
- * size. The preview body is keyed by path so it remounts for each item.
+ * presses on its buttons do not start a drag. Two small round buttons sit at the top left like
+ * traffic lights: close, and full size (the panel then fills the window; pressing it again
+ * restores the floating size and position). At the top right are, for files and apps, a plain
+ * "Open" / "Open with <app>" text button and a plain Share icon. The Share menu offers AirDrop (which reports that no devices are nearby), Copy (to the file
+ * clipboard) and, for files, Download to This Computer.
+ *
+ * Items with a content preview (images, text, PDFs, media…) get a large panel: the item name with
+ * an "index / total" counter for multi-item selections between the buttons, the preview body
+ * (keyed by path so it remounts for each item) and a footer with the folder's item count or the
+ * file's kind and size. Folders, apps and other files without one get a compact card (macOS 26):
+ * a big icon beside the name, the same details and the modification date.
  *
  * @param {Props} props - Component props.
  * @param {FSNode} props.node - Item being previewed.
@@ -62,6 +69,7 @@ export function QuickLook({ node, position, onClose, onOpen }: Props) {
   const t = useT();
   const locale = useLocale();
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [full, setFull] = useState(false);
   const drag = useRef<{ x: number; y: number; ox: number; oy: number } | null>(null);
   const opener = openerFor(node);
   const appName = opener ? t(getApp(opener)?.name) : '';
@@ -115,42 +123,113 @@ export function QuickLook({ node, position, onClose, onOpen }: Props) {
     drag.current = null;
   };
 
-  const details =
-    node.type === 'dir'
-      ? itemCount(fs.walk(node.path).length, locale)
-      : `${kindLabel(node, locale)} – ${formatBytes(fileSizeOf(node), locale)}`;
+  const details = node.type === 'dir' ? itemCount(fs.walk(node.path).length, locale) : `${kindLabel(node, locale)} – ${formatBytes(fileSizeOf(node), locale)}`;
+
+  const openLabel = !opener ? t(S.open) : locale === 'ko' ? `${withRo(appName)} 열기` : `Open with ${appName}`;
+  const rich = hasContentPreview(node);
+
+  /**
+   * Opens the Share menu just below the Share button.
+   *
+   * @param {ReactMouseEvent<HTMLButtonElement>} e - Click event of the Share button.
+   * @returns {void}
+   *
+   * @example
+   * <button onClick={shareMenu} />
+   */
+  const shareMenu = (e: ReactMouseEvent<HTMLButtonElement>) => {
+    const b = e.currentTarget.getBoundingClientRect();
+    showContextMenu(
+      {
+        clientX: b.left,
+        clientY: b.bottom + 4,
+        preventDefault: () => {},
+        stopPropagation: () => {},
+      },
+      [
+        {
+          label: S.airDrop,
+          action: () => notify({ appId: 'finder', title: S.airDrop, body: S.airDropNone }),
+        },
+        { separator: true },
+        { label: S.copy, action: () => fileClipboard.copy([node.path]) },
+        ...(node.type === 'file' ? [{ label: S.download, action: () => void downloadFile(node.path) }] : []),
+      ],
+    );
+  };
+  const controls = (
+    <>
+      <div className={s.side}>
+        <button type="button" className={s.light} aria-label={t(S.closeQuickLook)} title={t(S.closeQuickLook)} onClick={onClose}>
+          <X size={9} strokeWidth={3} />
+        </button>
+        <button type="button" className={s.light} aria-label={t(full ? S.exitFullScreen : S.fullScreen)} title={t(full ? S.exitFullScreen : S.fullScreen)} onClick={() => setFull((f) => !f)}>
+          {full ? <Minimize2 size={8} strokeWidth={3} /> : <Maximize2 size={8} strokeWidth={3} />}
+        </button>
+      </div>
+      <div className={s.title}>
+        {rich && <span className={s.name}>{name}</span>}
+        {position && position.total > 1 && (
+          <span className={s.counter}>
+            {position.index + 1} / {position.total}
+          </span>
+        )}
+      </div>
+      <div className={`${s.side} ${s.sideEnd}`}>
+        {canOpen && node.type !== 'dir' && (
+          <button
+            type="button"
+            className={s.textBtn}
+            onClick={() => {
+              onOpen(node);
+              onClose();
+            }}
+          >
+            {openLabel}
+          </button>
+        )}
+        <button type="button" className={s.iconBtn} aria-label={t(S.share)} title={t(S.share)} aria-haspopup="menu" onClick={shareMenu}>
+          <Share size={17} strokeWidth={1.9} />
+        </button>
+      </div>
+    </>
+  );
 
   return (
     <div className={s.layer}>
-      <div className={`lg lg-thick lg-float ${s.panel}`} role="dialog" aria-label={`${t(S.quickLook)}: ${name}`} style={{ translate: `${offset.x}px ${offset.y}px` }}>
+      <div
+        className={`lg lg-thick lg-float ${s.panel} ${full ? s.full : rich ? '' : s.compact}`}
+        role="dialog"
+        aria-label={`${t(S.quickLook)}: ${name}`}
+        style={full ? undefined : { translate: `${offset.x}px ${offset.y}px` }}
+      >
         <div className={s.header} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={endDrag} onPointerCancel={endDrag}>
-          <button type="button" className={`lg lg-control lg-circle lg-interactive ${s.close}`} aria-label={t(S.closeQuickLook)} onClick={onClose}>
-            <X size={12} strokeWidth={2.6} />
-          </button>
-          <div className={s.title}>
-            <span className={s.name}>{name}</span>
-            {position && position.total > 1 && (
-              <span className={s.counter}>
-                {position.index + 1} / {position.total}
-              </span>
-            )}
+          {controls}
+        </div>
+        {rich ? (
+          <>
+            <div className={s.body} key={node.path}>
+              <FilePreview node={node} variant="full" />
+            </div>
+            <div className={s.footer}>{details}</div>
+          </>
+        ) : (
+          <div className={s.card} key={node.path} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={endDrag} onPointerCancel={endDrag}>
+            <FileIcon node={node} size={180} />
+            <div className={s.meta}>
+              <h2 className={s.bigName}>{name}</h2>
+              <p>{details}</p>
+              <p>
+                {fmt(t(S.modifiedInline), {
+                  date: formatDate(node.modifiedAt, locale, {
+                    dateStyle: 'medium',
+                    timeStyle: 'medium',
+                  }),
+                })}
+              </p>
+            </div>
           </div>
-          {canOpen && (
-            <Button
-              className={s.openBtn}
-              onClick={() => {
-                onOpen(node);
-                onClose();
-              }}
-            >
-              {!opener ? t(S.open) : locale === 'ko' ? `${withRo(appName)} 열기` : `Open with ${appName}`}
-            </Button>
-          )}
-        </div>
-        <div className={s.body} key={node.path}>
-          <FilePreview node={node} variant="full" />
-        </div>
-        <div className={s.footer}>{details}</div>
+        )}
       </div>
     </div>
   );

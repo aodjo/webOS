@@ -11,8 +11,11 @@
   pointer-events: none;
 }
 
-/* Material comes from the global glass classes (lg lg-thick lg-float); radius is Tahoe's 22px. */
+/* Glass from the global classes (lg lg-thick lg-float) with a lighter tint, so the Finder content
+   behind shows through blurred like the macOS 26 Quick Look panel; radius is Tahoe's 22px. */
 .panel {
+  --lg-tint-thick: rgba(246, 246, 248, 0.5);
+  --lg-filter-thick: blur(28px) saturate(1.3);
   pointer-events: auto;
   display: flex;
   flex-direction: column;
@@ -34,25 +37,66 @@
   touch-action: none;
 }
 
-.close {
+/* Traffic-light style buttons at the top left (close, full size). */
+.light {
   flex: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  width: 16px;
+  height: 16px;
   padding: 0;
   border: none;
-  color: var(--text-secondary);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--text) 32%, transparent);
+  color: var(--window-bg);
   cursor: default;
 }
+.light:hover {
+  background: color-mix(in srgb, var(--text) 50%, transparent);
+}
 
-.close:hover {
+/* Plain controls at the top right: no button chrome, just the label or the glyph. */
+.textBtn,
+.iconBtn {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 13px;
+  cursor: default;
+}
+.iconBtn {
+  width: 26px;
+  height: 26px;
+}
+.textBtn:hover,
+.iconBtn:hover {
   color: var(--text);
 }
 
+/* Equal-width button groups on both sides keep the title centred. */
+.side {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.side:first-child {
+  gap: 7px;
+  padding-left: 6px;
+}
+.sideEnd {
+  justify-content: flex-end;
+}
+
 .title {
-  flex: 1;
+  flex: 0 1 auto;
   min-width: 0;
   display: flex;
   justify-content: center;
@@ -75,9 +119,58 @@
   color: var(--text-secondary);
 }
 
-.openBtn {
+/* Full size: the panel fills the window area. */
+.full {
+  width: 100%;
+  height: 100%;
+}
+
+/* Compact card for items without a content preview: big icon beside the name and details. */
+.compact {
+  width: min(600px, 92%);
+  height: auto;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 4px 40px 44px 32px;
+  touch-action: none;
+  animation: ql-fade 0.16s ease-out;
+}
+
+.card > svg {
   flex: none;
-  height: 28px;
+}
+
+.meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.meta p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.bigName {
+  margin: 0 0 4px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 520px) {
+  .card {
+    flex-direction: column;
+    text-align: center;
+    padding: 0 24px 28px;
+  }
 }
 
 /* The preview sits on an inset card, concentric with the panel (22px − 8px inset). */
@@ -101,6 +194,11 @@
   padding: 0 16px;
   font-size: 11px;
   color: var(--text-secondary);
+}
+
+:global(html[data-theme='dark']) .panel {
+  --lg-tint-thick: rgba(40, 40, 44, 0.48);
+  --lg-filter-thick: blur(28px) saturate(1.3) brightness(0.9);
 }
 
 @keyframes ql-in {

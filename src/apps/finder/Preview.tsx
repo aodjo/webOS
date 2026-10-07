@@ -99,6 +99,27 @@ function PageThumb({ text }: { text: string }) {
 }
 
 /**
+ * Tells whether Quick Look can show an item's content rather than just its icon.
+ *
+ * Mirrors the 'full' layout of FilePreview: images, Markdown, plain text and code with text
+ * content, web locations, and PDF, video and audio files with a URL have a content preview;
+ * folders, apps and every other file fall back to the big icon.
+ *
+ * @param {FSNode} node - The item to check.
+ * @returns {boolean} True when the 'full' preview shows the item's content.
+ *
+ * @example
+ * hasContentPreview(fs.stat('/Users/aodjo/Pictures/cat.png')!); // true
+ */
+export function hasContentPreview(node: FSNode): boolean {
+  const kind = kindOf(node);
+  if (node.type === 'dir' || kind === 'app') return false;
+  if (kind === 'image' || kind === 'link') return true;
+  if ((kind === 'markdown' || kind === 'text' || kind === 'code') && isTextFile(node)) return true;
+  return !!urlOf(node) && (kind === 'pdf' || kind === 'video' || kind === 'audio');
+}
+
+/**
  * Preview of any file system item in a 'full' or 'thumb' layout.
  *
  * Quick Look uses the interactive 'full' layout; Get Info, the column-view preview pane and the
