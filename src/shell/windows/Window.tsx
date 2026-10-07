@@ -43,6 +43,7 @@ import { WindowSheets } from '@/shell/desktop/Dialogs';
 import { AppErrorBoundary } from './AppErrorBoundary';
 import { TrafficLights } from './TrafficLights';
 import { RESIZE_DIRS, fallbackDockRect, minimizeTransform, slideOutOffset } from './geometry';
+import { playGenie } from './genie';
 import { selectExposeSlots } from './expose';
 import { afterPaint, chromeElements, cx, reduceMotionNow, useViewport, useViewportResizing, useWindowChrome } from './state';
 import { dragRegionFor, useWindowInteractions } from './useWindowInteractions';
@@ -63,11 +64,29 @@ const MINIMIZE_MS = 400; /** Duration in ms of the minimize animation; matches `
 type MinPhase = 'idle' | 'out' | 'done' | 'in';
 
 /**
- * Computes the CSS transform that sends a window into the Dock.
+ * Finds the Dock rectangle a window minimizes into.
  *
  * Targets the window's own minimized tile (`win:<id>` anchor) when the Dock has registered one,
  * otherwise the app's Dock icon, and falls back to an estimated rectangle at the Dock's configured
  * position and size when neither anchor is measured yet.
+ *
+ * @param {string} id - Window id.
+ * @param {string} appId - Id of the app that owns the window.
+ * @returns {Bounds} The target rectangle on screen.
+ *
+ * @example
+ * const tile = dockRect(win.id, win.appId);
+ */
+function dockRect(id: string, appId: string): Bounds {
+  const anchor = dockAnchors.get(`win:${id}`) ?? dockAnchors.get(appId);
+  const { dockPosition, dockSize } = useSystem.getState().settings;
+  return anchor && anchor.width > 0
+    ? { x: anchor.x, y: anchor.y, width: anchor.width, height: anchor.height }
+    : fallbackDockRect({ width: window.innerWidth, height: window.innerHeight }, dockPosition, dockSize);
+}
+
+/**
+ * Computes the CSS transform that sends a window into the Dock (see dockRect).
  *
  * @param {string} id - Window id.
  * @param {string} appId - Id of the app that owns the window.
@@ -78,13 +97,22 @@ type MinPhase = 'idle' | 'out' | 'done' | 'in';
  * setMinTarget(dockTransform(win.id, win.appId, bounds));
  */
 function dockTransform(id: string, appId: string, b: Bounds): string {
-  const anchor = dockAnchors.get(`win:${id}`) ?? dockAnchors.get(appId);
-  const { dockPosition, dockSize } = useSystem.getState().settings;
-  const rect =
-    anchor && anchor.width > 0
-      ? { x: anchor.x, y: anchor.y, width: anchor.width, height: anchor.height }
-      : fallbackDockRect({ width: window.innerWidth, height: window.innerHeight }, dockPosition, dockSize);
-  return minimizeTransform(b, rect);
+  return minimizeTransform(b, dockRect(id, appId));
+}
+
+/**
+ * Tells whether minimize and restore should play the genie effect.
+ *
+ * The effect is drawn for a Dock along the bottom edge; side Docks, and Reduce Motion, keep the
+ * plain scale-into-the-Dock transition.
+ *
+ * @returns {boolean} True when the genie effect applies.
+ *
+ * @example
+ * if (genieEnabled()) playGenie(el, bounds, tile, 'out', done);
+ */
+function genieEnabled(): boolean {
+  return useSystem.getState().settings.dockPosition === 'bottom' && !reduceMotionNow();
 }
 
 /**
@@ -191,6 +219,8 @@ function WindowFrame({ win }: { win: WindowState }) {
   const [prevMinimized, setPrevMinimized] = useState(win.minimized);
   const [minPhase, setMinPhase] = useState<MinPhase>(win.minimized ? 'done' : 'idle');
   const [minTarget, setMinTarget] = useState<string | null>(() => (win.minimized ? dockTransform(id, appId, b) : null));
+  const [genie, setGenie] = useState(false);
+  const [instant, setInstant] = useState(false);
   if (prevMinimized !== win.minimized) {
     setPrevMinimized(win.minimized);
     if (win.minimized) setMinPhase('out');
@@ -202,21 +232,46 @@ function WindowFrame({ win }: { win: WindowState }) {
   }
   useEffect(() => {
     if (minPhase !== 'out') return;
-    const raf = requestAnimationFrame(() => setMinTarget(dockTransform(id, appId, boundsRef.current)));
-    const timer = setTimeout(() => setMinPhase('done'), reduceMotionNow() ? 0 : MINIMIZE_MS);
+    const el = frameRef.current;
+    let cancelGenie: (() => void) | null = null;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const raf = requestAnimationFrame(() => {
+      setMinTarget(dockTransform(id, appId, boundsRef.current));
+      if (el && genieEnabled()) {
+        setGenie(true);
+        cancelGenie = playGenie(el, boundsRef.current, dockRect(id, appId), 'out', () => {
+          setGenie(false);
+          setMinPhase('done');
+        });
+      } else timer = setTimeout(() => setMinPhase('done'), reduceMotionNow() ? 0 : MINIMIZE_MS);
+    });
     return () => {
       cancelAnimationFrame(raf);
       clearTimeout(timer);
+      cancelGenie?.();
     };
   }, [minPhase, id, appId]);
   useLayoutEffect(() => {
     if (minPhase !== 'in') return;
     setMinTarget(dockTransform(id, appId, boundsRef.current));
+    const el = frameRef.current;
+    if (el && genieEnabled()) {
+      setGenie(true);
+      return playGenie(el, boundsRef.current, dockRect(id, appId), 'in', () => {
+        setInstant(true);
+        setGenie(false);
+        setMinPhase('idle');
+        setMinTarget(null);
+      });
+    }
     return afterPaint(() => {
       setMinPhase('idle');
       setMinTarget(null);
     });
   }, [minPhase, id, appId]);
+  useEffect(() => {
+    if (instant) return afterPaint(() => setInstant(false));
+  }, [instant]);
 
   const [opening, setOpening] = useState(() => !win.minimized && !reduceMotionNow());
 
@@ -418,7 +473,7 @@ function WindowFrame({ win }: { win: WindowState }) {
         radius,
         !interacting && !resizingViewport && s.animBounds,
         win.minimized && s.minimizing,
-        minPhase === 'in' && s.restoring,
+        (minPhase === 'in' || instant) && s.restoring,
         hiddenNow && s.hidden,
         overlayMode && s.overlayMode,
         slot && highlighted && s.highlighted,
@@ -432,6 +487,7 @@ function WindowFrame({ win }: { win: WindowState }) {
           zIndex: win.z,
           transform,
           opacity: parked ? 0 : undefined,
+          visibility: genie ? 'hidden' : undefined,
           '--expose-scale': slot?.scale ?? 1,
         } as CSSProperties
       }

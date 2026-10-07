@@ -12,6 +12,7 @@ import { useWindowChrome } from './state';
 import { minimizeTransform } from './geometry';
 import { MissionControl } from './MissionControl';
 import { AppSwitcher } from './AppSwitcher';
+import { GENIE_MS } from './genie';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -242,7 +243,7 @@ describe('window layer', () => {
   it('minimizes (stays mounted, hidden) and restores', async () => {
     const id = useWM.getState().windows[0].id;
     await act(async () => wm.minimize(id));
-    await wait(500);
+    await wait(700);
     const el = frame(id)!;
     expect(el).toBeTruthy();
     expect(el.hasAttribute('inert')).toBe(true);
@@ -534,7 +535,7 @@ describe('window behavior details', () => {
       window.dispatchEvent(new PointerEvent('pointerup', { clientX: w.x + 160, clientY: w.y + 90, pointerId: 11 }));
     });
     expect(boundsOf(win())).toEqual(boundsOf(w));
-    await wait(450);
+    await wait(GENIE_MS + 150);
   });
 
   it('restores out of where its Dock tile is now', async () => {
@@ -545,7 +546,8 @@ describe('window behavior details', () => {
     expect(el.style.transform).toBe(minimizeTransform(boundsOf(win()), tile));
     expect(el.style.opacity).toBe('0');
     expect(el.hasAttribute('inert')).toBe(false);
-    await wait(80);
+    // The genie plays out of the tile first; the window takes its place when it ends.
+    await wait(GENIE_MS + 150);
     expect(el.style.transform).toBe('');
     expect(el.style.opacity).toBe('');
     dockAnchors.delete(`win:${id}`);
