@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
-import { ArrowRight, Briefcase, Check, Copy, FileText, Globe, GraduationCap, Layers, Mail, MapPin, PenLine, Sparkles } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Briefcase, Check, Copy, FileText, Globe, GraduationCap, Layers, Mail, MapPin, PenLine, Sparkles, Trophy } from 'lucide-react';
 import type { AppProps, MenuItem } from '@/kernel';
 import { COMMON, PATHS, buildResume, dialogs, extname, fs, join, localizePeriod, showFSError, stem, useAppMenus, useArgsChange, useLocale, useNode, useSystem, useT, wm } from '@/kernel';
 import { Toolbar } from '@/components/ui';
 import { Markdown } from '@/components/Markdown';
-import { education, experience, owner, projects, skills, type Project } from '@/data/portfolio';
+import { awards, education, experience, owner, projects, skills, type Project } from '@/data/portfolio';
 import { ProjectCover } from '../projects/Cover';
 import { GitHubMark, LinkedInMark } from './brand';
 import { formatYears, parsePeriod, yearsOfExperience } from './stats';
 import styles from './AboutMe.module.css';
 
 const S = {
-  openToWork: { en: 'Open to work', ko: '채용 제안 환영' },
   mail: { en: 'Mail', ko: '메일' },
   resume: { en: 'Résumé', ko: '이력서' },
   copy: { en: 'Copy', ko: '복사' },
@@ -21,7 +20,10 @@ const S = {
   website: { en: 'website', ko: '웹사이트' },
   blog: { en: 'blog', ko: '블로그' },
   overview: { en: 'Overview', ko: '개요' },
-  experience: { en: 'Experience', ko: '경력' },
+  experience: { en: 'Activities', ko: '활동' },
+  workTitle: { en: 'Experience', ko: '경력' },
+  awardsTitle: { en: 'Awards', ko: '수상' },
+  awardsStat: { en: 'Awards', ko: '수상' },
   skills: { en: 'Skills', ko: '기술' },
   education: { en: 'Education', ko: '학력' },
   highlights: { en: 'Highlights', ko: '한눈에 보기' },
@@ -492,7 +494,8 @@ function MiniProjectCard({ project, index }: { project: Project; index: number }
  * Renders the Overview section.
  *
  * Shows the owner's tagline and Markdown bio, three animated highlight tiles (years of
- * experience, number of projects, number of skills) and up to four featured projects with a
+ * experience, or the number of awards when there is no work history; number of projects;
+ * number of skills) and up to four featured projects with a
  * button that opens the Projects app. When no project is marked as featured, the first four
  * projects are shown. The years tile keeps the "<1" and "N+" forms produced by `formatYears`
  * while it counts up.
@@ -515,13 +518,17 @@ function Overview() {
 
       <h2 className={styles.sectionTitle}>{t(S.highlights)}</h2>
       <div className={styles.stats}>
-        <StatTile
-          icon={<Briefcase size={15} />}
-          value={Math.floor(years)}
-          format={(n) => (yearsLabel === '<1' ? yearsLabel : yearsLabel.endsWith('+') ? `${n}+` : String(n))}
-          label={t(S.years)}
-          delay={0}
-        />
+        {experience.length > 0 ? (
+          <StatTile
+            icon={<Briefcase size={15} />}
+            value={Math.floor(years)}
+            format={(n) => (yearsLabel === '<1' ? yearsLabel : yearsLabel.endsWith('+') ? `${n}+` : String(n))}
+            label={t(S.years)}
+            delay={0}
+          />
+        ) : (
+          <StatTile icon={<Trophy size={15} />} value={awards.length} label={t(S.awardsStat)} delay={0} />
+        )}
         <StatTile icon={<Layers size={15} />} value={projects.length} label={t(S.projectsStat)} delay={1} />
         <StatTile icon={<Sparkles size={15} />} value={skillCount} label={t(S.skillsStat)} delay={2} />
       </div>
@@ -542,13 +549,15 @@ function Overview() {
 }
 
 /**
- * Renders the Experience section as a vertical timeline.
+ * Renders the Activities section: work history and awards as vertical timelines.
  *
  * Lists every experience entry from the portfolio data with its localized period, role,
- * company, description and highlights. Entries whose period ends in "Present" (or a localized
- * equivalent) get an emphasized dot and a "Now" badge.
+ * company, description and highlights; entries whose period ends in "Present" (or a localized
+ * equivalent) get an emphasized dot and a "Now" badge. Awards follow under their own heading
+ * with the month, title, placing, division and, when the award has a page, a link that opens it
+ * in Safari. A heading or list is left out when it has no entries.
  *
- * @returns {JSX.Element} The timeline list.
+ * @returns {JSX.Element} The timelines.
  *
  * @example
  * {tab === 'experience' && <ExperienceTab />}
@@ -557,33 +566,68 @@ function ExperienceTab() {
   const t = useT();
   const locale = useLocale();
   return (
-    <ol className={styles.timeline}>
-      {experience.map((e, i) => {
-        const current = !!parsePeriod(e.period)?.current;
-        return (
-          <li key={`${t(e.company)}-${e.period}`} className={styles.tlItem} style={{ '--i': i } as CSSProperties}>
-            <span className={`${styles.tlDot} ${current ? styles.tlDotCurrent : ''}`} aria-hidden="true" />
-            <div className={`lg lg-thick ${styles.tlCard}`}>
-              <div className={styles.tlPeriod}>
-                {localizePeriod(e.period, locale)}
-                {current && <span className={styles.nowBadge}>{t(S.now)}</span>}
-              </div>
-              <h3 className={styles.tlRole}>
-                {t(e.role)} <span className={styles.tlCompany}>@ {t(e.company)}</span>
-              </h3>
-              <p className={styles.tlDesc}>{t(e.description)}</p>
-              {e.highlights.length > 0 && (
-                <ul className={styles.tlHighlights}>
-                  {e.highlights.map((h, k) => (
-                    <li key={k}>{t(h)}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </li>
-        );
-      })}
-    </ol>
+    <>
+      {experience.length > 0 && (
+        <>
+          {awards.length > 0 && <h2 className={styles.sectionTitle}>{t(S.workTitle)}</h2>}
+          <ol className={styles.timeline}>
+            {experience.map((e, i) => {
+              const current = !!parsePeriod(e.period)?.current;
+              return (
+                <li key={`${t(e.company)}-${e.period}`} className={styles.tlItem} style={{ '--i': i } as CSSProperties}>
+                  <span className={`${styles.tlDot} ${current ? styles.tlDotCurrent : ''}`} aria-hidden="true" />
+                  <div className={`lg lg-thick ${styles.tlCard}`}>
+                    <div className={styles.tlPeriod}>
+                      {localizePeriod(e.period, locale)}
+                      {current && <span className={styles.nowBadge}>{t(S.now)}</span>}
+                    </div>
+                    <h3 className={styles.tlRole}>
+                      {t(e.role)} <span className={styles.tlCompany}>@ {t(e.company)}</span>
+                    </h3>
+                    <p className={styles.tlDesc}>{t(e.description)}</p>
+                    {e.highlights.length > 0 && (
+                      <ul className={styles.tlHighlights}>
+                        {e.highlights.map((h, k) => (
+                          <li key={k}>{t(h)}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        </>
+      )}
+      {awards.length > 0 && (
+        <>
+          {experience.length > 0 && <h2 className={styles.sectionTitle}>{t(S.awardsTitle)}</h2>}
+          <ol className={styles.timeline}>
+            {awards.map((a, i) => (
+              <li key={`${a.date}-${t(a.title)}`} className={styles.tlItem} style={{ '--i': i } as CSSProperties}>
+                <span className={`${styles.tlDot} ${a.result ? styles.tlDotCurrent : ''}`} aria-hidden="true" />
+                <div className={`lg lg-thick ${styles.tlCard}`}>
+                  <div className={styles.tlPeriod}>
+                    {a.date}
+                    {a.result && <span className={styles.nowBadge}>{t(a.result)}</span>}
+                  </div>
+                  <h3 className={styles.tlRole}>
+                    {a.href ? (
+                      <button type="button" className={styles.tlLink} onClick={() => openURL(a.href!)} title={a.href}>
+                        {t(a.title)} <ArrowUpRight size={13} />
+                      </button>
+                    ) : (
+                      t(a.title)
+                    )}
+                  </h3>
+                  {a.detail && <p className={styles.tlDesc}>{t(a.detail)}</p>}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </>
+      )}
+    </>
   );
 }
 
@@ -829,10 +873,6 @@ export default function AboutMe({ windowId, args }: AppProps) {
                 <div className={styles.location}>
                   <MapPin size={11} /> {t(owner.location)}
                 </div>
-                <span className={styles.pill}>
-                  <span className={styles.pillDot} />
-                  {t(S.openToWork)}
-                </span>
               </div>
             </div>
 

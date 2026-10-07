@@ -737,3 +737,20 @@
   font-size: 12px;
   color: var(--text-tertiary);
 }
+
+/* Award title that loads the event page in the hosting tab. */
+.awardLink {
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 30%, transparent);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.awardLink:hover {
+  text-decoration-color: currentColor;
+}

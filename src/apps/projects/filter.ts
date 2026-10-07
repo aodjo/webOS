@@ -105,8 +105,8 @@ export function sortProjects(list: Project[], sort: SortKey): Project[] {
  * @returns {Project[]} Matching projects in the requested order.
  *
  * @example
- * const hits = filterProjects(projects, { tags: ['React'], query: 'pixel', sort: 'newest' });
- * console.log(hits.map((p) => p.id)); // ['pixel-board']
+ * const hits = filterProjects(projects, { tags: ['React'], query: 'webos', sort: 'newest' });
+ * console.log(hits.map((p) => p.id)); // ['webos']
  */
 export function filterProjects(list: Project[], { tags, query, sort }: ProjectQuery): Project[] {
   const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);

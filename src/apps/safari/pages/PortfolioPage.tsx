@@ -5,9 +5,10 @@
  */
 import { useEffect, useRef, useState, type CSSProperties, type RefObject } from 'react';
 import { ArrowRight, Check, Copy, ExternalLink, Mail, MapPin, Sparkles } from 'lucide-react';
-import { education, experience, osInfo, owner, projects, skills } from '@/data/portfolio';
+import { awards, education, experience, osInfo, owner, projects, skills } from '@/data/portfolio';
 import { localizePeriod, useLocale, useT, wm } from '@/kernel';
 import { openCompose } from '@/apps/mail/compose';
+import { Markdown } from '@/components/Markdown';
 import { GitHubMark, LinkedInMark } from '../brands';
 import type { PageAPI } from './api';
 import styles from './Portfolio.module.css';
@@ -24,6 +25,7 @@ const P = {
   projects: { en: 'Projects', ko: '프로젝트' },
   skillsCount: { en: 'Skills', ko: '기술' },
   roles: { en: 'Roles', ko: '경력' },
+  awardsCount: { en: 'Awards', ko: '수상' },
   selectedWork: { en: 'Selected work', ko: '주요 작업물' },
   workTitle: { en: 'Things I’ve built', ko: '제가 만든 것들' },
   featured: { en: 'Featured', ko: '추천' },
@@ -34,18 +36,19 @@ const P = {
   skillsTitle: { en: 'What I work with', ko: '사용하는 기술' },
   journey: { en: 'Journey', ko: '여정' },
   experienceTitle: { en: 'Where I’ve worked', ko: '일해 온 곳' },
+  awardsTitle: { en: 'Awards & competitions', ko: '수상과 대회' },
   education: { en: 'Education', ko: '학력' },
   contactEyebrow: { en: 'Say hello', ko: '인사 나누기' },
-  contactTitle: { en: 'Let’s build something together.', ko: '함께 무언가를 만들어 봐요.' },
+  contactTitle: { en: 'Let’s build something together.', ko: '함께 만들 일을 기다립니다.' },
   contactBody: {
-    en: 'I’m always happy to talk about interesting products, frontend craft, or opportunities. My inbox is open.',
-    ko: '흥미로운 제품, 프론트엔드 개발, 새로운 기회에 대한 이야기라면 언제든 환영입니다. 편하게 연락 주세요.',
+    en: 'I’m always happy to talk about interesting products, building software, or opportunities. My inbox is open.',
+    ko: '흥미로운 제품, 개발, 새로운 기회에 대한 이야기라면 언제든 환영합니다. 편하게 연락 주세요.',
   },
   copy: { en: 'Copy address', ko: '주소 복사' },
   blog: { en: 'Blog', ko: '블로그' },
   website: { en: 'Website', ko: '웹사이트' },
   copied: { en: 'Copied', ko: '복사됨' },
-  footer: { en: `Made with React & TypeScript — running inside ${osInfo.name}.`, ko: `React와 TypeScript로 제작 — ${osInfo.name} 안에서 실행 중.` },
+  footer: { en: `Made with React and TypeScript, running inside ${osInfo.name}.`, ko: `React와 TypeScript로 만들었으며 ${osInfo.name} 안에서 실행 중입니다.` },
 }; /** Localized strings used only by the portfolio page. */
 
 /**
@@ -159,7 +162,6 @@ export function PortfolioPage({ api }: { api: PageAPI }) {
   const go = (ref: RefObject<HTMLElement | null>) => ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   const name = t(owner.name);
   const skillCount = skills.reduce((n, c) => n + c.items.length, 0);
-  const bio = t(owner.bio).split(/\n{2,}/);
   const socials = [
     owner.links.github && { href: owner.links.github, label: 'GitHub', icon: <GitHubMark size={16} /> },
     owner.links.linkedin && { href: owner.links.linkedin, label: 'LinkedIn', icon: <LinkedInMark size={16} /> },
@@ -248,8 +250,8 @@ export function PortfolioPage({ api }: { api: PageAPI }) {
               <dd>{t(P.skillsCount)}</dd>
             </div>
             <div>
-              <dt>{experience.length}</dt>
-              <dd>{t(P.roles)}</dd>
+              <dt>{experience.length || awards.length}</dt>
+              <dd>{t(experience.length ? P.roles : P.awardsCount)}</dd>
             </div>
           </dl>
         </div>
@@ -308,9 +310,7 @@ export function PortfolioPage({ api }: { api: PageAPI }) {
           <span className={styles.kicker}>{t(P.about)}</span>
         </div>
         <div className={styles.bio} data-reveal>
-          {bio.map((para, i) => (
-            <p key={i}>{para}</p>
-          ))}
+          <Markdown source={t(owner.bio)} />
         </div>
       </section>
 
@@ -343,7 +343,7 @@ export function PortfolioPage({ api }: { api: PageAPI }) {
       <section ref={expRef} className={styles.section}>
         <div className={styles.sectionHead} data-reveal>
           <span className={styles.kicker}>{t(P.journey)}</span>
-          <h2>{t(P.experienceTitle)}</h2>
+          <h2>{t(experience.length ? P.experienceTitle : P.awardsTitle)}</h2>
         </div>
         <ol className={styles.timeline}>
           {experience.map((e, ei) => (
@@ -360,6 +360,22 @@ export function PortfolioPage({ api }: { api: PageAPI }) {
                   ))}
                 </ul>
               )}
+            </li>
+          ))}
+          {awards.map((a, ai) => (
+            <li key={`award-${ai}`} data-reveal>
+              <div className={styles.period}>{a.date}</div>
+              <h3>
+                {a.href ? (
+                  <button type="button" className={styles.awardLink} onClick={() => api.navigate(a.href!)} title={a.href}>
+                    {t(a.title)}
+                  </button>
+                ) : (
+                  t(a.title)
+                )}
+                {a.result && <span> · {t(a.result)}</span>}
+              </h3>
+              {a.detail && <p>{t(a.detail)}</p>}
             </li>
           ))}
         </ol>

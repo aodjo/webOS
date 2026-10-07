@@ -295,15 +295,15 @@
     <path d="M562 252q0-8 8-8h18l8 8h30q8 0 8 8v34q0 8-8 8h-56q-8 0-8-8z" fill="#4c9be6"/>
     <rect x="562" y="258" width="72" height="44" rx="7" fill="url(#folderG)"/>
     <rect x="562" y="258" width="72" height="1.5" fill="#fff" fill-opacity=".5"/>
-    <text x="598" y="328" font-size="12" fill="#1d1d1f" text-anchor="middle">pixel-board</text>
+    <text x="598" y="328" font-size="12" fill="#1d1d1f" text-anchor="middle">sandbox</text>
     <path d="M672 252q0-8 8-8h18l8 8h30q8 0 8 8v34q0 8-8 8h-56q-8 0-8-8z" fill="#4c9be6"/>
     <rect x="672" y="258" width="72" height="44" rx="7" fill="url(#folderG)"/>
     <rect x="672" y="258" width="72" height="1.5" fill="#fff" fill-opacity=".5"/>
-    <text x="708" y="328" font-size="12" fill="#1d1d1f" text-anchor="middle">budget-buddy</text>
+    <text x="708" y="328" font-size="12" fill="#1d1d1f" text-anchor="middle">scripts</text>
     <path d="M782 252q0-8 8-8h18l8 8h30q8 0 8 8v34q0 8-8 8h-56q-8 0-8-8z" fill="#4c9be6"/>
     <rect x="782" y="258" width="72" height="44" rx="7" fill="url(#folderG)"/>
     <rect x="782" y="258" width="72" height="1.5" fill="#fff" fill-opacity=".5"/>
-    <text x="818" y="328" font-size="12" fill="#1d1d1f" text-anchor="middle">type-racer</text>
+    <text x="818" y="328" font-size="12" fill="#1d1d1f" text-anchor="middle">archive</text>
     <path d="M464 382h34l16 16v42q0 4-4 4h-46q-4 0-4-4v-54q0-4 4-4z" fill="#fff" stroke="#d1d1d6"/>
     <path d="M498 382v12q0 4 4 4h12" fill="#e5e5ea"/>
     <rect x="468" y="404" width="22" height="2.5" rx="1.25" fill="#8e8e93" fill-opacity="0.5"/>
@@ -340,9 +340,9 @@
     <text x="1010" y="406" font-size="12" fill="#98989f" text-anchor="middle" font-weight="600">aodjo — -zsh — 80×24</text>
     <g font-family="'SF Mono',ui-monospace,Menlo,Consolas,'D2Coding','Noto Sans Mono',monospace" font-size="14">
       <text x="744" y="450" xml:space="preserve"><tspan fill="#30d158">aodjo</tspan><tspan fill="#8e8e93">@</tspan><tspan fill="#64d2ff">webOS</tspan><tspan fill="#e5e5ea"> ~ % whoami</tspan></text>
-      <text x="744" y="476" xml:space="preserve"><tspan fill="#d1d1d6">aodjo · Frontend Engineer · Seoul</tspan></text>
+      <text x="744" y="476" xml:space="preserve"><tspan fill="#d1d1d6">aodjo · Full-stack Engineer · Seoul</tspan></text>
       <text x="744" y="502" xml:space="preserve"><tspan fill="#30d158">aodjo</tspan><tspan fill="#8e8e93">@</tspan><tspan fill="#64d2ff">webOS</tspan><tspan fill="#e5e5ea"> ~ % ls ~/Projects</tspan></text>
-      <text x="744" y="528" xml:space="preserve"><tspan fill="#64d2ff">webos/  pixel-board/  budget-buddy/  type-racer/</tspan></text>
+      <text x="744" y="528" xml:space="preserve"><tspan fill="#64d2ff">webos/  sandbox/  scripts/  archive/</tspan></text>
       <text x="744" y="554" xml:space="preserve"><tspan fill="#30d158">aodjo</tspan><tspan fill="#8e8e93">@</tspan><tspan fill="#64d2ff">webOS</tspan><tspan fill="#e5e5ea"> ~ % cat ~/Projects/webos/README.md | head -1</tspan></text>
       <text x="744" y="580" xml:space="preserve"><tspan fill="#ffd60a"># webOS</tspan><tspan fill="#d1d1d6"> — a macOS-like OS in your browser</tspan></text>
       <text x="744" y="606" xml:space="preserve"><tspan fill="#30d158">aodjo</tspan><tspan fill="#8e8e93">@</tspan><tspan fill="#64d2ff">webOS</tspan><tspan fill="#e5e5ea"> ~ % </tspan><tspan fill="#e5e5ea" fill-opacity=".85">█</tspan></text>

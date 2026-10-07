@@ -6,7 +6,7 @@
  * seed does not contain them), everything they created or changed is kept.
  */
 import type { AppManifest, FSNode, Locale } from './types';
-import { education, experience, osInfo, owner, projects, skills } from '@/data/portfolio';
+import { awards, education, experience, osInfo, owner, projects, skills } from '@/data/portfolio';
 import { HOME, PATHS, USER } from './constants';
 import { WALLPAPERS } from './wallpapers';
 import { fs, mimeFor, useFS } from './fs';
@@ -283,8 +283,12 @@ export function buildResume(locale: Locale): string {
     '',
     `> ${L(owner.tagline)}`,
     '',
-    `## ${ko ? '경력' : 'Experience'}`,
-    ...experience.flatMap((e) => [`### ${L(e.role)} — ${L(e.company)}`, `*${localizePeriod(e.period, locale)}*`, '', L(e.description), ...e.highlights.map((h) => `- ${L(h)}`), '']),
+    ...(experience.length
+      ? [`## ${ko ? '경력' : 'Experience'}`, ...experience.flatMap((e) => [`### ${L(e.role)} — ${L(e.company)}`, `*${localizePeriod(e.period, locale)}*`, '', L(e.description), ...e.highlights.map((h) => `- ${L(h)}`), ''])]
+      : []),
+    ...(awards.length
+      ? [`## ${ko ? '수상' : 'Awards'}`, ...awards.map((a) => `- ${a.date} **${L(a.title)}**${a.result ? ` ${L(a.result)}` : ''}${a.detail ? ` (${L(a.detail)})` : ''}`), '']
+      : []),
     `## ${ko ? '프로젝트' : 'Projects'}`,
     ...projects.map((p) => `- **${p.name}** (${p.year}) — ${L(p.tagline)}`),
     '',

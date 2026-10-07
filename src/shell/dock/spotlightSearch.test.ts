@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { APPS } from '@/apps';
 import { ensureSeeded, fs, PATHS } from '@/kernel';
+import { projects } from '@/data/portfolio';
 import { buildResults, choseong, isSearchableFile, matchScore } from './spotlightSearch';
 
 beforeAll(() => {
@@ -56,7 +57,7 @@ describe('buildResults', () => {
   it('finds settings panes, projects and skills', () => {
     expect(buildResults('dark mode', 'en').some((x) => x.kind === 'setting' && x.pane === 'appearance')).toBe(true);
     expect(buildResults('wallpaper', 'en').some((x) => x.kind === 'setting' && x.pane === 'wallpaper')).toBe(true);
-    expect(buildResults('pixel', 'en').some((x) => x.kind === 'project' && x.projectId === 'pixel-board')).toBe(true);
+    expect(buildResults(projects[0].name.toLowerCase(), 'en').some((x) => x.kind === 'project' && x.projectId === projects[0].id)).toBe(true);
     expect(buildResults('typescript', 'en').some((x) => x.kind === 'skill')).toBe(true);
   });
 

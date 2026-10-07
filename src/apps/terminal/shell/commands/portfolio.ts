@@ -1,6 +1,6 @@
 /** Portfolio commands that render the data in src/data/portfolio.ts: about, projects, skills, experience, contact, resume. */
 import { PATHS, buildResume, fs, join, localizePeriod, t, useSystem, wm } from '@/kernel';
-import { education, experience, owner, projects, skills } from '@/data/portfolio';
+import { awards, education, experience, owner, projects, skills } from '@/data/portfolio';
 import { c, displayWidth } from '../ansi';
 import type { CommandContext, CommandDef } from '../types';
 import { padEnd } from '../util';
@@ -117,7 +117,7 @@ function styler(ctx: CommandContext) {
      * @returns {string} The bold (or unchanged) text.
      *
      * @example
-     * out.push(s.bold('Frontend Engineer'));
+     * out.push(s.bold('Full-stack Engineer'));
      */
     bold: (s: string) => (tty ? c.bold(s) : s),
     /**
@@ -306,15 +306,16 @@ const experienceCmd: CommandDef = {
   aliases: ['work'],
   path: '/usr/local/bin',
   group: 'portfolio',
-  summary: { en: 'where I have worked', ko: '경력' },
+  summary: { en: 'experience, awards and education', ko: '경력, 수상, 학력' },
   usage: 'experience',
   /**
-   * Prints the work history as a timeline, followed by education.
+   * Prints the work history as a timeline, followed by awards and education.
    *
    * Each position shows the role, company and localized period on a bullet,
    * then its wrapped description and highlights hanging off a vertical bar
-   * that connects consecutive entries. Education entries, when present, are
-   * listed under their own heading.
+   * that connects consecutive entries. Awards (month, title, placing and
+   * division) and education entries follow under their own headings. A
+   * section without entries is left out.
    *
    * @param {CommandContext} ctx - The running command's context.
    * @returns {number} Exit status 0.
@@ -338,7 +339,8 @@ const experienceCmd: CommandDef = {
      * period('2024 — Present'); // '2024 — 현재' in the Korean locale
      */
     const period = (p: string) => localizePeriod(p, locale);
-    const out = ['', `  ${s.head(t({ en: 'Experience', ko: '경력' }))}`, ''];
+    const out: string[] = [];
+    if (experience.length) out.push('', `  ${s.head(t({ en: 'Experience', ko: '경력' }))}`, '');
     experience.forEach((e, i) => {
       const last = i === experience.length - 1;
       const bar = s.dim(last ? ' ' : '│');
@@ -347,6 +349,10 @@ const experienceCmd: CommandDef = {
       for (const h of e.highlights) out.push(...wrap(t(h), s.cols - 8).map((l, k) => `  ${bar}   ${k === 0 ? s.accent('▸') + ' ' : '  '}${l}`));
       if (!last) out.push(`  ${bar}`);
     });
+    if (awards.length) {
+      out.push('', `  ${s.head(t({ en: 'Awards', ko: '수상' }))}`, '');
+      for (const a of awards) out.push(`  ${s.accent('●')} ${s.dim(a.date)}  ${s.bold(t(a.title))}${a.result ? ` ${s.accent(t(a.result))}` : ''}${a.detail ? ` ${s.dim(t(a.detail))}` : ''}`);
+    }
     if (education.length) {
       out.push('', `  ${s.head(t({ en: 'Education', ko: '학력' }))}`, '');
       for (const e of education) out.push(`  ${s.accent('●')} ${s.bold(t(e.school))} ${s.dim('—')} ${t(e.degree)}  ${s.dim(period(e.period))}`);
@@ -355,7 +361,7 @@ const experienceCmd: CommandDef = {
     ctx.print(out.join('\n'));
     return 0;
   },
-}; /** `experience` (alias `work`): prints the work-history timeline and education. */
+}; /** `experience` (alias `work`): prints the work-history timeline, awards and education. */
 
 const contact: CommandDef = {
   name: 'contact',

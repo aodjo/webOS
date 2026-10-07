@@ -3,7 +3,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import '@/apps';
 import { WindowContext, useWM, wm, type AppProps } from '@/kernel';
-import { experience } from '@/data/portfolio';
+import { awards, experience } from '@/data/portfolio';
 import AboutMe from './index';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true; /** Marks this as an act() test environment so React does not warn about act() usage. */
@@ -69,9 +69,9 @@ describe('About Me app', () => {
       expect(tab.getAttribute('aria-selected')).toBe('true');
       expect(host.querySelector('[role="tabpanel"]')).not.toBeNull();
     }
-    // tabs[1] is Experience; its timeline renders one <li> per job.
+    // tabs[1] is Activities; its timelines render one <li> per job and per award.
     await act(async () => tabs[1].click());
-    expect(host.querySelectorAll('ol > li')).toHaveLength(experience.length);
+    expect(host.querySelectorAll('ol > li')).toHaveLength(experience.length + awards.length);
   });
 
   it('honours args.tab and arrow-key navigation in the tab bar', async () => {
