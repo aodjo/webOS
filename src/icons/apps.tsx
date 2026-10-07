@@ -424,24 +424,14 @@ export const PreviewIcon: IconFC = ({ size }) => {
   );
 };
 
-const CALC_GRID = [28.6, 42.87, 57.13, 71.4]; /** Key centers of the 4×4 Calculator grid, used for both rows and columns. */
-const CALC_OPS = [
-  <g key="div">
-    <path d="M-3.2 0H3.2" />
-    <circle cx="0" cy="-2.6" r="0.9" fill="#fff" stroke="none" />
-    <circle cx="0" cy="2.6" r="0.9" fill="#fff" stroke="none" />
-  </g>,
-  <path key="mul" d="M-2.4 -2.4L2.4 2.4M2.4 -2.4L-2.4 2.4" />,
-  <path key="sub" d="M-3.2 0H3.2" />,
-  <path key="add" d="M-3.2 0H3.2M0 -3.2V3.2" />,
-]; /** Operator glyphs for the orange column (÷ × − +, top to bottom), each centered at (0, 0) and stroked by the parent group. */
+const CALC_KEYS = [38, 50, 62].flatMap((cx, col) => [48.5, 59.5, 70.5].map((cy) => ({ cx, cy, op: col === 2 }))); /** Key centers of the Calculator's 3×3 keypad, column by column; the right column holds the orange operator keys. */
 
 /**
  * Calculator app icon.
  *
- * A 4×4 grid of round keys on a dark background: a light top row, dark digit keys and an orange
- * operator column showing ÷ × − +. The keys get a glass edge from 48px up, and the stronger rim
- * (0.3) keeps the dark silhouette visible.
+ * A small dark calculator standing on a gray squircle: a light display strip at the top and a
+ * 3×3 keypad of rounded keys, gray digit keys with an orange operator column on the right. The
+ * calculator body gets a glass edge from 32px up.
  *
  * @param {Object} props - Icon props.
  * @param {number} props.size - Rendered width and height in pixels.
@@ -456,36 +446,25 @@ export const CalculatorIcon: IconFC = ({ size }) => {
     <AppIconFrame
       size={size}
       fill={ids.url('bg')}
-      rim={0.3}
       defs={
         <>
-          <VGrad id={ids('bg')} from="#4b4b4f" to="#1c1c1e" />
-          <VGrad id={ids('light')} from="#e3e3e5" to="#a6a6aa" />
-          <VGrad id={ids('dark')} from="#727277" to="#4c4c51" />
-          <VGrad id={ids('op')} from="#ffbc4d" to="#ff8a00" />
+          <VGrad id={ids('bg')} from="#a9a9ae" to="#6b6b70" />
+          <VGrad id={ids('body')} from="#3a3a3e" to="#1b1b1d" />
+          <VGrad id={ids('display')} from="#f2f3f5" to="#c9ccd2" />
+          <VGrad id={ids('key')} from="#8b8b91" to="#6a6a70" />
+          <VGrad id={ids('op')} from="#ffb340" to="#ff8a00" />
         </>
       }
     >
-      {CALC_GRID.map((cy, row) =>
-        CALC_GRID.map((cx, col) => {
-          const op = col === 3;
-          const fill = op ? ids.url('op') : row === 0 ? ids.url('light') : ids.url('dark');
-          return (
-            <g key={`${row}-${col}`}>
-              <circle cx={cx} cy={cy + 0.7} r="6.1" fill="#000" fillOpacity="0.35" />
-              <circle cx={cx} cy={cy} r="6.1" fill={fill} />
-              {op && (
-                <g transform={`translate(${cx} ${cy})`} stroke="#fff" strokeWidth="1.5" strokeLinecap="round" fill="none">
-                  {CALC_OPS[row]}
-                </g>
-              )}
-            </g>
-          );
-        }),
-      )}
-      <GlassEdge size={size} min={48} opacity={0.7}>
-        {CALC_GRID.map((cy) => CALC_GRID.map((cx) => <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="6.1" />))}
+      <rect x="27" y="20" width="46" height="61" rx="8" fill="#000" fillOpacity="0.22" transform="translate(0 1.4)" />
+      <rect x="27" y="20" width="46" height="61" rx="8" fill={ids.url('body')} />
+      <GlassEdge size={size} min={32} opacity={0.5}>
+        <rect x="27" y="20" width="46" height="61" rx="8" />
       </GlassEdge>
+      <rect x="32" y="25" width="36" height="12" rx="3" fill={ids.url('display')} />
+      {CALC_KEYS.map((k) => (
+        <rect key={`${k.cx}-${k.cy}`} x={k.cx - 4.6} y={k.cy - 4.3} width="9.2" height="8.6" rx="2.6" fill={ids.url(k.op ? 'op' : 'key')} />
+      ))}
     </AppIconFrame>
   );
 };
