@@ -1,24 +1,26 @@
 /**
  * The lock screen clock drawn as Liquid Glass digits (macOS 26 lock screen).
  *
- * The digits are an SVG <text> rendered through a filter that turns the glyph shape into a
- * rounded glass slab: the shape is blurred into a height map, its slope (Sobel) bends the desktop
- * picture behind the glyphs, the bent picture is frosted and lifted toward white, a specular
- * light rakes the bevelled edges, a thin inner edge catches light and a soft shadow lifts the
- * digits off the wallpaper. The desktop picture is placed in the filter exactly where the lock
- * screen draws it (`cover`, centred on the viewport), so what shows through lines up with the
- * backdrop.
+ * The digits are an SVG <text> rendered through a filter that turns the glyph shape into a slab
+ * of milky glass: the glyph outline is softened into a height map whose slope (Sobel) bends the
+ * desktop picture along the edges, the bent picture is frosted and mixed mostly toward white, a
+ * thin line of light runs along the top-left edges with a weaker bounce on the bottom-right
+ * edges, and a faint shadow separates the digits from bright pictures. The desktop picture is
+ * placed in the filter exactly where the lock screen draws it (`cover`, centred on the
+ * viewport), so what shows through lines up with the backdrop.
  */
 import { useId, useLayoutEffect, useRef, useState } from 'react';
 import { useSystem } from '@/kernel/system';
 import styles from './GlassClock.module.css';
 
-const WIDTH = 760; /** Width of the clock canvas in px (wide enough for "12:59" at the font size). */
-const HEIGHT = 150; /** Height of the clock canvas in px, including room for the shadow. */
-const FONT_SIZE = 116; /** Size of the digits in px. */
-const BASELINE = 118; /** Baseline of the digits inside the canvas. */
-const BEVEL = 3.5; /** Blur radius that rounds the glyph edges into a bevel (px). */
-const LENS = 34; /** Strength of the refraction along the bevel (feDisplacementMap scale, px). */
+const WIDTH = 820; /** Width of the clock canvas in px (wide enough for "12:59" at the font size). */
+const HEIGHT = 168; /** Height of the clock canvas in px, including room for the shadow. */
+const FONT_SIZE = 136; /** Size of the digits in px. */
+const BASELINE = 134; /** Baseline of the digits inside the canvas. */
+const BEVEL = 2.5; /** Blur radius that rounds the glyph edges into a bevel (px). */
+const LENS = 22; /** Strength of the refraction along the bevel (feDisplacementMap scale, px). */
+const MILK = 0.74; /** White lift added to the frosted picture (0 = clear glass, 1 = opaque white). */
+const TRANSMIT = 0.3; /** Share of the frosted picture that shows through the milky glass. */
 
 interface Placement {
   left: number;
@@ -42,7 +44,7 @@ interface Placement {
  * @returns {JSX.Element} The glass clock.
  *
  * @example
- * <GlassClock text="9:41" wallpaper="/wallpapers/hallasan-light.svg" dateTime={now.toISOString()} />
+ * <GlassClock text="9:41" wallpaper="/wallpapers/flow-light.jpg" dateTime={now.toISOString()} />
  */
 export function GlassClock({ text, wallpaper, dateTime }: { text: string; wallpaper: string; dateTime: string }) {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -76,45 +78,36 @@ export function GlassClock({ text, wallpaper, dateTime }: { text: string; wallpa
               <feComposite in="slopeR" in2="slopeG" operator="arithmetic" k2="1" k3="1" result="normals" />
               <feDisplacementMap in="wall" in2="normals" scale={LENS} xChannelSelector="R" yChannelSelector="G" result="bent" />
 
-              <feGaussianBlur in="bent" stdDeviation="5" result="frosted" />
-              <feColorMatrix in="frosted" type="saturate" values="1.3" result="saturated" />
+              <feGaussianBlur in="bent" stdDeviation="3" result="frosted" />
+              <feColorMatrix in="frosted" type="saturate" values="1.25" result="saturated" />
               <feComponentTransfer in="saturated" result="milky">
-                <feFuncR type="linear" slope="0.58" intercept="0.42" />
-                <feFuncG type="linear" slope="0.58" intercept="0.42" />
-                <feFuncB type="linear" slope="0.58" intercept="0.45" />
+                <feFuncR type="linear" slope={TRANSMIT} intercept={MILK} />
+                <feFuncG type="linear" slope={TRANSMIT} intercept={MILK} />
+                <feFuncB type="linear" slope={TRANSMIT} intercept={MILK + 0.02} />
               </feComponentTransfer>
-              <feComposite in="milky" in2="SourceAlpha" operator="in" result="body" />
+              <feComposite in="milky" in2="SourceAlpha" operator="in" result="glass" />
 
-              <feDiffuseLighting in="height" surfaceScale="3" diffuseConstant="1" lightingColor="#fff" result="shade">
-                <feDistantLight azimuth="235" elevation="62" />
-              </feDiffuseLighting>
-              <feComposite in="body" in2="shade" operator="arithmetic" k1="0.14" k2="0.88" result="shaded" />
-              <feComposite in="shaded" in2="SourceAlpha" operator="in" result="glass" />
+              <feOffset in="SourceAlpha" dx="1.2" dy="1.2" result="shiftIn" />
+              <feComposite in="SourceAlpha" in2="shiftIn" operator="out" result="keyBand" />
+              <feGaussianBlur in="keyBand" stdDeviation="0.4" result="keySoft" />
+              <feFlood floodColor="#fff" floodOpacity="0.85" result="keyColor" />
+              <feComposite in="keyColor" in2="keySoft" operator="in" result="keyLight" />
+              <feOffset in="SourceAlpha" dx="-1" dy="-1" result="shiftOut" />
+              <feComposite in="SourceAlpha" in2="shiftOut" operator="out" result="bounceBand" />
+              <feGaussianBlur in="bounceBand" stdDeviation="0.4" result="bounceSoft" />
+              <feFlood floodColor="#fff" floodOpacity="0.45" result="bounceColor" />
+              <feComposite in="bounceColor" in2="bounceSoft" operator="in" result="bounceLight" />
 
-              <feSpecularLighting in="height" surfaceScale="4" specularConstant="1" specularExponent="22" lightingColor="#fff" result="gloss">
-                <feDistantLight azimuth="225" elevation="48" />
-              </feSpecularLighting>
-              <feComposite in="gloss" in2="SourceAlpha" operator="in" result="glossIn" />
-              <feComponentTransfer in="glossIn" result="glossSoft">
-                <feFuncA type="linear" slope="0.55" />
-              </feComponentTransfer>
-
-              <feMorphology in="SourceAlpha" operator="erode" radius="1.5" result="inner" />
-              <feGaussianBlur in="inner" stdDeviation="1" result="innerSoft" />
-              <feComposite in="SourceAlpha" in2="innerSoft" operator="out" result="rimBand" />
-              <feFlood floodColor="#fff" floodOpacity="0.7" result="rimColor" />
-              <feComposite in="rimColor" in2="rimBand" operator="in" result="rim" />
-
-              <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="shadowBlur" />
-              <feOffset in="shadowBlur" dy="4" result="shadowOffset" />
-              <feFlood floodColor="#000" floodOpacity="0.16" result="shadowColor" />
+              <feGaussianBlur in="SourceAlpha" stdDeviation="10" result="shadowBlur" />
+              <feOffset in="shadowBlur" dy="3" result="shadowOffset" />
+              <feFlood floodColor="#0a1a40" floodOpacity="0.14" result="shadowColor" />
               <feComposite in="shadowColor" in2="shadowOffset" operator="in" result="shadow" />
 
               <feMerge>
                 <feMergeNode in="shadow" />
                 <feMergeNode in="glass" />
-                <feMergeNode in="glossSoft" />
-                <feMergeNode in="rim" />
+                <feMergeNode in="keyLight" />
+                <feMergeNode in="bounceLight" />
               </feMerge>
             </filter>
           </defs>

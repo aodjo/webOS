@@ -1,16 +1,16 @@
 /**
  * Login window / lock screen (Liquid Glass controls over the blurred wallpaper).
  *
- * - 'login'  : shown after boot / log out. Sleep · Restart · Shut Down at the bottom.
+ * - 'login'  : shown after boot / log out.
  * - 'locked' : rendered over the running (inert) desktop; apps keep their state.
  *
  * Any key press focuses the password field. A wrong password shakes the field and clears it;
  * the right one (or anything when no password is set) plays the unlock transition and then
  * calls `onUnlock` once.
  */
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
-import { ArrowRight, Moon, Power, RotateCw, Users, Wifi, WifiOff } from 'lucide-react';
-import { power, useSystem } from '@/kernel/system';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { ArrowRight, Wifi, WifiOff } from 'lucide-react';
+import { useSystem } from '@/kernel/system';
 import { useRefraction } from '@/components/Glass';
 import { fmt, useLocale, useT } from '@/kernel/i18n';
 import type { Locale } from '@/kernel/types';
@@ -34,11 +34,6 @@ const S = {
   showHint: { en: 'Show Password Hint', ko: '암호 힌트 보기' },
   hint: { en: 'Hint: {hint}', ko: '암호 힌트: {hint}' },
   incorrect: { en: 'Incorrect password', ko: '암호가 올바르지 않습니다.' },
-  sleep: { en: 'Sleep', ko: '잠자기' },
-  restart: { en: 'Restart', ko: '재시동' },
-  shutDown: { en: 'Shut Down', ko: '시스템 종료' },
-  switchUser: { en: 'Switch User', ko: '사용자 전환' },
-  noOtherUsers: { en: 'There are no other users on this computer.', ko: '이 컴퓨터에 다른 사용자가 없습니다.' },
   battery: { en: 'Battery {pct}%', ko: '배터리 {pct}%' },
   capsLock: { en: 'Caps Lock is on', ko: 'Caps Lock이 켜져 있음' },
   wifiOn: { en: 'Wi-Fi: On', ko: 'Wi-Fi: 켬' },
@@ -60,9 +55,10 @@ const AUTO_HINT_AFTER = 3; /** Number of wrong attempts after which the password
  * `onUnlock` is called exactly once, UNLOCK_MS later. A wrong password clears and shakes the
  * field and counts the attempt; after AUTO_HINT_AFTER attempts (or via the "?" button) the
  * password hint replaces the caption. Printable keys, Backspace and Enter pressed anywhere focus
- * the password field, and Caps Lock is tracked for the ⇪ indicator. In 'login' mode the bottom
- * bar offers Sleep / Restart / Shut Down; in 'locked' mode it offers Switch User, which shows a
- * transient "no other users" caption that clears after 3.2 seconds.
+ * the password field, and Caps Lock is tracked for the ⇪ indicator. The password capsule stays
+ * hidden (but focused) until something is typed, the avatar is clicked or an attempt failed;
+ * Escape clears it and hides it again. Both modes look the same; power actions live in the menu
+ * bar once the session is unlocked.
  *
  * @param {Object} props - Component props.
  * @param {'login' | 'locked'} props.mode - Whether this is the login window or the lock screen.
@@ -82,9 +78,9 @@ export function LoginScreen({ mode, onUnlock }: { mode: 'login' | 'locked'; onUn
   const [value, setValue] = useState('');
   const [attempts, setAttempts] = useState(0);
   const [hintShown, setHintShown] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
   const [unlocking, setUnlocking] = useState(false);
   const [capsLock, setCapsLock] = useState(false);
+  const [revealed, setRevealed] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -153,12 +149,6 @@ export function LoginScreen({ mode, onUnlock }: { mode: 'login' | 'locked'; onUn
     return () => clearTimeout(id);
   }, [unlocking]);
 
-  useEffect(() => {
-    if (!message) return;
-    const id = window.setTimeout(() => setMessage(null), 3200);
-    return () => clearTimeout(id);
-  }, [message]);
-
   /**
    * Plays the "wrong password" shake animation on the form.
    *
@@ -217,7 +207,8 @@ export function LoginScreen({ mode, onUnlock }: { mode: 'login' | 'locked'; onUn
   const lum = useWallpaperLuminance(WHOLE_SCREEN);
   const scrim = lum === null ? 0 : Math.min(0.32, Math.max(0, (lum - 0.22) * 0.55));
   const showArrow = !needsPassword || value.length > 0;
-  const caption = message ?? (showHint ? fmt(t(S.hint), { hint }) : t(S.touchId));
+  const fieldShown = revealed || value.length > 0 || attempts > 0;
+  const caption = showHint ? fmt(t(S.hint), { hint }) : t(S.touchId);
 
   return (
     <div
@@ -240,10 +231,21 @@ export function LoginScreen({ mode, onUnlock }: { mode: 'login' | 'locked'; onUn
         </header>
 
         <div className={styles.user}>
-          <Avatar src={avatar} name={fullName} />
-          <div className={styles.name}>{fullName}</div>
+          <button
+            type="button"
+            className={styles.userButton}
+            tabIndex={-1}
+            aria-hidden="true"
+            onClick={() => {
+              setRevealed(true);
+              inputRef.current?.focus();
+            }}
+          >
+            <Avatar src={avatar} name={fullName} />
+            <span className={styles.name}>{fullName}</span>
+          </button>
 
-          <form ref={formRef} className={styles.form} onSubmit={submit} autoComplete="off">
+          <form ref={formRef} className={styles.form} data-hidden={!fieldShown || undefined} onSubmit={submit} autoComplete="off">
             <div ref={fieldRef} className={`lg lg-clear lg-capsule ${styles.field}`} data-caps={capsLock || undefined}>
               {/* The data-*ignore attributes keep browser/extension password managers out of this simulated OS password field. */}
               <input
@@ -252,7 +254,11 @@ export function LoginScreen({ mode, onUnlock }: { mode: 'login' | 'locked'; onUn
                 type="password"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
-                onKeyDown={(e) => e.key === 'Escape' && setValue('')}
+                onKeyDown={(e) => {
+                  if (e.key !== 'Escape') return;
+                  setValue('');
+                  setRevealed(false);
+                }}
                 placeholder={t(S.enterPassword)}
                 aria-label={t(S.password)}
                 autoComplete="off"
@@ -305,43 +311,8 @@ export function LoginScreen({ mode, onUnlock }: { mode: 'login' | 'locked'; onUn
           </div>
         </div>
 
-        {mode === 'login' ? (
-          <nav className={styles.bottomBar}>
-            <PowerButton label={t(S.sleep)} onClick={power.sleep} icon={<Moon size={18} strokeWidth={1.9} />} />
-            <PowerButton label={t(S.restart)} onClick={power.restart} icon={<RotateCw size={18} strokeWidth={1.9} />} />
-            <PowerButton label={t(S.shutDown)} onClick={power.shutDown} icon={<Power size={18} strokeWidth={1.9} />} />
-          </nav>
-        ) : (
-          <nav className={styles.bottomBar}>
-            <PowerButton label={t(S.switchUser)} onClick={() => setMessage(t(S.noOtherUsers))} icon={<Users size={18} strokeWidth={1.9} />} />
-          </nav>
-        )}
       </div>
     </div>
-  );
-}
-
-/**
- * Round glass button with a caption, used in the bottom bar of the login / lock screen.
- *
- * The icon sits in a clear glass circle and the label is rendered underneath it; the whole
- * column is one button.
- *
- * @param {Object} props - Component props.
- * @param {string} props.label - Caption shown under the circle.
- * @param {ReactNode} props.icon - Icon drawn inside the glass circle.
- * @param {() => void} props.onClick - Called when the button is clicked.
- * @returns {JSX.Element} The power button.
- *
- * @example
- * <PowerButton label="Sleep" icon={<Moon size={18} />} onClick={power.sleep} />
- */
-function PowerButton({ label, icon, onClick }: { label: string; icon: ReactNode; onClick: () => void }) {
-  return (
-    <button type="button" className={styles.powerBtn} onClick={onClick}>
-      <span className={`lg lg-clear lg-circle lg-interactive ${styles.powerCircle}`}>{icon}</span>
-      <span className={styles.powerLabel}>{label}</span>
-    </button>
   );
 }
 
@@ -366,9 +337,9 @@ function initials(name: string): string {
 }
 
 /**
- * Circular user picture inside a thin glass ring.
+ * Circular user picture.
  *
- * The ring is the `.lg` element and the clipped picture sits inside it. `src` is resolved with
+ * `src` is resolved with
  * `useImageURL` (public asset or virtual FS image). When there is no URL or the image fails to
  * load, the user's initials are shown instead; the failure is remembered per URL, so a new
  * picture is tried again.
@@ -386,11 +357,9 @@ function Avatar({ src, name }: { src: string; name: string }) {
   const [failedUrl, setFailedUrl] = useState<string | null>(null);
   const failed = failedUrl === url;
   return (
-    <div className={`lg lg-clear lg-circle ${styles.avatarRing}`}>
-      <div className={styles.avatar}>
-        {url && !failed ? <img src={url} alt="" draggable={false} onError={() => setFailedUrl(url)} /> : <span>{initials(name)}</span>}
-      </div>
-    </div>
+    <span className={styles.avatar}>
+      {url && !failed ? <img src={url} alt="" draggable={false} onError={() => setFailedUrl(url)} /> : <span>{initials(name)}</span>}
+    </span>
   );
 }
 
