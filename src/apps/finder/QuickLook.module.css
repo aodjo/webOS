@@ -37,25 +37,6 @@
   touch-action: none;
 }
 
-/* Traffic-light style buttons at the top left (close, full size). */
-.light {
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
-  padding: 0;
-  border: none;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--text) 32%, transparent);
-  color: var(--window-bg);
-  cursor: default;
-}
-.light:hover {
-  background: color-mix(in srgb, var(--text) 50%, transparent);
-}
-
 /* Plain controls at the top right: no button chrome, just the label or the glyph. */
 .textBtn,
 .iconBtn {
@@ -88,8 +69,7 @@
   gap: 8px;
 }
 .side:first-child {
-  gap: 7px;
-  padding-left: 6px;
+  padding-left: 8px;
 }
 .sideEnd {
   justify-content: flex-end;

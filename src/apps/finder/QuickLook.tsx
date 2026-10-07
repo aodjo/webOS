@@ -1,8 +1,9 @@
 import { useRef, useState, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent } from 'react';
-import { Maximize2, Minimize2, Share, X } from 'lucide-react';
+import { Share } from 'lucide-react';
 import type { FSNode } from '@/kernel';
 import { defaultAppFor, downloadFile, fileClipboard, fileSizeOf, fmt, formatBytes, formatDate, fs, getApp, notify, showContextMenu, useLocale, useT } from '@/kernel';
 import { FileIcon } from '@/icons';
+import { PanelLights } from '@/shell/windows/TrafficLights';
 import { displayName, isAppFile, itemCount, kindLabel, withRo } from './model';
 import { S } from './strings';
 import { FilePreview, hasContentPreview } from './Preview';
@@ -42,8 +43,8 @@ function openerFor(node: FSNode): string | null {
  * It never takes focus, so the Finder keeps handling the keyboard: arrow keys move the selection
  * underneath (the panel follows `node`) and Space / Escape close it. The header can be dragged
  * with the primary button to offset the panel (pointer capture keeps the drag going outside it);
- * presses on its buttons do not start a drag. Two small round buttons sit at the top left like
- * traffic lights: close, and full size (the panel then fills the window; pressing it again
+ * presses on its buttons do not start a drag. The window traffic lights sit at the top left:
+ * close, and zoom to full size (the panel then fills the window; pressing it again
  * restores the floating size and position). At the top right are, for files and apps, a plain
  * "Open" / "Open with <app>" text button and a plain Share icon. The Share menu offers AirDrop (which reports that no devices are nearby), Copy (to the file
  * clipboard) and, for files, Download to This Computer.
@@ -160,12 +161,7 @@ export function QuickLook({ node, position, onClose, onOpen }: Props) {
   const controls = (
     <>
       <div className={s.side}>
-        <button type="button" className={s.light} aria-label={t(S.closeQuickLook)} title={t(S.closeQuickLook)} onClick={onClose}>
-          <X size={9} strokeWidth={3} />
-        </button>
-        <button type="button" className={s.light} aria-label={t(full ? S.exitFullScreen : S.fullScreen)} title={t(full ? S.exitFullScreen : S.fullScreen)} onClick={() => setFull((f) => !f)}>
-          {full ? <Minimize2 size={8} strokeWidth={3} /> : <Maximize2 size={8} strokeWidth={3} />}
-        </button>
+        <PanelLights onClose={onClose} onZoom={() => setFull((f) => !f)} zoomed={full} closeLabel={t(S.closeQuickLook)} zoomLabel={t(full ? S.exitFullScreen : S.fullScreen)} />
       </div>
       <div className={s.title}>
         {rich && <span className={s.name}>{name}</span>}

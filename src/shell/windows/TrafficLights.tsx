@@ -306,3 +306,34 @@ export function TrafficLights({ win, focused, variant, canClose, canZoom }: Traf
     </div>
   );
 }
+
+/**
+ * Traffic-light buttons for a floating panel that is not a window (e.g. Quick Look).
+ *
+ * Uses the same red close and green zoom buttons as window title bars, with their glyphs shown
+ * while the group is hovered; there is no minimize button. The group sits in the normal layout
+ * flow instead of being pinned to a title bar, and pressing a button never takes DOM focus.
+ *
+ * @param {Object} props - Component props.
+ * @param {() => void} props.onClose - Called when the close button is clicked.
+ * @param {() => void} props.onZoom - Called when the zoom button is clicked.
+ * @param {boolean} props.zoomed - Whether the panel is at full size (the zoom glyph points inward).
+ * @param {string} props.closeLabel - Accessible label of the close button.
+ * @param {string} props.zoomLabel - Accessible label of the zoom button.
+ * @returns {JSX.Element} The button group.
+ *
+ * @example
+ * <PanelLights onClose={close} onZoom={toggle} zoomed={full} closeLabel="Close" zoomLabel="Full Size" />
+ */
+export function PanelLights({ onClose, onZoom, zoomed, closeLabel, zoomLabel }: { onClose: () => void; onZoom: () => void; zoomed: boolean; closeLabel: string; zoomLabel: string }) {
+  return (
+    <div className={cx(s.lights, s.lightsInline)} onMouseDown={(e) => e.preventDefault()}>
+      <button type="button" tabIndex={-1} className={cx(s.light, s.close)} aria-label={closeLabel} title={closeLabel} onClick={onClose}>
+        <CloseGlyph />
+      </button>
+      <button type="button" tabIndex={-1} className={cx(s.light, s.zoom)} aria-label={zoomLabel} title={zoomLabel} onClick={onZoom}>
+        <ZoomGlyph inward={zoomed} />
+      </button>
+    </div>
+  );
+}

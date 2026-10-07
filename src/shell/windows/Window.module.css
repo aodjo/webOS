@@ -217,6 +217,11 @@
   top: 20px;
 }
 
+/* Inside a floating panel's own header (PanelLights): part of the normal layout flow. */
+.lightsInline {
+  position: static;
+}
+
 .light {
   position: relative;
   display: grid;
