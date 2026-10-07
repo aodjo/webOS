@@ -21,29 +21,53 @@
   opacity: 0;
 }
 
+.logoSlot {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
 .greeting {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
   margin: 0;
-  padding: 0 24px;
-  max-width: 100%;
-  text-align: center;
+  transform: translate(-50%, -50%);
   font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-  font-size: clamp(15px, 2.4vw, 24px);
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  white-space: pre-wrap;
-  color: rgba(255, 255, 255, 0.45);
-  transition-property: opacity;
-  transition-timing-function: ease;
-  animation: trackIn 0.4s ease both;
-}
-
-.greeting.fading {
-  opacity: 0;
-}
-
-.glyph[data-settled] {
+  font-size: clamp(12px, 3.4vw, 22px);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
   color: #fff;
-  transition: color 0.25s ease;
+  animation: trackIn 0.5s ease both;
+  transition:
+    opacity 0.45s ease,
+    filter 0.45s ease;
+}
+
+.greeting.morphing {
+  opacity: 0;
+  filter: blur(6px);
+}
+
+.glyph {
+  display: inline-block;
+  max-width: 1ch;
+  overflow: hidden;
+  transition:
+    max-width 0.38s var(--ease-out),
+    opacity 0.3s ease,
+    color 0.3s ease;
+}
+
+.glyph[data-scrambled] {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.glyph[data-gone] {
+  max-width: 0;
+  opacity: 0;
 }
 
 .logo {

@@ -1,7 +1,7 @@
 /**
- * Boot screen shown while the OS starts: the owner's greeting decoding out of random characters,
- * then the logo and a progress bar on black, which fades out once the kernel reports the boot
- * I/O as done.
+ * Boot screen shown while the OS starts: a progress bar on black under the owner's greeting,
+ * which scrambles into random characters, collapses to the logo's size and turns into the logo.
+ * The screen fades out once the kernel reports the boot I/O as done.
  */
 import { useEffect, useRef, useState } from 'react';
 import { owner } from '@/data/portfolio';
@@ -22,13 +22,14 @@ const HOLD_AT = 0.85; /** Progress (0–1) the bar is capped at until the boot I
 const MAX_SPEED = 1 / 0.5; /** Maximum catch-up speed in progress per second, so a late `ready` never makes the bar jump. */
 const PAUSE_AT_END_MS = 260; /** Time in ms the full bar stays visible before the screen fades. */
 const FADE_MS = 520; /** Duration in ms of the fade-out, after which `onDone` is called. */
-const GLYPHS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'; /** Characters cycled through while a greeting character is still scrambled. */
+const GLYPHS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'; /** Characters cycled through while a greeting character is scrambled. */
 const SCRAMBLE_TICK_MS = 55; /** Time in ms between changes of a scrambled character. */
-const DECODE_DELAY_MS = 450; /** Time in ms the greeting stays fully scrambled before the first character settles. */
-const DECODE_STAGGER_MS = 38; /** Delay in ms between consecutive characters settling, left to right. */
-const DECODE_JITTER_MS = 260; /** Upper bound in ms of the random extra delay added to each character. */
-const GREETING_HOLD_MS = 900; /** Time in ms the decoded greeting stays before fading out. */
-const GREETING_FADE_MS = 450; /** Duration in ms of the greeting's fade-out, after which the logo appears. */
+const GREETING_READ_MS = 1100; /** Time in ms the greeting stays readable before it starts to scramble. */
+const SCRAMBLE_SPREAD_MS = 450; /** Window in ms over which the characters start scrambling, in random order. */
+const COLLAPSE_START_MS = 1500; /** Time in ms at which scrambled characters start dropping out. */
+const COLLAPSE_MS = 900; /** Time in ms over which characters drop out, from the ends towards the middle. */
+const KEEP_CHARS = 5; /** Number of middle characters left when the greeting reaches the logo's size. */
+const MORPH_AT_MS = 2550; /** Time in ms at which the leftover characters give way to the logo. */
 
 /**
  * Picks a random character to show in place of a scrambled one.
@@ -41,57 +42,56 @@ const GREETING_FADE_MS = 450; /** Duration in ms of the greeting's fade-out, aft
 const randomGlyph = () => GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
 
 /**
- * Plays the owner's greeting as if it were being decrypted, then reports completion.
+ * The owner's greeting, scrambling and collapsing into the logo's place.
  *
- * Every non-space character starts as a random glyph from `GLYPHS` that changes every
- * `SCRAMBLE_TICK_MS`. After `DECODE_DELAY_MS` the characters settle on their real value from
- * left to right, `DECODE_STAGGER_MS` apart plus a random jitter of up to `DECODE_JITTER_MS`.
- * Characters are written straight to the DOM from a `requestAnimationFrame` loop, so the effect
- * runs without re-rendering React; the rendered text is the first scramble, picked once, so a
- * re-render from the parent never overwrites characters that have already settled. Once all have settled, the greeting holds for
- * `GREETING_HOLD_MS`, fades out over `GREETING_FADE_MS` and calls `onDone` once. With reduced
- * motion the text is shown decoded right away. A pointer press or key press skips the effect.
+ * The greeting is first shown as is. After `GREETING_READ_MS` its characters start scrambling
+ * in random order (spread over `SCRAMBLE_SPREAD_MS`) into random glyphs from `GLYPHS` that change
+ * every `SCRAMBLE_TICK_MS`. From `COLLAPSE_START_MS` the characters drop out over `COLLAPSE_MS`,
+ * farthest from the middle first, until `KEEP_CHARS` remain, about as wide as the logo. At
+ * `MORPH_AT_MS` the rest fades away and `onMorph` is called so the logo can appear in its place.
+ * Characters are written straight to the DOM from a `requestAnimationFrame` loop; the rendered
+ * text is picked once, so a re-render from the parent never undoes those writes. The schedule
+ * lives in refs, so StrictMode's remount continues it instead of restarting.
  *
  * @param {Object} props - Component props.
- * @param {string} props.text - The greeting to decode.
- * @param {boolean} props.reduceMotion - Whether to skip the scramble and show the text as is.
- * @param {() => void} props.onDone - Called once after the greeting has faded out.
+ * @param {string} props.text - The greeting to show.
+ * @param {() => void} props.onMorph - Called once when the logo should take over.
  * @returns {JSX.Element} The greeting line.
  *
  * @example
- * <DecodingGreeting text="Welcome!" reduceMotion={false} onDone={() => setPhase('running')} />
+ * <GreetingMorph text="Welcome!" onMorph={() => setLogoShown(true)} />
  */
-function DecodingGreeting({ text, reduceMotion, onDone }: { text: string; reduceMotion: boolean; onDone: () => void }) {
-  const chars = Array.from(text);
+function GreetingMorph({ text, onMorph }: { text: string; onMorph: () => void }) {
+  const [chars] = useState(() => Array.from(text));
   const cellsRef = useRef<(HTMLSpanElement | null)[]>([]);
-  const settleAtRef = useRef<number[] | null>(null);
-  const onDoneRef = useRef(onDone);
-  const [fading, setFading] = useState(false);
-  const [initial] = useState(() => chars.map((ch) => (ch === ' ' || reduceMotion ? ch : randomGlyph())));
+  const onMorphRef = useRef(onMorph);
+  const startRef = useRef<number | null>(null);
+  const [morphing, setMorphing] = useState(false);
   useEffect(() => {
-    onDoneRef.current = onDone;
-  }, [onDone]);
+    onMorphRef.current = onMorph;
+  }, [onMorph]);
 
-  settleAtRef.current ??= chars.map((_, i) => (reduceMotion ? 0 : DECODE_DELAY_MS + i * DECODE_STAGGER_MS + Math.random() * DECODE_JITTER_MS));
+  const [schedule] = useState(() => {
+    const n = chars.length;
+    const mid = (n - 1) / 2;
+    const order = chars.map((_, i) => i).sort((x, y) => Math.abs(y - mid) - Math.abs(x - mid));
+    const drops = Math.max(0, n - KEEP_CHARS);
+    const goneAt = new Array<number>(n).fill(Infinity);
+    order.slice(0, drops).forEach((i, rank) => (goneAt[i] = COLLAPSE_START_MS + (rank / Math.max(1, drops)) * COLLAPSE_MS));
+    const scrambleAt = chars.map(() => GREETING_READ_MS + Math.random() * SCRAMBLE_SPREAD_MS);
+    return { scrambleAt, goneAt };
+  });
 
   useEffect(() => {
-    if (fading) {
-      const id = window.setTimeout(() => onDoneRef.current(), GREETING_FADE_MS);
-      return () => clearTimeout(id);
-    }
-    const settleAt = settleAtRef.current!;
-    const last = Math.max(0, ...settleAt);
+    if (morphing) return;
     let raf = 0;
-    let start: number | null = null;
     let lastTick = -1;
-    let holdTimer = 0;
 
     /**
-     * Updates the scrambled characters for one animation frame.
+     * Advances the scramble and collapse by one animation frame.
      *
-     * Settled characters get their real value; the rest get a new random glyph whenever a new
-     * scramble tick starts. When every character has settled the loop stops and the hold
-     * timer before the fade-out starts.
+     * Hides characters whose drop time has passed, gives scrambling characters a new random
+     * glyph on every new scramble tick, and switches to the morph once `MORPH_AT_MS` is reached.
      *
      * @param {number} now - The frame timestamp from `requestAnimationFrame`, in ms.
      * @returns {void}
@@ -100,52 +100,36 @@ function DecodingGreeting({ text, reduceMotion, onDone }: { text: string; reduce
      * raf = requestAnimationFrame(frame);
      */
     const frame = (now: number) => {
-      start ??= now;
-      const elapsed = now - start;
+      startRef.current ??= now;
+      const elapsed = now - startRef.current;
       const tick = Math.floor(elapsed / SCRAMBLE_TICK_MS);
       chars.forEach((ch, i) => {
         const cell = cellsRef.current[i];
-        if (!cell || ch === ' ') return;
-        if (elapsed >= settleAt[i]) {
-          if (cell.textContent !== ch) {
-            cell.textContent = ch;
-            cell.dataset.settled = '';
-          }
-        } else if (tick !== lastTick) cell.textContent = randomGlyph();
+        if (!cell) return;
+        if (elapsed >= schedule.goneAt[i]) {
+          if (!('gone' in cell.dataset)) cell.dataset.gone = '';
+        } else if (ch !== ' ' && elapsed >= schedule.scrambleAt[i] && tick !== lastTick) {
+          cell.textContent = randomGlyph();
+          cell.dataset.scrambled = '';
+        }
       });
       lastTick = tick;
-      if (elapsed >= last) {
-        holdTimer = window.setTimeout(() => setFading(true), GREETING_HOLD_MS);
+      if (elapsed >= MORPH_AT_MS) {
+        setMorphing(true);
+        onMorphRef.current();
         return;
       }
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
-
-    /**
-     * Skips the rest of the greeting when the visitor presses a key or the pointer.
-     *
-     * @returns {void}
-     *
-     * @example
-     * window.addEventListener('keydown', skip);
-     */
-    const skip = () => setFading(true);
-    window.addEventListener('keydown', skip);
-    window.addEventListener('pointerdown', skip);
-    return () => {
-      cancelAnimationFrame(raf);
-      clearTimeout(holdTimer);
-      window.removeEventListener('keydown', skip);
-      window.removeEventListener('pointerdown', skip);
-    };
-  }, [fading]);
+    return () => cancelAnimationFrame(raf);
+  }, [chars, schedule, morphing]);
 
   return (
-    <p className={`${styles.greeting} ${fading ? styles.fading : ''}`} style={{ transitionDuration: `${GREETING_FADE_MS}ms` }} aria-label={text}>
-      {chars.map((_, i) => (
+    <p className={`${styles.greeting} ${morphing ? styles.morphing : ''}`} aria-label={text}>
+      {chars.map((ch, i) => (
         <span key={i} ref={(el) => void (cellsRef.current[i] = el)} className={styles.glyph} aria-hidden="true">
-          {initial[i]}
+          {ch === ' ' ? '\u00a0' : ch}
         </span>
       ))}
     </p>
@@ -168,11 +152,12 @@ function DecodingGreeting({ text, reduceMotion, onDone }: { text: string; reduce
 const easeInOutSine = (x: number) => 0.5 - Math.cos(Math.PI * x) / 2;
 
 /**
- * Full-screen boot screen: the owner's greeting, then the OS logo and a progress bar on black.
+ * Full-screen boot screen with the OS logo and a progress bar on black.
  *
- * When `owner.bootGreeting` is set, it first plays `DecodingGreeting` and shows the logo only
- * after the greeting has faded out. The startup chime plays once, together with the logo, when
- * the startup sound setting is on. The bar is
+ * When `owner.bootGreeting` is set (and Reduce Motion is off), `GreetingMorph` plays in the
+ * logo's place first and the logo appears when it morphs; the bar's fill time is stretched by
+ * `MORPH_AT_MS` so the logo still shows for a while before the screen fades. The startup chime
+ * plays once, together with the logo, when the startup sound setting is on. The bar is
  * animated by a `requestAnimationFrame` loop that writes its transform and `aria-valuenow`
  * straight to the DOM, so it moves at display rate without re-rendering React. It eases
  * towards a time-based target, is capped at `HOLD_AT` until `ready` is true, then catches up
@@ -204,16 +189,18 @@ export function BootScreen({ ready, onDone }: { ready: boolean; onDone: () => vo
   const doneCalled = useRef(false);
   const chimed = useRef(false);
 
-  const greeting = owner.bootGreeting.trim();
   const reduceMotion = useSystem((st) => st.settings.reduceMotion);
-  const [phase, setPhase] = useState<'greeting' | 'running' | 'complete' | 'fading'>(greeting ? 'greeting' : 'running');
+  const [greeting] = useState(() => (reduceMotion ? '' : owner.bootGreeting.trim()));
+  const [logoShown, setLogoShown] = useState(!greeting);
+  const fillMs = FILL_MS + (greeting ? MORPH_AT_MS : 0);
+  const [phase, setPhase] = useState<'running' | 'complete' | 'fading'>('running');
 
   useEffect(() => {
-    if (phase === 'greeting' || chimed.current) return;
+    if (!logoShown || chimed.current) return;
     chimed.current = true;
     const { startupSound, volume } = useSystem.getState().settings;
     if (startupSound) playStartupChime(volume);
-  }, [phase]);
+  }, [logoShown]);
 
   useEffect(() => {
     if (phase !== 'running') return;
@@ -242,7 +229,7 @@ export function BootScreen({ ready, onDone }: { ready: boolean; onDone: () => vo
       const dt = last === null ? 0 : Math.min(0.05, Math.max(0, (now - last) / 1000));
       last = now;
       const elapsed = now - startRef.current - START_DELAY_MS;
-      let target = elapsed <= 0 ? 0 : easeInOutSine(Math.min(1, elapsed / FILL_MS));
+      let target = elapsed <= 0 ? 0 : easeInOutSine(Math.min(1, elapsed / fillMs));
       if (!readyRef.current) target = Math.min(target, HOLD_AT);
 
       const p = progressRef.current;
@@ -263,7 +250,7 @@ export function BootScreen({ ready, onDone }: { ready: boolean; onDone: () => vo
     };
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
-  }, [phase]);
+  }, [phase, fillMs]);
 
   useEffect(() => {
     if (phase === 'complete') {
@@ -280,19 +267,16 @@ export function BootScreen({ ready, onDone }: { ready: boolean; onDone: () => vo
     }
   }, [phase]);
 
-  if (phase === 'greeting') {
-    return (
-      <div className={styles.root} style={{ zIndex: Z.POWER }}>
-        <DecodingGreeting text={greeting} reduceMotion={reduceMotion} onDone={() => setPhase('running')} />
-      </div>
-    );
-  }
-
   return (
     <div className={styles.root} style={{ zIndex: Z.POWER }}>
       <div className={`${styles.content} ${phase === 'fading' ? styles.fading : ''}`} style={{ transitionDuration: `${FADE_MS}ms` }}>
-        <div className={styles.logo}>
-          <OSLogo size={80} color="#fff" />
+        <div className={styles.logoSlot}>
+          {greeting && <GreetingMorph text={greeting} onMorph={() => setLogoShown(true)} />}
+          {logoShown && (
+            <div className={styles.logo}>
+              <OSLogo size={80} color="#fff" />
+            </div>
+          )}
         </div>
         <div ref={barRef} className={styles.track} role="progressbar" aria-label={t(S.starting)} aria-valuemin={0} aria-valuemax={100} aria-valuenow={0}>
           <div ref={fillRef} className={styles.fill} />
