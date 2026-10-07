@@ -125,16 +125,34 @@ export interface Award {
 
 export const awards: Award[] = [
   {
+    date: '2026.10',
+    title: { en: '2026 National Park Satellite Monitoring AI Challenge, Track 3', ko: '2026 국립공원 위성 모니터링 AI 챌린지, 주제 3' },
+    detail: { en: 'Entered as aod_jo', ko: 'aod_jo로 참가했어요.' },
+    href: 'https://aifactory.space/ko/competitions/9306',
+  },
+  {
+    date: '2026.10',
+    title: { en: '2026 National Park Satellite Monitoring AI Challenge, Track 4', ko: '2026 국립공원 위성 모니터링 AI 챌린지, 주제 4' },
+    detail: { en: 'Entered as aod_jo', ko: 'aod_jo로 참가했어요.' },
+    href: 'https://aifactory.space/ko/competitions/9307',
+  },
+  {
+    date: '2026.10',
+    title: { en: '5th Korea High School AI & SW Development Contest 2026', ko: '제5회 2026 대한민국 고등학생 AI·SW 개발 공모전' },
+    detail: { en: 'Entered with team Knock', ko: '팀 노크로 참가했어요.' },
+    href: 'https://www.sw.or.kr/site/sw/ex/board/View.do?cbIdx=292&bcIdx=66137&searchExt1=',
+  },
+  {
     date: '2026.02',
     title: 'Grizzly Hacks II',
-    detail: { en: 'Entered with BSD', ko: 'BSD로 참가' },
+    detail: { en: 'Entered with team BSD', ko: '팀 BSD로 참가했어요.' },
     result: { en: '1st place', ko: '1위' },
     href: 'https://grizzly-hacks-ii.devpost.com/',
   },
   {
     date: '2026.02',
     title: { en: 'JoCoding × OpenAI × Primer AI Hackathon', ko: '조코딩 x OpenAI x Primer AI 해커톤' },
-    detail: { en: 'Entered with Gitfle', ko: 'Gitfle로 참가' },
+    detail: { en: 'Entered with team Gitfle', ko: '팀 Gitfle로 참가했어요.' },
     href: 'https://hack.primer.kr/rounds/8',
   },
   {
