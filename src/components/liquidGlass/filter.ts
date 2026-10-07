@@ -4,7 +4,8 @@
  * corner radius and look.
  *
  * Pipeline: refract the backdrop through the lens map (optionally per colour channel for a faint
- * dispersion), frost it lightly, saturate and brighten it, let a blurred, saturated copy of the
+ * dispersion), frost it (made opaque again so the blur's fade at the filter edge does not show
+ * the sharp backdrop), saturate and brighten it, let a blurred, saturated copy of the
  * backdrop bleed into the rim, then add the specular rim light.
  */
 import { renderLensMaps } from './optics';
@@ -31,14 +32,15 @@ export interface GlassLook {
 }
 
 export const LOOKS: Record<GlassLookName, GlassLook> = {
-  regular: { blur: 3, saturation: 1.7, brightness: 1.06, bleed: 0.55, bleedBlur: 10, specular: 0.85, dispersion: 0.05, lens: 1 },
-  clear: { blur: 1, saturation: 1.5, brightness: 1.08, bleed: 0.45, bleedBlur: 8, specular: 0.9, dispersion: 0.06, lens: 1.1 },
-  thick: { blur: 12, saturation: 1.8, brightness: 1.02, bleed: 0.4, bleedBlur: 14, specular: 0.7, dispersion: 0, lens: 0.9 },
-  menu: { blur: 9, saturation: 1.9, brightness: 1.04, bleed: 0.45, bleedBlur: 12, specular: 0.75, dispersion: 0, lens: 0.9 },
-  control: { blur: 2, saturation: 1.6, brightness: 1.06, bleed: 0.5, bleedBlur: 8, specular: 0.8, dispersion: 0.04, lens: 1 },
+  regular: { blur: 7, saturation: 1.15, brightness: 1.03, bleed: 0.06, bleedBlur: 8, specular: 0.4, dispersion: 0.03, lens: 1 },
+  clear: { blur: 1.5, saturation: 1.1, brightness: 1.04, bleed: 0.05, bleedBlur: 6, specular: 0.45, dispersion: 0.04, lens: 1.1 },
+  thick: { blur: 16, saturation: 1.2, brightness: 1.02, bleed: 0.04, bleedBlur: 12, specular: 0.3, dispersion: 0, lens: 0.8 },
+  menu: { blur: 14, saturation: 1.25, brightness: 1.02, bleed: 0.04, bleedBlur: 12, specular: 0.3, dispersion: 0, lens: 0.8 },
+  control: { blur: 3, saturation: 1.12, brightness: 1.03, bleed: 0.05, bleedBlur: 6, specular: 0.4, dispersion: 0.02, lens: 1 },
 }; /** Filter settings for each glass look; thicker looks frost more and refract less. */
 
 const SVG_NS = 'http://www.w3.org/2000/svg'; /** Namespace for created SVG elements. */
+const OPAQUE = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0 1'; /** Colour matrix that keeps the (unpremultiplied) colour and sets alpha to 1, so a blur fading out at the filter edge keeps the averaged colour instead of revealing the sharp backdrop. */
 const RELEASE_DELAY_MS = 4000; /** How long an unused filter is kept for elements that come back at the same size. */
 
 interface FilterEntry {
@@ -179,12 +181,12 @@ function buildFilter(id: string, w: number, h: number, r: number, look: GlassLoo
 
   prims.push(
     svgEl('feGaussianBlur', { in: 'refracted', stdDeviation: look.blur, result: 'frostedRaw' }),
-    svgEl('feComposite', { in: 'frostedRaw', in2: 'refracted', operator: 'over', result: 'frosted' }),
+    svgEl('feColorMatrix', { in: 'frostedRaw', type: 'matrix', values: OPAQUE, result: 'frosted' }),
     svgEl('feColorMatrix', { in: 'frosted', type: 'saturate', values: look.saturation, result: 'saturated' }),
     transfer('saturated', 'base', { slope: look.brightness }),
     svgEl('feGaussianBlur', { in: 'SourceGraphic', stdDeviation: look.bleedBlur, result: 'bleedBlur' }),
-    svgEl('feColorMatrix', { in: 'bleedBlur', type: 'saturate', values: 2.6, result: 'bleedSat' }),
-    transfer('bleedSat', 'bleedLit', { slope: 1.4, intercept: 0.05 }),
+    svgEl('feColorMatrix', { in: 'bleedBlur', type: 'saturate', values: 1.5, result: 'bleedSat' }),
+    transfer('bleedSat', 'bleedLit', { slope: 1.15, intercept: 0.04 }),
     image(maps.edge, 'edgeMask'),
     svgEl('feComposite', { in: 'bleedLit', in2: 'edgeMask', operator: 'in', result: 'bleedBand' }),
     transfer('bleedBand', 'bleed', { alphaSlope: look.bleed }),

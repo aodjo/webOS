@@ -18,13 +18,13 @@
   /* Dark glass in both appearances (white text on it). */
   --lg-tint: rgba(255, 255, 255, 0.1);
   --lg-tint-clear: rgba(255, 255, 255, 0.06);
-  --lg-filter: blur(14px) saturate(1.6) brightness(1.04);
-  --lg-filter-clear: blur(6px) saturate(1.5) brightness(1.06);
+  --lg-filter: blur(14px) saturate(1.25) brightness(1.02);
+  --lg-filter-clear: blur(6px) saturate(1.2) brightness(1.04);
   --lg-rim-top: rgba(255, 255, 255, 0.5);
   --lg-rim-bottom: rgba(255, 255, 255, 0.2);
   --lg-rim-side: rgba(255, 255, 255, 0.14);
   --lg-edge: rgba(0, 0, 0, 0.25);
-  --lg-sheen: linear-gradient(160deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.04) 32%, rgba(255, 255, 255, 0) 55%, rgba(255, 255, 255, 0.06) 100%);
+  --lg-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0) 45%);
   --lg-shadow: 0 6px 20px rgba(0, 0, 0, 0.22), 0 1px 3px rgba(0, 0, 0, 0.16);
 }
 .root.closing {

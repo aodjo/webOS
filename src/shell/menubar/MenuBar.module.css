@@ -131,15 +131,15 @@
 }
 .bar[data-foreground='light'] .capsule {
   --lg-tint: rgba(255, 255, 255, 0.14);
-  --lg-filter: blur(8px) saturate(1.9) brightness(1.12);
+  --lg-filter: blur(8px) saturate(1.2) brightness(1.08);
   --lg-rim-top: rgba(255, 255, 255, 0.62);
   --lg-rim-bottom: rgba(255, 255, 255, 0.22);
   --lg-rim-side: rgba(255, 255, 255, 0.14);
 }
 .bar[data-foreground='dark'] .capsule {
   --lg-tint: rgba(255, 255, 255, 0.42);
-  --lg-filter: blur(8px) saturate(1.9) brightness(1.08);
-  --lg-rim-top: rgba(255, 255, 255, 0.95);
+  --lg-filter: blur(8px) saturate(1.2) brightness(1.06);
+  --lg-rim-top: rgba(255, 255, 255, 0.8);
   --lg-rim-bottom: rgba(255, 255, 255, 0.45);
   --lg-rim-side: rgba(255, 255, 255, 0.3);
 }

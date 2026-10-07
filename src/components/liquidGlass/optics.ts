@@ -114,8 +114,9 @@ export function sdRoundRect(px: number, py: number, hw: number, hh: number, r: n
  *
  * Walks every pixel of the (possibly downscaled) map, finds its distance to the outline and the
  * outward normal from the SDF gradient, then writes: the refracted offset along the inward normal
- * (displacement), a rim light whose intensity follows how much the bulge faces the key light plus
- * a weaker bounce on the opposite rim (specular), and a soft band hugging the edge (edge mask).
+ * (displacement), a crisp rim line whose intensity follows how much the edge faces the key light
+ * plus a weaker bounce on the opposite rim, over a faint glow on the steepest part of the bulge
+ * (specular), and a soft band hugging the edge (edge mask).
  * Returns empty strings when no 2D canvas is available.
  *
  * @param {LensParams} p - Surface geometry and glass properties.
@@ -156,7 +157,7 @@ export function renderLensMaps(p: LensParams): LensMaps {
   const bezel = Math.max(1, Math.min(p.bezel, hw, hh));
   const { offsets, max } = refractionProfile(bezel, p.thickness, p.ior);
   const scale = Math.max(1, max * 2);
-  const bleedBand = bezel * 1.6;
+  const bleedBand = bezel;
   const d = dCtx.createImageData(cw, ch);
   const s = sCtx.createImageData(cw, ch);
   const e = eCtx.createImageData(cw, ch);
@@ -186,9 +187,9 @@ export function renderLensMaps(p: LensParams): LensMaps {
           const facing = nx * LIGHT.x + ny * LIGHT.y;
           const steep = 1 - squircleHeight(t);
           const key = Math.pow(Math.max(0, facing), 1.6);
-          const bounce = Math.pow(Math.max(0, -facing), 2.2) * 0.55;
-          const rim = Math.max(0, 1 - dist / 1.6);
-          spec = Math.min(1, (key + bounce) * Math.pow(steep, 0.7) * 0.9 + rim * (0.35 + 0.45 * Math.max(key, bounce)));
+          const bounce = Math.pow(Math.max(0, -facing), 2.2) * 0.6;
+          const rim = Math.max(0, 1 - dist / 1.2);
+          spec = Math.min(1, rim * (0.25 + 0.75 * Math.max(key, bounce)) + (key + bounce) * Math.pow(steep, 2.5) * 0.35);
         }
         const u = dist / bleedBand;
         edge = Math.pow(1 - u, 2.2);

@@ -15,12 +15,12 @@
 :root {
   /* Tints laid over the filtered backdrop. Regular glass is nearly clear; text-heavy surfaces
      (thick, menu) are frosted enough to read. */
-  --lg-tint: rgba(255, 255, 255, 0.14);
-  --lg-tint-clear: rgba(255, 255, 255, 0.06);
+  --lg-tint: rgba(255, 255, 255, 0.12);
+  --lg-tint-clear: rgba(255, 255, 255, 0.04);
   --lg-tint-medium: rgba(246, 246, 248, 0.38);
   --lg-tint-thick: rgba(250, 250, 252, 0.66);
   --lg-tint-menu: rgba(250, 250, 252, 0.55);
-  --lg-filter-menu: blur(22px) saturate(2) brightness(1.04);
+  --lg-filter-menu: blur(24px) saturate(1.4) brightness(1.04);
   /* Solid fallback for Reduce Transparency (a surface may override it, e.g. the dark lock screen). */
   --lg-solid: var(--window-bg-secondary);
   /* Small controls (buttons, segmented tracks) sitting on window content. */
@@ -28,26 +28,26 @@
   --lg-control-hover: rgba(255, 255, 255, 0.78);
   --lg-control-press: rgba(235, 235, 240, 0.82);
 
-  --lg-filter: blur(10px) saturate(1.8) brightness(1.08);
-  --lg-filter-clear: blur(4px) saturate(1.6) brightness(1.1);
-  --lg-filter-thick: blur(24px) saturate(1.8);
+  --lg-filter: blur(8px) saturate(1.2) brightness(1.05);
+  --lg-filter-clear: blur(2px) saturate(1.15) brightness(1.06);
+  --lg-filter-thick: blur(24px) saturate(1.35);
 
   /* Rim light: a crisp line around the shape, brightest on the top-left and bottom-right arcs
      where the key light and its bounce hit the curved edge. */
-  --lg-rim-hi: rgba(255, 255, 255, 0.95);
-  --lg-rim-lo: rgba(255, 255, 255, 0.3);
-  --lg-rim-top: rgba(255, 255, 255, 0.85);
-  --lg-rim-bottom: rgba(255, 255, 255, 0.4);
-  --lg-rim-side: rgba(255, 255, 255, 0.22);
+  --lg-rim-hi: rgba(255, 255, 255, 0.75);
+  --lg-rim-lo: rgba(255, 255, 255, 0.16);
+  --lg-rim-top: rgba(255, 255, 255, 0.6);
+  --lg-rim-bottom: rgba(255, 255, 255, 0.25);
+  --lg-rim-side: rgba(255, 255, 255, 0.12);
   /* Light caught inside the glass edge and bleeding inward. */
-  --lg-glow: rgba(255, 255, 255, 0.3);
-  --lg-glow-size: 14px;
-  --lg-lip: rgba(255, 255, 255, 0.45);
-  --lg-edge: rgba(0, 0, 0, 0.06);
-  --lg-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 45%);
+  --lg-glow: rgba(255, 255, 255, 0.05);
+  --lg-glow-size: 6px;
+  --lg-lip: rgba(255, 255, 255, 0.22);
+  --lg-edge: rgba(0, 0, 0, 0.04);
+  --lg-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0) 40%);
 
-  --lg-shadow: 0 4px 18px rgba(0, 0, 0, 0.1), 0 0 1px rgba(0, 0, 0, 0.1);
-  --lg-shadow-float: 0 12px 36px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.08);
+  --lg-shadow: 0 6px 20px rgba(0, 0, 0, 0.1), 0 0 1px rgba(0, 0, 0, 0.08);
+  --lg-shadow-float: 0 12px 36px rgba(0, 0, 0, 0.14), 0 1px 4px rgba(0, 0, 0, 0.06);
   --lg-shadow-control: 0 1px 2px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
 
   /* Inner light stack shared by every glass surface: edge glow, top lip and a hairline rim. */
@@ -66,29 +66,29 @@
 }
 
 html[data-theme='dark'] {
-  --lg-tint: rgba(28, 28, 32, 0.24);
-  --lg-tint-clear: rgba(20, 20, 24, 0.08);
+  --lg-tint: rgba(24, 24, 28, 0.22);
+  --lg-tint-clear: rgba(16, 16, 20, 0.08);
   --lg-tint-medium: rgba(28, 28, 32, 0.56);
   --lg-tint-menu: rgba(34, 34, 38, 0.55);
-  --lg-filter-menu: blur(22px) saturate(1.8) brightness(0.86);
+  --lg-filter-menu: blur(24px) saturate(1.35) brightness(0.86);
   --lg-tint-thick: rgba(34, 34, 38, 0.66);
   --lg-control: rgba(255, 255, 255, 0.12);
   --lg-control-hover: rgba(255, 255, 255, 0.18);
   --lg-control-press: rgba(255, 255, 255, 0.08);
 
-  --lg-filter: blur(10px) saturate(1.6) brightness(0.9);
-  --lg-filter-clear: blur(4px) saturate(1.5) brightness(0.95);
-  --lg-filter-thick: blur(24px) saturate(1.6) brightness(0.9);
+  --lg-filter: blur(8px) saturate(1.2) brightness(0.88);
+  --lg-filter-clear: blur(2px) saturate(1.15) brightness(0.94);
+  --lg-filter-thick: blur(24px) saturate(1.3) brightness(0.88);
 
-  --lg-rim-hi: rgba(255, 255, 255, 0.6);
-  --lg-rim-lo: rgba(255, 255, 255, 0.14);
+  --lg-rim-hi: rgba(255, 255, 255, 0.42);
+  --lg-rim-lo: rgba(255, 255, 255, 0.08);
   --lg-rim-top: rgba(255, 255, 255, 0.45);
   --lg-rim-bottom: rgba(255, 255, 255, 0.2);
   --lg-rim-side: rgba(255, 255, 255, 0.1);
-  --lg-glow: rgba(255, 255, 255, 0.1);
-  --lg-lip: rgba(255, 255, 255, 0.25);
+  --lg-glow: rgba(255, 255, 255, 0.025);
+  --lg-lip: rgba(255, 255, 255, 0.14);
   --lg-edge: rgba(0, 0, 0, 0.3);
-  --lg-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0) 45%);
+  --lg-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0) 45%);
 
   --lg-shadow: 0 6px 22px rgba(0, 0, 0, 0.32), 0 0 1px rgba(0, 0, 0, 0.4);
   --lg-shadow-float: 0 14px 40px rgba(0, 0, 0, 0.45), 0 1px 4px rgba(0, 0, 0, 0.3);
@@ -132,7 +132,7 @@ html[data-theme='dark'] {
   pointer-events: none;
   z-index: -1;
   background:
-    radial-gradient(circle at var(--lg-px, 50%) var(--lg-py, 50%), rgb(255 255 255 / calc(var(--lg-press) * 0.45)) 0, rgb(255 255 255 / calc(var(--lg-press) * 0.12)) 45%, transparent 75%),
+    radial-gradient(circle at var(--lg-px, 50%) var(--lg-py, 50%), rgb(255 255 255 / calc(var(--lg-press) * 0.22)) 0, rgb(255 255 255 / calc(var(--lg-press) * 0.06)) 45%, transparent 75%),
     var(--lg-sheen);
 }
 
