@@ -44,6 +44,7 @@ import {
   type FSNode,
 } from '@/kernel';
 import { Z, shellLayerRoot } from '../layers';
+import { exposableWindows } from '../windows/expose';
 import { isModKey } from './DialogParts';
 import { DesktopIcon, iconLabel, type IconEvents } from './DesktopIcon';
 import {
@@ -1046,8 +1047,9 @@ export function Desktop() {
   /**
    * Ends a rubber-band drag.
    *
-   * A plain click on the wallpaper (no movement, not cancelled) also closes the shell overlays and
-   * leaves widget edit mode.
+   * A plain click on the wallpaper (no movement, not cancelled) closes the shell overlays and
+   * leaves widget edit mode; when nothing of that was open and some window is on screen, it opens
+   * Mission Control instead.
    *
    * @param {boolean} cancelled - The pointer was cancelled or lost its capture.
    * @returns {void}
@@ -1061,8 +1063,12 @@ export function Desktop() {
     bandRef.current = null;
     setBand(null);
     if (!b.moved && !cancelled) {
-      useUI.getState().closeOverlays();
+      const ui = useUI.getState();
+      const overlayOpen = ui.spotlight || ui.launchpad || ui.missionControl || ui.controlCenter || ui.notificationCenter || ui.contextMenu !== null || ui.appSwitcher !== null || ui.showDesktop;
+      const editing = useDesktopUI.getState().editingWidgets;
+      ui.closeOverlays();
       desktopUI.setEditing(false);
+      if (!overlayOpen && !editing && exposableWindows(useWM.getState()).length) ui.set({ missionControl: true });
     }
   };
 
