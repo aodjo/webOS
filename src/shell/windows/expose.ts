@@ -1,7 +1,8 @@
 /**
  * Mission Control (exposé) layout: arranges windows in non-overlapping, justified rows that keep
  * each window's aspect ratio and roughly its on-screen arrangement. Shared by the Window frames
- * (which transform themselves into their slot) and MissionControl (which draws the labels).
+ * (which transform themselves into their slot) and MissionControl (which draws the Spaces bar
+ * and the name of the hovered window).
  */
 import type { Bounds, Process, WindowState } from '@/kernel/types';
 import { clamp, type Size } from './geometry';
@@ -36,7 +37,7 @@ export interface ExposeOptions {
   maxScale: number;
 }
 
-const DEFAULTS: ExposeOptions = { gap: 32, labelHeight: 30, maxScale: 0.9 }; /** Layout options used when the caller doesn't override them. */
+const DEFAULTS: ExposeOptions = { gap: 28, labelHeight: 0, maxScale: 0.9 }; /** Layout options used when the caller doesn't override them. */
 
 /**
  * Returns the height of the Spaces bar ("Desktop 1" thumbnail strip) at the top of Mission Control.

@@ -1,14 +1,15 @@
 /**
- * Mission Control (F3 / ⌃↑): darkens and blurs the desktop, the windows lay themselves out in a
- * non-overlapping grid (see expose.ts – the Window frames apply the transforms) and this
- * component draws the backdrop, the Spaces bar and a label under each window.
+ * Mission Control (F3 / ⌃↑): the windows lay themselves out in a non-overlapping grid over the
+ * lightly dimmed wallpaper (see expose.ts – the Window frames apply the transforms) and this
+ * component draws the backdrop, the Spaces bar and the name of the hovered window.
  */
 import { useEffect, useRef, type RefObject } from 'react';
+import { createPortal } from 'react-dom';
 import { useShallow } from 'zustand/react/shallow';
 import type { WindowState } from '@/kernel/types';
 import { fs, getApp, getWorkspace, isCompact, useDialogs, useIsDark, useSystem, useT, useUI, useWM, wallpaperURL, wm } from '@/kernel';
 import { FORCE_QUIT_HOST } from '@/shell/desktop/ForceQuit';
-import { Z } from '../layers';
+import { Z, shellLayerRoot } from '../layers';
 import { exposableWindows, selectExposeSlots, spacesBarHeight, type ExposeSlot } from './expose';
 import { cx, usePresence, useViewport, useWindowChrome } from './state';
 import type { Size } from './geometry';
@@ -171,8 +172,8 @@ export function MissionControl() {
      *
      * Esc exits. Arrow keys select the focused window (or the first one) on the first press and
      * then move the selection spatially with `nextSlot`. Enter / Space pick the selected window or
-     * exit when nothing is selected, unless a label button focused with Tab is the target (it
-     * activates itself). Other printable keys without ⌥ only have their default action prevented
+     * exit when nothing is selected, unless a button focused with Tab (the desktop thumbnail) is the
+     * target (it activates itself). Other printable keys without ⌥ only have their default action prevented
      * so they can't scroll or activate anything. Keys are ignored while a system modal is up or
      * ⌘ / ⌃ is held.
      *
@@ -233,11 +234,12 @@ export function MissionControl() {
 }
 
 /**
- * The Mission Control overlay: backdrop, Spaces bar and window labels.
+ * The Mission Control overlay: backdrop, Spaces bar and the hovered window's name.
  *
- * Darkens and blurs the desktop, draws the "Desktop 1" thumbnail in a glass capsule at the top of
- * the workspace and a label under every window that has an exposé slot (the window frames apply
- * their own exposé transforms). Clicking the empty background exits.
+ * Lightly dims the wallpaper, draws the Spaces bar (a frosted band across the top of the screen
+ * holding the "Desktop 1" thumbnail) and the app name over the hovered or keyboard-selected
+ * window (the window frames apply their own exposé transforms and highlight). Clicking the empty
+ * background exits.
  *
  * @param {Object} props - Component props.
  * @param {RefObject<HTMLDivElement | null>} props.rootRef - Ref to the focusable root element.
@@ -256,63 +258,43 @@ function MissionControlView({ rootRef, closing }: { rootRef: RefObject<HTMLDivEl
   const selected = useWindowChrome((c) => c.exposeSelected);
   const ws = getWorkspace();
   const barHeight = spacesBarHeight(viewport);
+  const selectedWin = windows.find((w) => w.id === selected);
+  const selectedSlot = selected ? slots.get(selected) : undefined;
 
   return (
     <div ref={rootRef} tabIndex={-1} className={cx(s.root, closing && s.closing)} style={{ zIndex: Z.MISSION_CONTROL }} role="dialog" aria-label={t(S.title)} onClick={exit}>
       <div className={s.backdrop} />
-      <div className={s.spaces} style={{ left: ws.x, top: ws.y, width: ws.width, height: barHeight }}>
-        {/* Thumbnail + label + the capsule's padding leave ~6px above and below the strip. Thick
-            glass: the "Desktop 1" label is text over the dimmed (possibly dark) wallpaper. */}
-        <div className={cx('lg lg-thick lg-capsule', s.strip)}>
-          <SpaceThumbnail screen={viewport} thumbHeight={barHeight - 46} label={t(S.desktop)} compact={compact} />
-        </div>
+      <div className={s.spaces} style={{ top: ws.y, height: barHeight }}>
+        <SpaceThumbnail screen={viewport} thumbHeight={barHeight - 34} label={t(S.desktop)} compact={compact} />
       </div>
-      {windows.map((w) => {
-        const slot = slots.get(w.id);
-        return slot ? <WindowLabel key={w.id} win={w} slot={slot} selected={selected === w.id} /> : null;
-      })}
+      {selectedWin && selectedSlot && <WindowName key={selectedWin.id} win={selectedWin} slot={selectedSlot} />}
     </div>
   );
 }
 
 /**
- * Glass capsule label under a window in Mission Control.
+ * The app name shown over the hovered (or keyboard-selected) window in Mission Control.
  *
- * Shows the app icon and the window title, centered 8px below the window's exposé slot; it may
- * grow as wide as the slot, and to at least 160px for narrow slots. Hovering selects the window,
- * leaving clears the selection if it is still this window, and clicking picks the window.
+ * A thick-glass capsule centered on the window's exposé slot, as on macOS. It is portaled into
+ * the shell layer root just above the window layer (which Mission Control raises over its own
+ * overlay), and it ignores the pointer, so the window underneath still takes the click.
  *
  * @param {Object} props - Component props.
- * @param {WindowState} props.win - The window being labeled.
+ * @param {WindowState} props.win - The selected window.
  * @param {ExposeSlot} props.slot - The window's exposé slot.
- * @param {boolean} props.selected - Whether this window is the exposé selection.
- * @returns {JSX.Element} The label button.
+ * @returns {ReactPortal} The name capsule.
  *
  * @example
- * <WindowLabel win={w} slot={slot} selected={selected === w.id} />
+ * <WindowName win={w} slot={slot} />
  */
-function WindowLabel({ win, slot, selected }: { win: WindowState; slot: ExposeSlot; selected: boolean }) {
+function WindowName({ win, slot }: { win: WindowState; slot: ExposeSlot }) {
+  const t = useT();
   const app = getApp(win.appId);
-  const Icon = app?.icon;
-  return (
-    <button
-      type="button"
-      className={cx('lg lg-thick lg-capsule', s.label, selected && s.labelSelected)}
-      style={{ left: slot.x + slot.width / 2, top: slot.y + slot.height + 8, maxWidth: Math.max(slot.width, 160) }}
-      onClick={(e) => {
-        e.stopPropagation();
-        choose(win.id);
-      }}
-      onPointerEnter={() => useWindowChrome.setState({ exposeSelected: win.id })}
-      onPointerLeave={() => useWindowChrome.setState((c) => (c.exposeSelected === win.id ? { exposeSelected: null } : c))}
-    >
-      {Icon && (
-        <span className={s.labelIcon} aria-hidden>
-          <Icon size={18} />
-        </span>
-      )}
-      <span className={s.labelText}>{win.title}</span>
-    </button>
+  return createPortal(
+    <div className={cx('lg lg-thick lg-capsule', s.name)} style={{ left: slot.x + slot.width / 2, top: slot.y + slot.height / 2, maxWidth: Math.max(slot.width - 24, 120), zIndex: Z.MISSION_CONTROL + 2 }} aria-hidden>
+      {app ? t(app.name) : win.title}
+    </div>,
+    shellLayerRoot(),
   );
 }
 

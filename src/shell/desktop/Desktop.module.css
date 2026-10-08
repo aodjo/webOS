@@ -229,3 +229,13 @@ html[data-reduce-transparency='true'] .selected .image {
   inset: 0;
   pointer-events: none;
 }
+
+/* Mission Control shows only the wallpaper behind the windows: icons and widgets step aside. */
+.desktop > :not(:first-child) {
+  transition: opacity 0.25s var(--ease-out);
+}
+
+.desktop[data-mission-control] > :not(:first-child) {
+  opacity: 0;
+  pointer-events: none;
+}

@@ -265,9 +265,7 @@ describe('window layer', () => {
       wm.openWindow('finder');
     });
     await act(async () => useUI.getState().set({ missionControl: true }));
-    const labels = document.querySelectorAll('[role="dialog"] button');
-    // Desktop thumbnail + one label per window.
-    expect(labels.length).toBe(3);
+    expect(document.querySelectorAll('[role="dialog"] button')).toHaveLength(1);
     for (const w of useWM.getState().windows) expect(frame(w.id)!.style.transform).toMatch(/scale/);
     await act(async () => {
       window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));

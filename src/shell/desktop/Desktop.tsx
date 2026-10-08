@@ -1451,6 +1451,7 @@ export function Desktop() {
     else iconEls.current.delete(path);
   }, []);
 
+  const missionControl = useUI((u) => u.missionControl);
   const iconAreaLum = useWallpaperLuminance(ICON_REGION);
   const labelTone = iconAreaLum !== null && iconAreaLum > DARK_LABELS_ABOVE ? 'dark' : 'light';
 
@@ -1459,6 +1460,7 @@ export function Desktop() {
       ref={rootRef}
       className={styles.desktop}
       data-label-tone={labelTone}
+      data-mission-control={missionControl || undefined}
       style={{ zIndex: Z.DESKTOP }}
       onPointerDown={onRootPointerDown}
       onPointerMove={onRootPointerMove}
