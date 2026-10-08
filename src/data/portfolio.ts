@@ -360,4 +360,31 @@ export const projects: Project[] = [
     ],
     featured: true,
   },
+  {
+    id: 'gitfle',
+    name: 'Gitfle',
+    year: 2026,
+    tagline: { en: 'AI agents that review your GitHub repositories and coding habits.', ko: 'AI 에이전트가 GitHub 레포지토리로 코딩 습관을 진단해 주는 서비스.' },
+    description: {
+      en:
+        'Gitfle diagnoses your everyday coding habits. Sign in with GitHub and pick your repositories; AI agents explore each one and evaluate it, ' +
+        'and their reviews are combined into a final report with strengths, points to improve, next steps and recommended study material. ' +
+        'Built for the JoCoding × OpenAI × Primer AI Hackathon, with a React and TypeScript client, a TypeScript server and coin top-ups through Korean payment services.',
+      ko:
+        'Gitfle는 평소 코딩 습관을 진단해 주는 서비스입니다. GitHub로 로그인해 레포지토리를 고르면 AI 에이전트가 각각을 탐색하며 평가하고, ' +
+        '그 평가를 모아 강점, 개선 포인트, 다음 실행, 추천 학습 자료가 담긴 최종 리포트를 만들어 줍니다. ' +
+        '조코딩 x OpenAI x Primer AI 해커톤을 위해 만들었으며, React·TypeScript 클라이언트와 TypeScript 서버, 국내 간편결제를 통한 코인 충전으로 구성했습니다.',
+    },
+    role: { en: 'Design and development', ko: '기획 및 개발' },
+    tags: ['React', 'TypeScript', 'Tailwind CSS', 'OpenAI', 'Docker'],
+    cover: '/projects/gitfle.jpg',
+    color: '#ef3b33',
+    links: { github: 'https://github.com/aodjo/gitfle-client' },
+    highlights: [
+      { en: 'GitHub sign-in and repository selection', ko: 'GitHub 로그인과 레포지토리 선택' },
+      { en: 'Several AI agents review each repository in parallel, with live progress', ko: '여러 AI 에이전트가 레포지토리를 나눠 평가하고 진행 상황을 실시간으로 표시' },
+      { en: 'Portfolio report and study plan with recommended resources', ko: '포트폴리오 리포트와 추천 자료가 담긴 학습 방향' },
+      { en: 'Coin top-ups through PAYCO, Naver Pay and Kakao Pay', ko: 'PAYCO, 네이버페이, 카카오페이로 코인 충전' },
+    ],
+  },
 ]; /** Portfolio projects; each also gets a Finder folder ~/Documents/Projects/<name>, and the first one's cover becomes the Desktop screenshot. TODO: replace with your real projects. */
