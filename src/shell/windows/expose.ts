@@ -40,36 +40,41 @@ export interface ExposeOptions {
 const DEFAULTS: ExposeOptions = { gap: 28, labelHeight: 0, maxScale: 0.9 }; /** Layout options used when the caller doesn't override them. */
 
 /**
- * Returns the height of the Spaces bar ("Desktop 1" thumbnail strip) at the top of Mission Control.
+ * Returns the height of the Spaces bar at the top of Mission Control.
  *
- * Short screens (under 640px tall) get a compact bar.
+ * The bar is a thin band of desktop names until the pointer reaches it; it then expands to show
+ * the desktop thumbnails, and the windows move down below it. Short
+ * screens (under 640px tall) get a smaller expanded bar.
  *
  * @param {Size} screen - The viewport size.
- * @returns {number} The bar height in pixels (76 or 104).
+ * @param {boolean} [expanded=false] - Whether the thumbnails are shown.
+ * @returns {number} The bar height in pixels (40 collapsed; 76 or 104 expanded).
  *
  * @example
- * spacesBarHeight({ width: 1440, height: 900 }); // 104
+ * spacesBarHeight({ width: 1440, height: 900 }, true); // 104
  */
-export function spacesBarHeight(screen: Size): number {
+export function spacesBarHeight(screen: Size, expanded = false): number {
+  if (!expanded) return 40;
   return screen.height < 640 ? 76 : 104;
 }
 
 /**
  * Returns the region windows are laid out in: below the Spaces bar, inside the workspace.
  *
- * Horizontal padding is 4% of the screen width clamped to 16..64px, and 20px is kept free at
- * the bottom. Width and height are at least 1 so the layout never divides by zero.
+ * Horizontal padding is 4% of the screen width clamped to 16..64px, 28px are kept free under the
+ * Spaces bar (collapsed or expanded) and 20px at the bottom. Width and height are at least 1 so the layout never divides by zero.
  *
  * @param {Size} screen - The viewport size.
  * @param {Bounds} ws - The workspace rect.
+ * @param {boolean} [spacesExpanded=false] - Lay out below the expanded Spaces bar instead.
  * @returns {Bounds} The layout area.
  *
  * @example
  * const area = exposeArea({ width: 1440, height: 900 }, getWorkspace());
  */
-export function exposeArea(screen: Size, ws: Bounds): Bounds {
+export function exposeArea(screen: Size, ws: Bounds, spacesExpanded = false): Bounds {
   const padX = clamp(Math.round(screen.width * 0.04), 16, 64);
-  const top = ws.y + spacesBarHeight(screen);
+  const top = ws.y + spacesBarHeight(screen, spacesExpanded) + 28;
   const bottom = ws.y + ws.height - 20;
   return { x: ws.x + padX, y: top, width: Math.max(1, ws.width - padX * 2), height: Math.max(1, bottom - top) };
 }
@@ -248,23 +253,24 @@ export function exposableWindows(s: WMSlice): WindowState[] {
  * @param {Size} screen - The viewport size.
  * @param {Bounds} ws - The workspace rect.
  * @param {boolean} [compact=false] - Lay out every window at the workspace size.
+ * @param {boolean} [spacesExpanded=false] - Leave room for the expanded Spaces bar.
  * @returns {Map<string, ExposeSlot>} Slots keyed by window id.
  *
  * @example
  * const slots = useWM((st) => selectExposeSlots(st, viewport, getWorkspace()));
  */
-export function selectExposeSlots(s: WMSlice, screen: Size, ws: Bounds, compact = false): Map<string, ExposeSlot> {
+export function selectExposeSlots(s: WMSlice, screen: Size, ws: Bounds, compact = false, spacesExpanded = false): Map<string, ExposeSlot> {
   if (!cacheState || cacheState.windows !== s.windows || cacheState.processes !== s.processes) {
     cacheState = { windows: s.windows, processes: s.processes };
     cacheByKey.clear();
   }
-  const key = `${screen.width}x${screen.height}|${ws.x},${ws.y},${ws.width},${ws.height}|${compact}`;
+  const key = `${screen.width}x${screen.height}|${ws.x},${ws.y},${ws.width},${ws.height}|${compact}|${spacesExpanded}`;
   const cached = cacheByKey.get(key);
   if (cached) return cached;
 
   const items = exposableWindows(s).map((w) => (compact ? { id: w.id, ...ws } : { id: w.id, x: w.x, y: w.y, width: w.width, height: w.height }));
   const slots = new Map<string, ExposeSlot>();
-  for (const slot of computeExposeLayout(items, exposeArea(screen, ws))) {
+  for (const slot of computeExposeLayout(items, exposeArea(screen, ws, spacesExpanded))) {
     const prev = lastSlots.get(slot.id);
     slots.set(slot.id, prev && sameSlot(prev, slot) ? prev : slot);
   }

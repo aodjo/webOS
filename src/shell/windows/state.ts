@@ -14,9 +14,11 @@ interface ChromeState {
   snap: { rect: Bounds; z: number } | null;
   /** Window highlighted in Mission Control (hover or arrow keys). */
   exposeSelected: string | null;
+  /** Mission Control's Spaces bar shows the desktop thumbnails (the windows move down for it). */
+  spacesExpanded: boolean;
 }
 
-export const useWindowChrome = create<ChromeState>()(() => ({ snap: null, exposeSelected: null })); /** Zustand store for the snap preview and the Mission Control selection. */
+export const useWindowChrome = create<ChromeState>()(() => ({ snap: null, exposeSelected: null, spacesExpanded: false })); /** Zustand store for the snap preview and the Mission Control selection and Spaces bar. */
 
 export const chromeElements = new Map<string, HTMLElement>(); /** Live `.chrome` elements by window id, used to snapshot a closing window for its fade-out. */
 

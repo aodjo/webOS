@@ -277,7 +277,8 @@ function WindowFrame({ win }: { win: WindowState }) {
 
   const visible = !appHidden && !win.minimized;
   const hiddenNow = appHidden || (win.minimized && minPhase === 'done');
-  const slot = useWM((st) => (missionControl && visible ? (selectExposeSlots(st, viewport, getWorkspace(), compact).get(id) ?? null) : null));
+  const spacesExpanded = useWindowChrome((c) => c.spacesExpanded);
+  const slot = useWM((st) => (missionControl && visible ? (selectExposeSlots(st, viewport, getWorkspace(), compact, spacesExpanded).get(id) ?? null) : null));
   const slid = showDesktop && visible && !slot;
   const overlayMode = !!slot || slid;
   const canMove = !compact && !overlayMode && visible;

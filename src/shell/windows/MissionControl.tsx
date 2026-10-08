@@ -125,7 +125,7 @@ function nextSlot(slots: ExposeSlot[], current: ExposeSlot, key: Arrow): ExposeS
  * const slots = [...currentSlots().values()];
  */
 function currentSlots(): Map<string, ExposeSlot> {
-  return selectExposeSlots(useWM.getState(), { width: window.innerWidth, height: window.innerHeight }, getWorkspace(), isCompact());
+  return selectExposeSlots(useWM.getState(), { width: window.innerWidth, height: window.innerHeight }, getWorkspace(), isCompact(), useWindowChrome.getState().spacesExpanded);
 }
 
 /**
@@ -158,7 +158,7 @@ export function MissionControl() {
 
     const ui = useUI.getState();
     if (ui.showDesktop || ui.launchpad || ui.spotlight || ui.contextMenu) ui.set({ showDesktop: false, launchpad: false, spotlight: false, contextMenu: null });
-    useWindowChrome.setState({ exposeSelected: null });
+    useWindowChrome.setState({ exposeSelected: null, spacesExpanded: false });
 
     const unsubscribe = useWM.subscribe((st, prev) => {
       if ((st.focusedId && st.focusedId !== prev.focusedId) || st.windows.length > prev.windows.length) exit();
@@ -237,7 +237,7 @@ export function MissionControl() {
  * The Mission Control overlay: backdrop, Spaces bar and the hovered window's name.
  *
  * Lightly dims the wallpaper, draws the Spaces bar (a frosted band across the top of the screen
- * holding the "Desktop 1" thumbnail) and the app name over the hovered or keyboard-selected
+ * that shows the desktop names and expands to their thumbnails while hovered or focused) and the app name over the hovered or keyboard-selected
  * window (the window frames apply their own exposé transforms and highlight). Clicking the empty
  * background exits.
  *
@@ -254,18 +254,26 @@ function MissionControlView({ rootRef, closing }: { rootRef: RefObject<HTMLDivEl
   const viewport = useViewport();
   const compact = isCompact();
   const windows = useWM((st) => st.windows);
-  const slots = useWM((st) => selectExposeSlots(st, viewport, getWorkspace(), compact));
+  const expanded = useWindowChrome((c) => c.spacesExpanded);
+  const slots = useWM((st) => selectExposeSlots(st, viewport, getWorkspace(), compact, expanded));
   const selected = useWindowChrome((c) => c.exposeSelected);
   const ws = getWorkspace();
-  const barHeight = spacesBarHeight(viewport);
+  const barHeight = spacesBarHeight(viewport, expanded);
   const selectedWin = windows.find((w) => w.id === selected);
   const selectedSlot = selected ? slots.get(selected) : undefined;
 
   return (
     <div ref={rootRef} tabIndex={-1} className={cx(s.root, closing && s.closing)} style={{ zIndex: Z.MISSION_CONTROL }} role="dialog" aria-label={t(S.title)} onClick={exit}>
       <div className={s.backdrop} />
-      <div className={s.spaces} style={{ top: ws.y, height: barHeight }}>
-        <SpaceThumbnail screen={viewport} thumbHeight={barHeight - 34} label={t(S.desktop)} compact={compact} />
+      <div
+        className={cx(s.spaces, expanded && s.expanded)}
+        style={{ top: ws.y, height: barHeight }}
+        onPointerEnter={() => useWindowChrome.setState({ spacesExpanded: true })}
+        onPointerLeave={() => useWindowChrome.setState({ spacesExpanded: false })}
+        onFocus={() => useWindowChrome.setState({ spacesExpanded: true })}
+        onBlur={() => useWindowChrome.setState({ spacesExpanded: false })}
+      >
+        <SpaceThumbnail screen={viewport} thumbHeight={spacesBarHeight(viewport, true) - 34} label={t(S.desktop)} compact={compact} />
       </div>
       {selectedWin && selectedSlot && <WindowName key={selectedWin.id} win={selectedWin} slot={selectedSlot} />}
     </div>

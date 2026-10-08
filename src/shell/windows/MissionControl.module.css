@@ -56,7 +56,22 @@
   backdrop-filter: blur(24px) saturate(120%);
   -webkit-backdrop-filter: blur(24px) saturate(120%);
   box-shadow: inset 0 -0.5px 0 color-mix(in srgb, white 14%, transparent);
+  transition: height 0.32s var(--ease-out);
   animation: spaceIn 0.36s var(--ease-out) both;
+}
+
+/* Collapsed: only the desktop names, the current one on a pill. Expanded: thumbnails above them. */
+.spaces:not(.expanded) .spaceThumb {
+  height: 0 !important;
+  opacity: 0;
+  margin-bottom: -5px;
+  box-shadow: none;
+}
+
+.spaces:not(.expanded) .spaceLabel {
+  padding: 3px 10px;
+  border-radius: 7px;
+  background: color-mix(in srgb, white 24%, transparent);
 }
 
 :global(html[data-reduce-transparency='true']) .spaces {
@@ -93,7 +108,11 @@
   box-shadow:
     0 0 0 3px var(--accent),
     0 4px 12px color-mix(in srgb, black 28%, transparent);
-  transition: transform 0.3s var(--lg-spring);
+  transition:
+    height 0.32s var(--ease-out),
+    opacity 0.25s ease,
+    margin 0.32s var(--ease-out),
+    transform 0.3s var(--lg-spring);
 }
 
 .space:hover .spaceThumb {
