@@ -332,4 +332,32 @@ export const projects: Project[] = [
       { en: 'VS Code extension with a TextMate grammar', ko: 'TextMate 문법을 쓰는 VS Code 확장' },
     ],
   },
+  {
+    id: 'openroute',
+    name: 'OpenRoute',
+    year: 2026,
+    tagline: { en: 'Walking directions that avoid accessibility obstacles.', ko: '접근성 장애물을 피해 가는 도보 길찾기 앱.' },
+    description: {
+      en:
+        'OpenRoute is a mobile navigation app that helps people avoid stairs, blocked paths and broken elevators. ' +
+        'Users report obstacles with a photo, and walking routes show the reported obstacles along the way. ' +
+        'Built as team lead of a team of four at Grizzly Hacks II, where it won 1st place: an Expo/React Native app on a FastAPI server with SQLite and the Google Maps APIs.',
+      ko:
+        'OpenRoute는 계단, 막힌 길, 고장 난 엘리베이터 같은 접근성 장애물을 피할 수 있게 돕는 모바일 길찾기 앱입니다. ' +
+        '사용자가 사진과 함께 장애물을 제보하면, 도보 경로에 제보된 장애물이 함께 표시됩니다. ' +
+        'Grizzly Hacks II 해커톤에서 4인 팀의 팀장으로 만들어 1위를 했으며, Expo·React Native 앱과 FastAPI 서버, SQLite, Google Maps API로 구성했습니다.',
+    },
+    role: { en: 'Team lead', ko: '팀장' },
+    tags: ['React Native', 'Expo', 'FastAPI', 'Python', 'SQLite', 'Google Maps'],
+    cover: '/projects/openroute.jpg',
+    color: '#3b52c4',
+    links: { github: 'https://github.com/aodjo/devpost-hackaton' },
+    highlights: [
+      { en: '1st place at Grizzly Hacks II (February 2026)', ko: 'Grizzly Hacks II 1위 (2026년 2월)' },
+      { en: 'Walking routes that show community-reported obstacles', ko: '커뮤니티가 제보한 장애물을 함께 보여 주는 도보 경로' },
+      { en: 'Obstacle reports with photo upload', ko: '사진을 첨부하는 장애물 제보' },
+      { en: 'Place search with autocomplete and a FastAPI map tile proxy', ko: '자동 완성 장소 검색과 FastAPI 지도 타일 프록시' },
+    ],
+    featured: true,
+  },
 ]; /** Portfolio projects; each also gets a Finder folder ~/Documents/Projects/<name>, and the first one's cover becomes the Desktop screenshot. TODO: replace with your real projects. */
