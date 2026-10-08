@@ -190,7 +190,8 @@ export interface Project {
   cover: string;
   /** Accent color painted behind the cover (the `--c` CSS variable) in the Projects app, Mail and Spotlight. */
   color: string;
-  links: { demo?: string; github?: string };
+  /** Where to see the project: a live demo, its source code, and/or an Instagram post about it. */
+  links: { demo?: string; github?: string; instagram?: string };
   highlights: LString[];
   /** Shows the project in the Projects hero carousel and the featured-projects email. */
   featured?: boolean;
@@ -385,6 +386,60 @@ export const projects: Project[] = [
       { en: 'Several AI agents review each repository in parallel, with live progress', ko: '여러 AI 에이전트가 레포지토리를 나눠 평가하고 진행 상황을 실시간으로 표시' },
       { en: 'Portfolio report and study plan with recommended resources', ko: '포트폴리오 리포트와 추천 자료가 담긴 학습 방향' },
       { en: 'Coin top-ups through PAYCO, Naver Pay and Kakao Pay', ko: 'PAYCO, 네이버페이, 카카오페이로 코인 충전' },
+    ],
+  },
+  {
+    id: 'claude-usage',
+    name: 'ClaudeUsage',
+    year: 2026,
+    tagline: { en: 'A desktop widget that keeps your Claude plan usage on screen.', ko: 'Claude 요금제 사용량을 화면에 띄워 두는 데스크톱 위젯.' },
+    description: {
+      en:
+        'ClaudeUsage floats a small widget on the desktop with the usage of a Claude subscription: the 5-hour limit and the weekly limits, each with the time left until it resets. ' +
+        'It refreshes every two minutes, turns a bar yellow at 75% and red at 90%, and stays out of the Dock and taskbar. ' +
+        'Built with Electron and released for macOS, Windows and Linux through GitHub Actions.',
+      ko:
+        'ClaudeUsage는 Claude 구독의 사용량(5시간 한도와 주간 한도, 그리고 각각 초기화까지 남은 시간)을 바탕화면 위의 작은 위젯으로 보여 줍니다. ' +
+        '2분마다 새로고침하고, 막대는 75% 이상이면 노란색, 90% 이상이면 빨간색으로 바뀌며, Dock이나 작업 표시줄에는 나타나지 않습니다. ' +
+        'Electron으로 만들었고 GitHub Actions로 macOS, Windows, Linux용 설치 파일을 배포합니다.',
+    },
+    role: { en: 'Design and development', ko: '디자인 및 개발' },
+    tags: ['Electron', 'JavaScript', 'macOS', 'Windows', 'Linux'],
+    cover: '/projects/claude-usage.jpg',
+    color: '#e07a4f',
+    links: { github: 'https://github.com/aodjo/ClaudeUsage', instagram: 'https://www.instagram.com/p/DdtrIwBzrfF/' },
+    highlights: [
+      { en: '5-hour and weekly limits with the time left until each resets', ko: '5시간·주간 한도와 초기화까지 남은 시간' },
+      { en: 'Bars that turn yellow at 75% and red at 90%; auto refresh every two minutes', ko: '75%·90%에서 색이 바뀌는 막대와 2분마다 자동 새로고침' },
+      { en: 'Draggable, always-on-top widget that remembers its position', ko: '위치를 기억하는 드래그·항상 위 위젯' },
+      { en: 'Builds for macOS, Windows and Linux (x64 and ARM) from GitHub Actions', ko: 'GitHub Actions로 macOS, Windows, Linux(x64·ARM) 빌드' },
+    ],
+  },
+  {
+    id: 'cat-hearth-workshop',
+    name: 'Cat Hearth Workshop',
+    year: 2026,
+    tagline: { en: 'A cozy pixel-art game about a winter workshop run by cats. Coming soon.', ko: '고양이들이 꾸려 가는 겨울 화로 공방, 픽셀 아트 게임. 출시 예정.' },
+    description: {
+      en:
+        'Cat Hearth Workshop (고양이 화로 공방) is an upcoming pixel-art mobile game for iOS and Android. Guest cats come in and order, and the staff cats (a cook, a smith, a gatherer, a baker and a potter) make and serve everything on their own. ' +
+        'There are 110 guest cats with their own builds and coat patterns; serve one its favorite menu and it goes into your collection. ' +
+        'Furniture has effects that bring in more or special guests, and rainy or snowy days change the mood of the shop and what sells.',
+      ko:
+        '고양이 화로 공방은 iOS와 Android로 출시 예정인 픽셀 아트 모바일 게임입니다. 손님 고양이가 주문하면 요리사, 대장장이, 채집가, 제빵사, 도예가인 직원 고양이들이 알아서 만들어 가져다줍니다. ' +
+        '체형도 털 무늬도 제각각인 손님 고양이가 110마리이고, 좋아하는 메뉴를 내 주면 도감에 기록됩니다. ' +
+        '가구마다 효과가 있어 손님이 더 자주 오거나 특별한 고양이가 찾아오고, 비 오는 날과 눈 오는 날에는 가게 분위기와 잘 팔리는 메뉴가 달라집니다.',
+    },
+    role: { en: 'Design and development', ko: '기획 및 개발' },
+    tags: ['Game', 'iOS', 'Android', 'Pixel Art'],
+    cover: '/projects/cat-hearth-workshop.jpg',
+    color: '#e8a33d',
+    links: { instagram: 'https://www.instagram.com/p/Dd87GtzE5RH/' },
+    highlights: [
+      { en: 'Five staff cats that cook, forge, gather, bake and make pottery on their own', ko: '요리, 대장일, 채집, 제빵, 도예를 알아서 하는 직원 고양이 5마리' },
+      { en: '110 guest cats to collect by serving their favorite menus', ko: '좋아하는 메뉴로 모으는 손님 고양이 110마리 도감' },
+      { en: 'Furniture with effects that attract more or special guests', ko: '손님을 더 부르거나 특별한 고양이를 부르는 가구 효과' },
+      { en: 'Weather events (rain boosts soup and grills, snow boosts warm drinks) and a golden guest who pays 5×', ko: '날씨 이벤트(비: 국물·구이 1.5배, 눈: 따뜻한 음료 2배)와 값을 5배로 두고 가는 황금 손님' },
     ],
   },
 ]; /** Portfolio projects; each also gets a Finder folder ~/Documents/Projects/<name>, and the first one's cover becomes the Desktop screenshot. TODO: replace with your real projects. */

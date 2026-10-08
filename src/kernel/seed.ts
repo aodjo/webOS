@@ -186,7 +186,7 @@ function buildSeed(locale: Locale, apps: AppManifest[]): Draft {
   for (const p of projects) {
     const folder = join(PATHS.projects, p.name);
     dir(folder);
-    const links = [p.links.demo && `- Demo: ${p.links.demo}`, p.links.github && `- GitHub: ${p.links.github}`].filter(Boolean).join('\n');
+    const links = [p.links.demo && `- Demo: ${p.links.demo}`, p.links.github && `- GitHub: ${p.links.github}`, p.links.instagram && `- Instagram: ${p.links.instagram}`].filter(Boolean).join('\n');
     file(
       join(folder, 'README.md'),
       `# ${p.name}\n\n> ${L(p.tagline)}\n\n![cover](${p.cover})\n\n${L(p.description)}\n\n## ${locale === 'ko' ? '역할' : 'Role'}\n${L(p.role)}\n\n## ${locale === 'ko' ? '주요 내용' : 'Highlights'}\n${p.highlights.map((h) => `- ${L(h)}`).join('\n')}\n\n## ${locale === 'ko' ? '기술 스택' : 'Stack'}\n${p.tags.map((t) => `\`${t}\``).join(' ')}\n${links ? `\n## ${locale === 'ko' ? '링크' : 'Links'}\n${links}\n` : ''}`,
@@ -194,6 +194,7 @@ function buildSeed(locale: Locale, apps: AppManifest[]): Draft {
     asset(join(folder, `cover.svg`), p.cover, 52_000);
     if (p.links.demo) file(join(folder, `${p.name}.webloc`), p.links.demo);
     if (p.links.github) file(join(folder, `GitHub.webloc`), p.links.github);
+    if (p.links.instagram) file(join(folder, `Instagram.webloc`), p.links.instagram);
   }
 
   file(

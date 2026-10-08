@@ -9,7 +9,7 @@ import { awards, education, experience, osInfo, owner, projects, skills } from '
 import { localizePeriod, useLocale, useT, wm } from '@/kernel';
 import { openCompose } from '@/apps/mail/compose';
 import { Markdown } from '@/components/Markdown';
-import { GitHubMark, LinkedInMark } from '../brands';
+import { GitHubMark, InstagramMark, LinkedInMark } from '../brands';
 import type { PageAPI } from './api';
 import styles from './Portfolio.module.css';
 
@@ -293,6 +293,11 @@ export function PortfolioPage({ api }: { api: PageAPI }) {
                   {p.links.github && (
                     <button type="button" onClick={() => api.navigate(p.links.github!)}>
                       <GitHubMark size={13} /> {t(P.code)}
+                    </button>
+                  )}
+                  {p.links.instagram && (
+                    <button type="button" onClick={() => api.navigate(p.links.instagram!)}>
+                      <InstagramMark size={13} /> Instagram
                     </button>
                   )}
                   <button type="button" className={styles.more} onClick={() => wm.launch('projects', { project: p.id })}>

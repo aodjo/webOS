@@ -5,6 +5,7 @@ import { Button } from '@/components/ui';
 import { Markdown } from '@/components/Markdown';
 import type { Project } from '@/data/portfolio';
 import { GitHubMark } from '../about-me/brand';
+import { InstagramMark } from '../safari/brands';
 import { ProjectCover } from './Cover';
 import { EASE_OUT, canAnimate, flipTransform, useReducedMotion } from './motion';
 import styles from './Projects.module.css';
@@ -13,6 +14,7 @@ const S = {
   liveDemo: { en: 'Live Demo', ko: '라이브 데모' },
   source: { en: 'Source', ko: '소스 코드' },
   sourceCode: { en: 'Source Code', ko: '소스 코드' },
+  instagram: { en: 'Instagram', ko: '인스타그램' },
   showInFinder: { en: 'Show in Finder', ko: 'Finder에서 보기' },
   about: { en: 'About', ko: '소개' },
   highlights: { en: 'Highlights', ko: '주요 내용' },
@@ -123,10 +125,11 @@ export function Detail({ project, prev, next, origin, dir, closing, getCloseTarg
   useLayoutEffect(() => {
     onClosedRef.current = onClosed;
   });
-  const { demo, github } = project.links;
+  const { demo, github, instagram } = project.links;
   const links: { key: string; url: string; label: string; icon: ReactNode }[] = [];
   if (demo) links.push({ key: 'demo', url: demo, label: t(S.liveDemo), icon: <Globe size={15} /> });
   if (github) links.push({ key: 'github', url: github, label: t(S.sourceCode), icon: <GitHubMark size={15} /> });
+  if (instagram) links.push({ key: 'instagram', url: instagram, label: t(S.instagram), icon: <InstagramMark size={15} /> });
 
   useLayoutEffect(() => {
     const el = coverRef.current;
@@ -202,6 +205,11 @@ export function Detail({ project, prev, next, origin, dir, closing, getCloseTarg
                 {github && (
                   <Button size="large" className="lg lg-control" onClick={() => onOpenURL(github)}>
                     <GitHubMark size={14} /> {t(S.source)}
+                  </Button>
+                )}
+                {instagram && (
+                  <Button size="large" className="lg lg-control" onClick={() => onOpenURL(instagram)}>
+                    <InstagramMark size={14} /> {t(S.instagram)}
                   </Button>
                 )}
                 <Button size="large" className="lg lg-control" onClick={() => onShowInFinder(project)}>

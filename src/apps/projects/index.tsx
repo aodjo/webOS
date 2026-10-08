@@ -29,6 +29,7 @@ const S = {
   open: { en: 'Open', ko: '열기' },
   openDemo: { en: 'Open Live Demo', ko: '라이브 데모 열기' },
   viewSource: { en: 'View Source Code', ko: '소스 코드 보기' },
+  openInstagram: { en: 'Open Instagram Post', ko: '인스타그램 게시물 열기' },
   showInFinder: { en: 'Show in Finder', ko: 'Finder에서 보기' },
 }; /** Localized UI strings for the Projects app (toolbar, menus, context menu). */
 
@@ -423,6 +424,7 @@ export default function Projects({ windowId, args }: AppProps) {
         items: [
           { label: S.openDemo, disabled: !p?.links.demo, action: () => p?.links.demo && openURL(p.links.demo) },
           { label: S.viewSource, disabled: !p?.links.github, action: () => p?.links.github && openURL(p.links.github) },
+          { label: S.openInstagram, disabled: !p?.links.instagram, action: () => p?.links.instagram && openURL(p.links.instagram) },
           { separator: true },
           { label: S.showInFinder, disabled: !p, action: () => p && showInFinder(p) },
         ],
@@ -450,10 +452,11 @@ export default function Projects({ windowId, args }: AppProps) {
         { label: S.open, action: () => open(p, coverEl) },
         { label: S.showInFinder, action: () => showInFinder(p) },
       ];
-      const { demo, github } = p.links;
+      const { demo, github, instagram } = p.links;
       const links: MenuItem[] = [];
       if (demo) links.push({ label: S.openDemo, action: () => openURL(demo) });
       if (github) links.push({ label: S.viewSource, action: () => openURL(github) });
+      if (instagram) links.push({ label: S.openInstagram, action: () => openURL(instagram) });
       showContextMenu(e, links.length ? [...items, { separator: true }, ...links] : items);
     },
     [open],
